@@ -4,89 +4,118 @@
 
 **粗體字**
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 **粗體字**
-</pre>
-</div>
+
+或
+
+__粗體字__
+```
 
 ---
 
 *斜體字*
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 *斜體字*
-</pre>
-</div>
+
+或
+
+_斜體字_
+```
 
 ---
 
 <u>底線</u>
 
-<div>
-<pre>
-&lt;u&gt;底線&lt;/u&gt;
-</pre>
-</div>
+##### Markdown 語法：
+
+```
+<u>底線</u>
+```
 
 ---
 
 ~~刪除線~~
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 ~~刪除線~~
-</pre>
-</div>
+```
 
 ---
 
-`突出`
+`Highlight 凸顯字`
 
-<div>
-<pre>
-`突出`
-</pre>
-</div>
+##### Markdown 語法：
+
+```
+`Highlight 凸顯字`
+```
 
 ---
 
 $註記$
 
-<div>
-<pre>
+###### *(GitHub 不支援)*
+
+##### Markdown 語法：
+
+```
 $註記$
-</pre>
-</div>
+```
 
 ---
 
-[連結文字](https://www.google.com)
+### 超連結
 
-<div>
-<pre>
-[連結文字](https://www.google.com)
-</pre>
-</div>
+<https://www.google.com>
+
+##### Markdown 語法：
+
+```
+在網址頭、尾加上 "<" 和 ">"
+<https://www.google.com>
+```
 
 ---
 
+### 含連結文字的超連結
+
+[連結文字](https://www.google.com)
+
+##### Markdown 語法：
+
+```
+[連結文字](https://www.google.com)
+```
+
+---
+
+### 圖片
+
 ![圖片 Alt](https://picsum.photos/id/684/600/400 "圖片 Title")
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 ![圖片 Alt](https://picsum.photos/id/684/600/400 "圖片 Title")
-</pre>
-</div>
+```
 
 --- 
 
 ### 分隔線
 
-<div>
-<pre>---</pre>
-</div>
+##### Markdown 語法：
+
+```
+---
+```
 
 ---
 
@@ -104,60 +133,61 @@ $註記$
 
 ###### H6 標題6
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 # H1 標題1
 ## H2 標題2
 ### H3 標題3
 #### H4 標題4
 ##### H5 標題5
 ###### H6 標題6
-</pre>
-</div>
+```
 
 ---
 
 ### 數學公式
 
+###### *(GitHub 不支援)*
+
 $$
 f(x)=10
 $$
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 $$
 f(x)=10
 $$
-</pre>
-</div>
+```
 
 ---
 
 ### HTML 區塊
 
 <div>
-<h3>head 3 tag</h3>
-文字內容<br />
-<a href="http://www.google.com" target="_blank">Google</a><br /><br />
+<h3>文章標題</h3>
+文章內容<br />
+<a href="http://www.google.com" target="_blank">Google</a>
 </div>
 
+##### Markdown 語法：
+
+```html
 <div>
-<pre>
-&lt;div&gt;
-&lt;h3&gt;head 3 tag&lt;/h3&gt;
-文字內容&lt;br /&gt;
-&lt;a href="http://www.google.com" target="_blank"&gt;Google&lt;/a&gt;
-&lt;/div&gt;
-</pre>
+<h3>文章標題</h3>
+文章內容<br />
+<a href="http://www.google.com" target="_blank">Google</a>
 </div>
+```
 
 ---
 
 ### 程式碼區塊
 
 ```csharp
-// Code Block
-// 程式碼區塊
+// C# 程式碼區塊
 public class MyClass
 {
     public string String1 { get; set; }
@@ -170,41 +200,35 @@ public class MyClass
 }
 ```
 
-<div>
-<pre>
-<code>```</code>csharp
-// Code Block
-// 程式碼區塊
-public class MyClass
-{
-    public string String1 { get; set; }
-    public int Int1 { get; set; }
+##### Markdown 語法：
 
-    public MyClass()
+    ```csharp
+    // C# 程式碼區塊
+    public class MyClass
     {
-      Console.WriteLine("建構子");
-    }
-}
-<code>```</code>
-</pre>
-</div>
+        public string String1 { get; set; }
+        public int Int1 { get; set; }
 
+        public MyClass()
+        {
+          Console.WriteLine("建構子");
+        }
+    }
+    ```
 
 ---
 
 ### 引言
 
-> Quote Block
-> 
+> 若要換行，結尾要加兩個 `空白鍵`__  
 > 引言
 
-<div>
-<pre>
-> Quote Block
-> 
+##### Markdown 語法：
+
+```
+> 若要換行，結尾要加兩個 `空白`__  
 > 引言
-</pre>
-</div>
+```
 
 ---
 
@@ -212,82 +236,99 @@ public class MyClass
 
 | A   | B   | C   | D   |
 |:--- | --- |:---:| ---:|
+| XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX |
+| 靠左  | 預設  | 置中  | 靠右  |
 | A1  | B1  | C3  | D1  |
 | A2  | B2  | C2  | D2  |
 | A3  | B3  | C3  | D3  |
 
-<div>
-<pre>
+##### Markdown 語法：
+
+```
 | A   | B   | C   | D   |
 |:--- | --- |:---:| ---:|
+| 靠左  | 預設  | 置中  | 靠右  |
+| XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX |
 | A1  | B1  | C3  | D1  |
 | A2  | B2  | C2  | D2  |
 | A3  | B3  | C3  | D3  |
-</pre>
-</div>
+```
 
 ---
 
-### 數字列表清單
+### 有序列表
 
-1. Order List 1
-   
-   1. Order List 1-1
-   
-   2. Order List 1-2
-      
-      1. Order List 1-2-1
-      
-      2. Order List 1-2-2
-      
-      3. Order List 1-2-3
-   
-   3. Order List 1-3
+1. 有序列表 1
+2. 有序列表 2
+   1. 有序列表 1-1
+   2. 有序列表 1-2
+      1. 有序列表為 `數字` + `.` + `空白鍵`
+      > 2. 可搭配引言符號 `>`
+      > * 可搭配無序列表符號 *
+      > + 可搭配無序列表符號 +
+      > - 可搭配無序列表符號 -
+   3. 有序列表 1-3 結尾加兩個 `空白鍵` + `換行` __  
+      這行文字就會對齊
+   4. 有序列表 1-4
+3. 有序列表 3
 
-2. Order List 2
 
-<div>
-<pre>
-1. Order List 1<br />
-   1. Order List 1-1<br />
-   2. Order List 1-2<br />
-      1. Order List 1-2-1<br />
-      2. Order List 1-2-2<br />
-      3. Order List 1-2-3<br />
-   3. Order List 1-3<br />
-2. Order List 2
-</pre>
-</div>
+##### Markdown 語法：
+
+```
+1. 有序列表 1
+2. 有序列表 2
+   1. 有序列表 1-1
+   2. 有序列表 1-2
+      1. 有序列表為 `數字` + `.` + `空白鍵`
+      > 2. 可搭配引言符號 `>`
+      > * 可搭配無序列表符號 *
+      > + 可搭配無序列表符號 +
+      > - 可搭配無序列表符號 -
+   3. 有序列表 1-3 結尾加兩個 `空白鍵` + `換行` __  
+      這行文字就會對齊
+   4. 有序列表 1-4
+3. 有序列表 3
+```
 
 ---
 
-### 清單列表
+### 無序列表
 
-- Bullet List 1
-  
-  - Bullet List 1-1
-  
-  - Bullet List 1-2
-    
-    - Bullet List 1-2-1
-    
-    - Bullet List 1-2-2
-    
-    - Bullet List 1-2-3
-  
-  - Bullet List 1-3
+- 無序列表 1
+- 無序列表 2
+  - 無序列表 1-1
+  - 無序列表 1-2
+    - 無序列表為 `*` 或 `+` 或 `-`
+    > - 可搭配引言符號 `>`
+    > 1. 可搭配有序列表 `數字` + `.` + `空白鍵`
+    > 2. 可搭配有序列表 `數字` + `.` + `空白鍵`
+    > 3. 可搭配有序列表 `數字` + `.` + `空白鍵`
+  - 無序列表 1-3 結尾加兩個 `空白鍵` + `換行` __  
+    這行文字就會對齊
+  - 無序列表 1-4
+- 無序列表 3
 
-- Bullet List 2
+##### Markdown 語法：
 
-<div>
-<pre>
-- Bullet List 1<br />
-  - Bullet List 1-1<br />
-  - Bullet List 1-2<br />
-    - Bullet List 1-2-1<br />
-    - Bullet List 1-2-2<br />
-    - Bullet List 1-2-3<br />
-  - Bullet List 1-3<br />
-- Bullet List 2
-</pre>
-</div>
+```
+- 無序列表 1
+- 無序列表 2
+  - 無序列表 1-1
+  - 無序列表 1-2
+    - 無序列表為 `*` 或 `+` 或 `-`
+    > - 可搭配引言符號 `>`
+    > 1. 可搭配有序列表 `數字` + `.` + `空白鍵`
+    > 2. 可搭配有序列表 `數字` + `.` + `空白鍵`
+    > 3. 可搭配有序列表 `數字` + `.` + `空白鍵`
+  - 無序列表 1-3 結尾加兩個 `空白鍵` + `換行` __  
+    這行文字就會對齊
+  - 無序列表 1-4
+- 無序列表 3
+```
+
+---
+
+#### 參考資料
+1. <https://gist.github.com/christech1117/6dc5221c177104990767d6490ad8c7ba>
+2. <https://gist.githubusercontent.com/christech1117/6dc5221c177104990767d6490ad8c7ba/raw/e97cc6bb396ab387ef66fbfe91c6fa702b7f2a55/Markdown%25E6%2595%2599%25E5%25AD%25B8.md>
