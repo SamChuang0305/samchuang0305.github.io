@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <meta property="fb:admins" content="">
+  <meta property="fb:app_id" content="1099372750454457">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '複製',
+      copy_success: '複製成功',
+      copy_failure: '複製失敗'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="H1 標題1 (含底線)H2 標題2 (含底線)H3 標題3H4 標題4H5 標題5H6 標題6123456# H1 標題1## H2 標題2### H3 標題3#### H4 標題4##### H5 標題5###### H6 標題6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown 語法整理">
+<meta property="og:url" content="https://samchuang0305.github.io/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="Sam 的金魚腦海馬迴">
+<meta property="og:description" content="H1 標題1 (含底線)H2 標題2 (含底線)H3 標題3H4 標題4H5 標題5H6 標題6123456# H1 標題1## H2 標題2### H3 標題3#### H4 標題4##### H5 標題5###### H6 標題6">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://picsum.photos/id/684/600/400">
+<meta property="article:published_time" content="2020-01-10T17:07:00.000Z">
+<meta property="article:modified_time" content="2020-01-11T07:22:00.000Z">
+<meta property="article:author" content="Sam Chuang">
+<meta property="article:tag" content="Markdown">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/684/600/400">
+  <link rel="canonical" href="https://samchuang0305.github.io/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Markdown 語法整理 | Sam 的金魚腦海馬迴</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156002640-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-156002640-1');
+      }
+    </script>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sam 的金魚腦海馬迴</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">海馬迴用於記錄短期、長期記憶</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首頁</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分類</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>標籤</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>歸檔</a>
+
+  </li>
+      
+    
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://samchuang0305.github.io/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sam Chuang">
+      <meta itemprop="description" content="頭殼裡的金魚腦負責處理邏輯，用來存放記憶的海馬迴卻留在這裡">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sam 的金魚腦海馬迴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            Markdown 語法整理
+            
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              
+                
+              
+
+              <time title="創建時間：2020-01-10 09:07:00 / 修改時間：23:22:00" itemprop="dateCreated datePublished" datetime="2020-01-10T09:07:00-08:00">2020-01-10</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Markdown/" itemprop="url" rel="index">
+                    <span itemprop="name">Markdown</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Facebook：</span>
+    
+    <a title="facebook comments" href="/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count fb-comments-count" data-href="https://samchuang0305.github.io/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/" itemprop="commentCount">0</span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="H1-標題1-含底線"><a href="#H1-標題1-含底線" class="headerlink" title="H1 標題1 (含底線)"></a>H1 標題1 (含底線)</h1><h2 id="H2-標題2-含底線"><a href="#H2-標題2-含底線" class="headerlink" title="H2 標題2 (含底線)"></a>H2 標題2 (含底線)</h2><h3 id="H3-標題3"><a href="#H3-標題3" class="headerlink" title="H3 標題3"></a>H3 標題3</h3><h4 id="H4-標題4"><a href="#H4-標題4" class="headerlink" title="H4 標題4"></a>H4 標題4</h4><h5 id="H5-標題5"><a href="#H5-標題5" class="headerlink" title="H5 標題5"></a>H5 標題5</h5><h6 id="H6-標題6"><a href="#H6-標題6" class="headerlink" title="H6 標題6"></a>H6 標題6</h6><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># H1 標題1</span></span><br><span class="line"><span class="section">## H2 標題2</span></span><br><span class="line"><span class="section">### H3 標題3</span></span><br><span class="line"><span class="section">#### H4 標題4</span></span><br><span class="line"><span class="section">##### H5 標題5</span></span><br><span class="line"><span class="section">###### H6 標題6</span></span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<hr>
+<h3 id="文字格式"><a href="#文字格式" class="headerlink" title="文字格式"></a>文字格式</h3><ul>
+<li><p><strong>粗體字</strong></p>
+  <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**粗體字**</span></span><br><span class="line"></span><br><span class="line">或</span><br><span class="line"></span><br><span class="line"><span class="strong">__粗體字__</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><em>斜體字</em></p>
+  <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="emphasis">*斜體字*</span></span><br><span class="line"></span><br><span class="line">或</span><br><span class="line"></span><br><span class="line"><span class="emphasis">_斜體字_</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><u>底線</u></p>
+  <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">u</span>&gt;</span></span>底線<span class="xml"><span class="tag">&lt;/<span class="name">u</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><del>刪除線</del></p>
+  <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~~刪除線~~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Highlight 凸顯字</code></p>
+  <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">`Highlight 凸顯字`</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>$註記$<br>  <strong><em>(GitHub 不支援)</em></strong></p>
+  <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$註記$</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><blockquote>
+<p>引言，若要換行，結尾要加兩個 <code>空白</code>__<br>這是新的一行</p>
+</blockquote>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; 引言，若要換行，結尾要加兩個 `空白`__  </span></span><br><span class="line"><span class="quote">&gt; 這是新的一行</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="連結"><a href="#連結" class="headerlink" title="連結"></a>連結</h3><p><a href="https://www.google.com" target="_blank" rel="noopener">https://www.google.com</a></p>
+<p>在連結頭、尾加上 “&lt;” 和 “&gt;”</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">https:</span>//<span class="attr">www.google.com</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="帶有文字的連結"><a href="#帶有文字的連結" class="headerlink" title="帶有文字的連結"></a>帶有文字的連結</h3><p><a href="https://www.google.com" target="_blank" rel="noopener">連結文字</a></p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">連結文字</span>](<span class="link">https://www.google.com</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="圖片"><a href="#圖片" class="headerlink" title="圖片"></a>圖片</h3><p><img src="https://picsum.photos/id/684/600/400" alt="圖片 Alt" title="圖片 Title"></p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">圖片 Alt</span>](<span class="link">https://picsum.photos/id/684/600/400 "圖片 Title"</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="分隔線"><a href="#分隔線" class="headerlink" title="分隔線"></a>分隔線</h3><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="數學公式"><a href="#數學公式" class="headerlink" title="數學公式"></a>數學公式</h3><p><strong><em>(GitHub 不支援)</em></strong></p>
+<p>$$<br>f(x)=10<br>$$</p>
+<p><strong>Markdown 語法：</strong></p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">f(x)=10</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="HTML-區塊"><a href="#HTML-區塊" class="headerlink" title="HTML 區塊"></a>HTML 區塊</h3><div>
+文章內容<br />
+文章內容<br />
+使用 HTML 連結語法 <a href="http://www.google.com" target="_blank">Google</a><br />
+
+<p>含有<span style="color:magenta"> <em>顏色</em> </span>的文章內容</p>
+</div>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">文章內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">文章內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">使用 HTML 連結語法 <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.google.com"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">含有<span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">"color:magenta"</span>&gt;</span> *顏色* <span class="tag">&lt;/<span class="name">span</span>&gt;</span>的文章內容</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="程式碼區塊"><a href="#程式碼區塊" class="headerlink" title="程式碼區塊"></a>程式碼區塊</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C# 程式碼區塊</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> String1 &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> Int1 &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      Console.WriteLine(<span class="string">"建構子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<pre>
+&#96;&#96;&#96;csharp
+// C# 程式碼區塊
+public class MyClass
+{
+    public string String1 { get; set; }
+    public int Int1 { get; set; }
+
+    public MyClass()
+    {
+        Console.WriteLine("建構子");
+    }
+}
+&#96;&#96;&#96;
+</pre>
+
+<hr>
+<h3 id="表格、對齊方式、文字樣式"><a href="#表格、對齊方式、文字樣式" class="headerlink" title="表格、對齊方式、文字樣式"></a>表格、對齊方式、文字樣式</h3><table>
+<thead>
+<tr>
+<th align="left">A</th>
+<th>B</th>
+<th align="center">C</th>
+<th align="right">D</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">XXXXXXXXXX</td>
+<td>XXXXXXXXXX</td>
+<td align="center">XXXXXXXXXX</td>
+<td align="right">XXXXXXXXXX</td>
+</tr>
+<tr>
+<td align="left">靠左</td>
+<td>預設</td>
+<td align="center">置中</td>
+<td align="right">靠右</td>
+</tr>
+<tr>
+<td align="left">A1</td>
+<td>B1</td>
+<td align="center">C3</td>
+<td align="right">D1</td>
+</tr>
+<tr>
+<td align="left"><code>凸顯字</code></td>
+<td>B2</td>
+<td align="center">C2</td>
+<td align="right">D2</td>
+</tr>
+<tr>
+<td align="left"><em>斜體</em></td>
+<td><strong>粗體</strong></td>
+<td align="center"><u>底線</u></td>
+<td align="right"><del>刪除線</del></td>
+</tr>
+</tbody></table>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">| A          | B          | C          | D          |</span><br><span class="line">|:---        | ---        |:---:       | ---:       |</span><br><span class="line">| XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX |</span><br><span class="line">| 靠左       | 預設       | 置中       | 靠右       |</span><br><span class="line">| A1         | B1         | C3         | D1         |</span><br><span class="line">| <span class="code">`凸顯字`</span>   | B2         | C2         | D2         |</span><br><span class="line">| <span class="emphasis">*斜體*</span>     | <span class="strong">**粗體**</span>   | <span class="xml"><span class="tag">&lt;<span class="name">u</span>&gt;</span></span>底線<span class="xml"><span class="tag">&lt;/<span class="name">u</span>&gt;</span></span>| ~~刪除線~~ |</span><br></pre></td></tr></table></figure>
+
+<p>第一排是標題列 ( 以粗體顯示 )<br>第二排是對齊列 ( <code>:</code> 表示對齊位置，並搭配至少三個 <code>-</code> 符號表示內容 )<br>表格內可用 <code>空白</code> 排板增加 Markdown 可讀性，但不會影響輸出呈現的結果<br>表格內可使用行內格式符號</p>
+<hr>
+<h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><ol>
+<li>有序列表 1</li>
+<li>有序列表 2<ol>
+<li>有序列表 1-1</li>
+<li>有序列表 1-2<ol>
+<li>有序列表為 <code>數字</code> + <code>.</code> + <code>空白鍵</code><blockquote>
+<ol start="2">
+<li>可搭配引言符號 <code>&gt;</code></li>
+</ol>
+<ul>
+<li>可搭配無序列表符號 *</li>
+</ul>
+<ul>
+<li>可搭配無序列表符號 +</li>
+</ul>
+<ul>
+<li>可搭配無序列表符號 -</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+</li>
+<li>有序列表 1-3 結尾加兩個 <code>空白鍵</code> + <code>換行</code> __<br>這行文字就會對齊</li>
+<li>有序列表 1-4</li>
+</ol>
+</li>
+<li>有序列表 3</li>
+</ol>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1. </span>有序列表 1</span><br><span class="line"><span class="bullet">2. </span>有序列表 2</span><br><span class="line"><span class="bullet">   1. </span>有序列表 1-1</span><br><span class="line"><span class="bullet">   2. </span>有序列表 1-2</span><br><span class="line"><span class="bullet">      1. </span>有序列表為 <span class="code">`數字`</span> + <span class="code">`.`</span> + <span class="code">`空白鍵`</span></span><br><span class="line"><span class="code">      &gt; 2. 可搭配引言符號 `&gt;`</span></span><br><span class="line"><span class="code">      &gt; * 可搭配無序列表符號 *</span></span><br><span class="line"><span class="code">      &gt; + 可搭配無序列表符號 +</span></span><br><span class="line"><span class="code">      &gt; - 可搭配無序列表符號 -</span></span><br><span class="line"><span class="bullet">   3. </span>有序列表 1-3 結尾加兩個 <span class="code">`空白鍵`</span> + <span class="code">`換行`</span> __  </span><br><span class="line"><span class="code">      這行文字就會對齊</span></span><br><span class="line"><span class="bullet">   4. </span>有序列表 1-4</span><br><span class="line"><span class="bullet">3. </span>有序列表 3</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="無序列表"><a href="#無序列表" class="headerlink" title="無序列表"></a>無序列表</h3><ul>
+<li>無序列表 1</li>
+<li>無序列表 2<ul>
+<li>無序列表 1-1</li>
+<li>無序列表 1-2<ul>
+<li>無序列表為 <code>*</code> 或 <code>+</code> 或 <code>-</code><blockquote>
+<ul>
+<li>可搭配引言符號 <code>&gt;</code></li>
+</ul>
+<ol>
+<li>可搭配有序列表 <code>數字</code> + <code>.</code> + <code>空白鍵</code></li>
+<li>可搭配有序列表 <code>數字</code> + <code>.</code> + <code>空白鍵</code></li>
+<li>可搭配有序列表 <code>數字</code> + <code>.</code> + <code>空白鍵</code></li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>無序列表 1-3 結尾加兩個 <code>空白鍵</code> + <code>換行</code> __<br>這行文字就會對齊</li>
+<li>無序列表 1-4</li>
+</ul>
+</li>
+<li>無序列表 3</li>
+</ul>
+<p>無序列表開頭為 <code>*</code> 或 <code>+</code> 或 <code>-</code></p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>無序列表 1</span><br><span class="line"><span class="bullet">- </span>無序列表 2</span><br><span class="line"><span class="bullet">  - </span>無序列表 1-1</span><br><span class="line"><span class="bullet">  - </span>無序列表 1-2</span><br><span class="line"><span class="bullet">    - </span>無序列表為 <span class="code">`*`</span> 或 <span class="code">`+`</span> 或 <span class="code">`-`</span></span><br><span class="line"><span class="code">    &gt; - 可搭配引言符號 `&gt;`</span></span><br><span class="line"><span class="code">    &gt; 1. 可搭配有序列表 `數字` + `.` + `空白鍵`</span></span><br><span class="line"><span class="code">    &gt; 2. 可搭配有序列表 `數字` + `.` + `空白鍵`</span></span><br><span class="line"><span class="code">    &gt; 3. 可搭配有序列表 `數字` + `.` + `空白鍵`</span></span><br><span class="line"><span class="bullet">  - </span>無序列表 1-3 結尾加兩個 <span class="code">`空白鍵`</span> + <span class="code">`換行`</span> __  </span><br><span class="line"><span class="code">    這行文字就會對齊</span></span><br><span class="line"><span class="bullet">  - </span>無序列表 1-4</span><br><span class="line"><span class="bullet">- </span>無序列表 3</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h3><p>若輸入的內容行尾有 <code>分行符號</code>，但顯示的內容沒有斷行，<br>在分行符號前 (行尾處) 加兩個 <code>空白鍵</code> 即可。<br>例如本補充的前兩行行尾就有用兩個 <code>空白鍵</code> + <code>分行符號</code></p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a href="https://gist.github.com/christech1117/6dc5221c177104990767d6490ad8c7ba" target="_blank" rel="noopener">https://gist.github.com/christech1117/6dc5221c177104990767d6490ad8c7ba</a></li>
+<li><a href="https://gist.githubusercontent.com/christech1117/6dc5221c177104990767d6490ad8c7ba/raw/e97cc6bb396ab387ef66fbfe91c6fa702b7f2a55/Markdown%25E6%2595%2599%25E5%25AD%25B8.md" target="_blank" rel="noopener">https://gist.githubusercontent.com/christech1117/6dc5221c177104990767d6490ad8c7ba/raw/e97cc6bb396ab387ef66fbfe91c6fa702b7f2a55/Markdown%25E6%2595%2599%25E5%25AD%25B8.md</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Markdown/" rel="tag"><i class="fa fa-tag"></i> Markdown</a>
+            
+          </div>
+        
+
+        
+  <div class="post-widgets">
+    <div class="social-like">
+      
+
+      
+        <div class="fb_like">
+          <div class="fb-like" data-layout="button_count" data-share="true"></div>
+        </div>
+      
+    </div>
+  
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/12/24/Bookmarklet%20for%20search%20Udemy%20FREE%20courses/" rel="next" title="搜尋 Udemy 免費課程的 Bookmarklet">
+                  <i class="fa fa-chevron-left"></i> 搜尋 Udemy 免費課程的 Bookmarklet
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div class="fb-comments"
+       data-href="https://samchuang0305.github.io/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/"
+       data-numposts="10"
+       data-width="100%"
+       data-colorscheme="light">
+    </div>
+  </div>
+  
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#H1-標題1-含底線"><span class="nav-text">H1 標題1 (含底線)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#H2-標題2-含底線"><span class="nav-text">H2 標題2 (含底線)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#H3-標題3"><span class="nav-text">H3 標題3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#H4-標題4"><span class="nav-text">H4 標題4</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#H5-標題5"><span class="nav-text">H5 標題5</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#H6-標題6"><span class="nav-text">H6 標題6</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文字格式"><span class="nav-text">文字格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#連結"><span class="nav-text">連結</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#帶有文字的連結"><span class="nav-text">帶有文字的連結</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#圖片"><span class="nav-text">圖片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分隔線"><span class="nav-text">分隔線</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#數學公式"><span class="nav-text">數學公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML-區塊"><span class="nav-text">HTML 區塊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程式碼區塊"><span class="nav-text">程式碼區塊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表格、對齊方式、文字樣式"><span class="nav-text">表格、對齊方式、文字樣式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序列表"><span class="nav-text">有序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#無序列表"><span class="nav-text">無序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#補充"><span class="nav-text">補充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#參考資料"><span class="nav-text">參考資料</span></a></li></ol></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar.jpg"
+      alt="Sam Chuang">
+  <p class="site-author-name" itemprop="name">Sam Chuang</p>
+  <div class="site-description" itemprop="description">頭殼裡的金魚腦負責處理邏輯，用來存放記憶的海馬迴卻留在這裡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分類</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">標籤</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/" title="回首頁 &amp;rarr; &#x2F;"><i class="fa fa-fw fa-home"></i>回首頁</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/about/" title="關於我 &amp;rarr; &#x2F;about&#x2F;"><i class="fa fa-fw fa-user"></i>關於我</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.facebook.com/chuangsam" title="FB Page &amp;rarr; https:&#x2F;&#x2F;www.facebook.com&#x2F;chuangsam" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>FB Page</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/SamChuang0305" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;SamChuang0305" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sam Chuang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 強力驅動 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主題 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.4.2.js"></script>
+
+<script src="/js/motion.js?v=7.4.2.js"></script>
+
+
+<script src="/js/schemes/pisces.js?v=7.4.2.js"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.4.2.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+    function fbAsyncInit() {
+      FB.init({
+        appId  : '1099372750454457',
+        xfbml  : true,
+        version: 'v3.3'
+      });
+    }
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/zh_TW/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
