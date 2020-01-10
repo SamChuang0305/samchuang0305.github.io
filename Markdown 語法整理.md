@@ -6,7 +6,7 @@
 
 ##### Markdown 語法：
 
-```
+```md
 **粗體字**
 
 或
@@ -20,7 +20,7 @@ __粗體字__
 
 ##### Markdown 語法：
 
-```
+```md
 *斜體字*
 
 或
@@ -34,7 +34,7 @@ _斜體字_
 
 ##### Markdown 語法：
 
-```
+```md
 <u>底線</u>
 ```
 
@@ -44,7 +44,7 @@ _斜體字_
 
 ##### Markdown 語法：
 
-```
+```md
 ~~刪除線~~
 ```
 
@@ -54,7 +54,7 @@ _斜體字_
 
 ##### Markdown 語法：
 
-```
+```md
 `Highlight 凸顯字`
 ```
 
@@ -66,32 +66,32 @@ $註記$
 
 ##### Markdown 語法：
 
-```
+```md
 $註記$
 ```
 
 ---
 
-### 超連結
+### 連結
 
 <https://www.google.com>
 
 ##### Markdown 語法：
 
-```
-在網址頭、尾加上 "<" 和 ">"
+```md
+在連結頭、尾加上 "<" 和 ">"
 <https://www.google.com>
 ```
 
 ---
 
-### 含連結文字的超連結
+### 使用文字的連結
 
 [連結文字](https://www.google.com)
 
 ##### Markdown 語法：
 
-```
+```md
 [連結文字](https://www.google.com)
 ```
 
@@ -103,7 +103,7 @@ $註記$
 
 ##### Markdown 語法：
 
-```
+```md
 ![圖片 Alt](https://picsum.photos/id/684/600/400 "圖片 Title")
 ```
 
@@ -113,7 +113,7 @@ $註記$
 
 ##### Markdown 語法：
 
-```
+```md
 ---
 ```
 
@@ -121,9 +121,9 @@ $註記$
 
 ### 標題類
 
-# H1 標題1
+# H1 標題1 (含底線)
 
-## H2 標題2
+## H2 標題2 (含底線)
 
 ### H3 標題3
 
@@ -135,7 +135,7 @@ $註記$
 
 ##### Markdown 語法：
 
-```
+```md
 # H1 標題1
 ## H2 標題2
 ### H3 標題3
@@ -156,7 +156,7 @@ $$
 
 ##### Markdown 語法：
 
-```
+```md
 $$
 f(x)=10
 $$
@@ -169,7 +169,9 @@ $$
 <div>
 <h3>文章標題</h3>
 文章內容<br />
-<a href="http://www.google.com" target="_blank">Google</a>
+使用 HTML 連結語法 <a href="http://www.google.com" target="_blank">Google</a><br />
+
+含有<span style="color:magenta"> *顏色* </span>的文章內容
 </div>
 
 ##### Markdown 語法：
@@ -178,7 +180,9 @@ $$
 <div>
 <h3>文章標題</h3>
 文章內容<br />
-<a href="http://www.google.com" target="_blank">Google</a>
+使用 HTML 連結語法 <a href="http://www.google.com" target="_blank">Google</a><br />
+
+含有<span style="color:magenta"> *顏色* </span>的文章內容
 </div>
 ```
 
@@ -220,39 +224,44 @@ public class MyClass
 
 ### 引言
 
-> 若要換行，結尾要加兩個 `空白鍵`__  
-> 引言
+> 引言，若要換行，結尾要加兩個 `空白`__  
+> 這是新的一行
 
 ##### Markdown 語法：
 
-```
-> 若要換行，結尾要加兩個 `空白`__  
-> 引言
+```md
+> 引言，若要換行，結尾要加兩個 `空白`__  
+> 這是新的一行
 ```
 
 ---
 
 ### 表格與對齊方式
 
-| A   | B   | C   | D   |
-|:--- | --- |:---:| ---:|
+| A          | B          | C          | D          |
+|:---        | ---        |:---:       | ---:       |
 | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX |
-| 靠左  | 預設  | 置中  | 靠右  |
-| A1  | B1  | C3  | D1  |
-| A2  | B2  | C2  | D2  |
-| A3  | B3  | C3  | D3  |
+| 靠左       | 預設       | 置中       | 靠右       |
+| A1         | B1         | C3         | D1         |
+| *斜體*     | **粗體**   | <u>底線</u>| ~~刪除線~~ |
+| `凸顯字`   | B2         | C2         | D2         |
 
 ##### Markdown 語法：
 
-```
-| A   | B   | C   | D   |
-|:--- | --- |:---:| ---:|
-| 靠左  | 預設  | 置中  | 靠右  |
+
+```md
+| A          | B          | C          | D          |
+|:---        | ---        |:---:       | ---:       |
 | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX |
-| A1  | B1  | C3  | D1  |
-| A2  | B2  | C2  | D2  |
-| A3  | B3  | C3  | D3  |
+| 靠左       | 預設       | 置中       | 靠右       |
+| A1         | B1         | C3         | D1         |
+| *斜體*     | **粗體**   | <u>底線</u>| ~~刪除線~~ |
+| `凸顯字`   | B2         | C2         | D2         |
 ```
+第一排是標題列 ( 以粗體顯示 )  
+第二排是對齊列 ( `:` 表示對齊位置，並搭配至少三個 `-` 符號表示內容 )  
+表格內可用 `空白` 排板增加 Markdown 可讀性，但不會影響輸出呈現的結果  
+表格內可使用行內格式符號
 
 ---
 
@@ -329,6 +338,13 @@ public class MyClass
 
 ---
 
+#### 補充
+
+若輸入的內容行尾有 `分行符號`，但顯示的內容沒有斷行，  
+在分行符號前 (行尾處) 加兩個 `空白鍵` 即可。  
+例如本補充的前兩行行尾就有用兩個 `空白鍵` + `分行符號`
+
 #### 參考資料
+
 1. <https://gist.github.com/christech1117/6dc5221c177104990767d6490ad8c7ba>
 2. <https://gist.githubusercontent.com/christech1117/6dc5221c177104990767d6490ad8c7ba/raw/e97cc6bb396ab387ef66fbfe91c6fa702b7f2a55/Markdown%25E6%2595%2599%25E5%25AD%25B8.md>
