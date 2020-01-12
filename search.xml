@@ -252,12 +252,17 @@ function MyFunc()
     <content><![CDATA[<p>今早在復習 SQL 語法，看到十年前的 JOIN 筆記，決定把他圖形化，以後若要用到就一目瞭然了<br>既然都做了，就貼上來分享，有需要的人請自取 🙂</p>
 <a id="more"></a>
 
-<p><span style="color:red"> <strong>※ 注意 ※</strong> </span><br>這個筆記使用 <strong>文氏圖</strong> 表示是方便記憶用<br>範例語法有特別為了呈現 <strong>文氏圖</strong> 而調整過<br>許多 JOIN 在實際應用的情況下，通常 <span style="color:red"> <strong>無法</strong> </span> 透過 <strong>文氏圖</strong> 正確表示</p>
 <p><img src="/2019/07/11/SQL-JOIN/SQL-JOIN-01.jpg" alt="Left Join、Inner Join、RIGHT Join" title="Left Join、Inner Join、RIGHT Join"></p>
 <hr>
 <p><img src="/2019/07/11/SQL-JOIN/SQL-JOIN-02.jpg" alt="Left Join (Minus T2)、Union All (Minus Inner Join)、Right Join (Minus T1)" title="Left Join (Minus T2)、Union All (Minus Inner Join)、Right Join (Minus T1)"></p>
 <hr>
 <p><img src="/2019/07/11/SQL-JOIN/SQL-JOIN-03.jpg" alt="Full Outer Join、Union All" title="Full Outer Join、Union All"></p>
+<hr>
+<p><span style="color:red"> <strong>※ 注意 ※</strong> </span>  </p>
+<p>這份筆記使用 <strong>文氏圖</strong> 是為了方便記憶<br>範例語法有特別為呈現 <strong>文氏圖</strong> 而調整過<br>通常在實際應用的情況 <strong>文氏圖</strong> <span style="color:red"> <strong>無法完全正確地</strong> </span> 表示出該 JOIN 的結果</p>
+<blockquote>
+<p>可參考這個說明，裡面用的圖解比較精準，但不易於記憶<br><a href="https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins/" target="_blank" rel="noopener">https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins/</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>T-SQL</category>
