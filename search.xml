@@ -66,7 +66,7 @@
   範例內容<br />
   使用 HTML 連結語法 <a href="http://www.google.com" target="_blank">Google</a><br />
 
-<p>  含有<span style="color:ff00ff"> <em>顏色</em> </span>的段落內容<br>  </div></p>
+<p>  含有<span style="color:#ff00ff"> <em>顏色</em> </span>的段落內容<br>  </div></p>
   <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">範例內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">範例內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">使用 HTML 連結語法 <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.google.com"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">含有<span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">"color:ff00ff"</span>&gt;</span> *顏色* <span class="tag">&lt;/<span class="name">span</span>&gt;</span>的段落內容</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <hr>
@@ -242,7 +242,6 @@ function MyFunc()
         <category>小工具</category>
       </categories>
       <tags>
-        <tag>Bookmarklet</tag>
         <tag>Javascript</tag>
       </tags>
   </entry>
@@ -258,8 +257,8 @@ function MyFunc()
 <hr>
 <p><img src="/2019/07/11/SQL-JOIN/SQL-JOIN-03.jpg" alt="Full Outer Join、Union All" title="Full Outer Join、Union All"></p>
 <hr>
-<p><span style="color:red"> <strong>※ 注意 ※</strong> </span>  </p>
-<p>這份筆記使用 <strong>文氏圖</strong> 是為了方便記憶<br>範例語法有特別為呈現 <strong>文氏圖</strong> 而調整過<br>通常在實際應用的情況 <strong>文氏圖</strong> <span style="color:red"> <strong>無法完全正確地</strong> </span> 表示出該 JOIN 的結果</p>
+<p><span style="color:#ff0000"> <strong>※ 注意 ※</strong> </span>  </p>
+<p>這份筆記使用 <strong>文氏圖</strong> 是為了方便記憶<br>範例語法有特別為呈現 <strong>文氏圖</strong> 而調整過<br>通常在實際應用的情況 <strong>文氏圖</strong> <span style="color:#ff0000"> <strong>無法完全正確地</strong> </span> 表示出該 JOIN 的結果</p>
 <blockquote>
 <p>可參考這個說明，裡面用的圖解比較精準，但不易於記憶<br><a href="https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins/" target="_blank" rel="noopener">https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins/</a></p>
 </blockquote>
