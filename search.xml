@@ -260,7 +260,7 @@ function MyFunc()
 <p><span style="color:#ff0000"> <strong>※ 注意 ※</strong> </span>  </p>
 <p>這份筆記使用 <strong>文氏圖</strong> 是為了方便記憶<br>範例語法有特別為呈現 <strong>文氏圖</strong> 而調整過<br>通常在實際應用的情況 <strong>文氏圖</strong> <span style="color:#ff0000"> <strong>無法完全正確地</strong> </span> 表示出該 JOIN 的結果</p>
 <blockquote>
-<p>可參考這個說明，裡面用的圖解比較精準，但不易於記憶<br><a href="https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins/" target="_blank" rel="noopener">https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins/</a></p>
+<p>可參考這個說明，裡面用的圖解比較精準，只是不容易記憶<br><a href="https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins" target="_blank" rel="noopener">https://blog.jooq.org/2016/07/05/say-no-to-venn-diagrams-when-explaining-joins</a></p>
 </blockquote>
 ]]></content>
       <categories>
