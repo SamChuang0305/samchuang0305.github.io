@@ -51,7 +51,7 @@
 </ul>
 <hr>
 <ul>
-<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔指定為 template 格式輸出，輸出的格式最完美，也是最費工的做法，我目前的文章內容還沒多到需要製成這麼精致的 PDF，所以先打住，等將來需要的時候再繼續研究，或是您有使用的經驗，也請不吝留言分享，感謝您<br>  (待補，也可能永遠不會補 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</p>
+<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔指定為 template 格式輸出，輸出的格式最完美，也是最費工的做法，我目前的文章內容還沒多到需要製成這麼精致的 PDF，所以先打住，等將來需要的時候再繼續研究，或是您有使用的經驗，也請不吝留言分享，感謝您<br>  <span style="color:#ff0000"><strong>(待補，也可能永遠不會補 😆)</strong></span></p>
 <blockquote>
 <p><a href="https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#using-markdown-templates" target="_blank" rel="noopener">Using Markdown Templates</a></p>
 </blockquote>
@@ -78,8 +78,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Markdown 語法整理</title>
-    <url>/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/</url>
+    <title>Markdown 常用語法整理</title>
+    <url>/2020/01/10/Markdown%20%E5%B8%B8%E7%94%A8%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<h1 id="標題-H1"><a href="#標題-H1" class="headerlink" title="標題 H1"></a>標題 H1</h1><h2 id="標題-H2"><a href="#標題-H2" class="headerlink" title="標題 H2"></a>標題 H2</h2><h3 id="標題-H3"><a href="#標題-H3" class="headerlink" title="標題 H3"></a>標題 H3</h3><h4 id="標題-H4"><a href="#標題-H4" class="headerlink" title="標題 H4"></a>標題 H4</h4><h5 id="標題-H5"><a href="#標題-H5" class="headerlink" title="標題 H5"></a>標題 H5</h5><h6 id="標題-H6"><a href="#標題-H6" class="headerlink" title="標題 H6"></a>標題 H6</h6><figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="section"># 標題 H1</span></span><br><span class="line"><span class="section">## 標題 H2</span></span><br><span class="line"><span class="section">### 標題 H3</span></span><br><span class="line"><span class="section">#### 標題 H4</span></span><br><span class="line"><span class="section">##### 標題 H5</span></span><br><span class="line"><span class="section">###### 標題 H6</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 
@@ -306,7 +306,7 @@ function MyFunc()
 </blockquote>
 <hr>
 <h1 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h1><ul>
-<li><h2 id="關於換行"><a href="#關於換行" class="headerlink" title="關於換行"></a>關於換行</h2><p>若遇到多行段落內容在顯示時沒有正確換行，可在要換行內容的結尾加 <code>兩個空白鍵</code> 例如：  </p>
+<li><h2 id="強制換行"><a href="#強制換行" class="headerlink" title="強制換行"></a>強制換行</h2><p>若遇到多行段落內容在顯示時沒有正確換行，可在要換行內容的結尾加 <code>兩個空白鍵</code> 強制換行，例如：  </p>
 <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">第一行段落內容 + <span class="code">`兩個空白鍵`</span> + <span class="code">`換行符號`</span></span><br><span class="line">第二行段落內容</span><br></pre></td></tr></table></figure>
 
 <p>顯示結果  </p>
