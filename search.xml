@@ -1,10 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>使用 Pandoc 將 Markdown 轉為 PDF 文件</title>
+    <url>/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<ul>
+<li><h3 id="準備環境"><a href="#準備環境" class="headerlink" title="準備環境"></a>準備環境</h3><ul>
+<li>安裝 <a href="https://pandoc.org/" target="_blank" rel="noopener">Pandoc</a> : 功能強的萬用文件轉換器</li>
+<li>安裝 <a href="https://miktex.org/" target="_blank" rel="noopener">MiKTeX</a> : 在 Pandoc 轉檔時會自動安裝缺少的套件 (例如處理中文字就需要 cjk 套件)</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<ul>
+<li><h3 id="輸出-PDF-步驟-方法一"><a href="#輸出-PDF-步驟-方法一" class="headerlink" title="輸出 PDF 步驟 (方法一)"></a>輸出 PDF 步驟 (方法一)</h3><p>  使用預設格式輸出，最簡單，輸出的內容格式也不會太美</p>
+<ol>
+<li><p>markdown 的 YAML 內宣告的內容會輸出成文件的封面</p>
+ <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果 markdown 文件內有中文字，要在開頭的 YAML 內加入中文字型宣告</p>
+<p> <b><code>for Linux</code></b></p>
+ <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">mainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+
+<p> <b><code>for Windows</code></b></p>
+ <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
+<p> <b><code>for Linux</code></b></p>
+ <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-latex</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
+
+<p> <b><code>for Windows</code></b></p>
+ <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
+
+<p> <strong>參數說明</strong></p>
+<ul>
+<li><code>-o &#39;destination.pdf&#39;</code> : 輸出檔名</li>
+<li><code>--latex-engine=xelatex</code> 或 <code>--pdf-engine=xelatex</code> : 指定 LaTeX engine 用 xelatex 做為 PDF 的編碼器</li>
+<li><code>--toc</code> : 在文件內產生 Table of Contents 目錄頁，並加上頁碼和連結 <strong>(選擇性參數)</strong></li>
+</ul>
+</li>
+<li><p><strong>轉檔指令與範例檔</strong></p>
+<p> pandoc &#34;<a href="example.txt">example.txt</a>&#34; -o &#34;<a href="example.pdf">example.pdf</a>&#34; –pdf-engine=xelatex –toc</p>
+<p> 從輸出結果 <a href="example.pdf">example.pdf</a> 來看，雖然轉換出來的格式不完美，但已可將中文內容轉出，也有 Table of Contents 目錄頁含頁碼與連結、以及文章大標題的書籤連結。</p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔做為 template 格式輸出，輸出的格式最完美，也是最費工的做法，小弟想把時間留給家人，暫無打算將生命浪費在此，若有人研究出心得，還請您留言分享，感謝您<br>  (待補，很可能永遠不會補 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</p>
+<blockquote>
+<p><a href="https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#using-markdown-templates" target="_blank" rel="noopener">Using Markdown Templates</a></p>
+</blockquote>
+</li>
+<li><h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ul>
+<li><a href="https://blog.miniasp.com/post/2018/10/06/Useful-tool-Pandoc-universal-document-converter" target="_blank" rel="noopener">介紹好用工具：Pandoc ( 萬用的文件轉換器 )</a></li>
+<li><a href="https://pandoc.org/demos.html" target="_blank" rel="noopener">Pandoc 官網轉換各種文件的範例</a></li>
+<li><a href="https://github.com/jgm/pandoc/wiki/Pandoc-with-Chinese" target="_blank" rel="noopener">Pandoc with Chinese</a></li>
+<li><a href="http://pages.tzengyuxio.me/pandoc/" target="_blank" rel="noopener">Pandoc’s Markdown 語法 (中文翻譯)</a></li>
+<li><a href="https://pandoc.org/MANUAL.html#variables-for-latex" target="_blank" rel="noopener">Pandoc 可用的 LaTeX 參數</a></li>
+<li><a href="http://project.mde.tw/blog/pandoc-markdown-zhuan-pdf-ge-shi.html" target="_blank" rel="noopener">Pandoc - Markdown 轉 PDF 格式</a></li>
+<li><a href="http://project.mde.tw/blog/pandoc-markdown-ji-ben-yu-fa-jie-shao.html" target="_blank" rel="noopener">Pandoc - Markdown 基本語法介紹</a></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Markdown</category>
+      </categories>
+      <tags>
+        <tag>Markdown</tag>
+        <tag>Pandoc</tag>
+        <tag>PDF</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Markdown 語法整理</title>
     <url>/2020/01/10/Markdown%20%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<h1 id="標題-H1"><a href="#標題-H1" class="headerlink" title="標題 H1"></a>標題 H1</h1><h2 id="標題-H2"><a href="#標題-H2" class="headerlink" title="標題 H2"></a>標題 H2</h2><h3 id="標題-H3"><a href="#標題-H3" class="headerlink" title="標題 H3"></a>標題 H3</h3><h4 id="標題-H4"><a href="#標題-H4" class="headerlink" title="標題 H4"></a>標題 H4</h4><h5 id="標題-H5"><a href="#標題-H5" class="headerlink" title="標題 H5"></a>標題 H5</h5><h6 id="標題-H6"><a href="#標題-H6" class="headerlink" title="標題 H6"></a>標題 H6</h6><figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="section"># 標題 H1</span></span><br><span class="line"><span class="section">## 標題 H2</span></span><br><span class="line"><span class="section">### 標題 H3</span></span><br><span class="line"><span class="section">#### 標題 H4</span></span><br><span class="line"><span class="section">##### 標題 H5</span></span><br><span class="line"><span class="section">###### 標題 H6</span></span><br></pre></td></tr></table></figure>
-
 <a id="more"></a>
 
 <hr>
@@ -100,8 +174,11 @@ function MyFunc()
 }
 &#96;&#96;&#96;
 </pre>
-
-
+</li>
+<li><h2 id="程式碼區塊支援的語言種類"><a href="#程式碼區塊支援的語言種類" class="headerlink" title="程式碼區塊支援的語言種類"></a>程式碼區塊支援的語言種類</h2><ul>
+<li><a href="https://github.com/github/linguist/blob/master/vendor/README.md" target="_blank" rel="noopener">Grammar index</a></li>
+<li><a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml" target="_blank" rel="noopener">參考 languages YAML file</a></li>
+</ul>
 </li>
 </ul>
 <hr>
@@ -232,6 +309,12 @@ function MyFunc()
 
 <p>顯示結果  </p>
 <p>第一行段落內容<br>第二行段落內容</p>
+</li>
+<li><h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="noopener">Mastering Markdown</a></li>
+<li><a href="https://github.github.com/gfm/" target="_blank" rel="noopener">GitHub Flavored Markdown Spec</a></li>
+<li><a href="https://help.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax" target="_blank" rel="noopener">Basic writing and formatting syntax</a></li>
+</ul>
 </li>
 </ul>
 ]]></content>
