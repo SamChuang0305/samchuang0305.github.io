@@ -16,17 +16,17 @@
 <ul>
 <li><h3 id="輸出-PDF-步驟-方法一"><a href="#輸出-PDF-步驟-方法一" class="headerlink" title="輸出 PDF 步驟 (方法一)"></a>輸出 PDF 步驟 (方法一)</h3><p>  使用預設格式輸出，最簡單，輸出的內容格式也不會太美</p>
 <ol>
-<li><p>markdown 的 YAML 內宣告的內容會輸出成文件的封面</p>
+<li><h4 id="使用-YAML-metedata"><a href="#使用-YAML-metedata" class="headerlink" title="使用 YAML metedata"></a>使用 YAML metedata</h4><p> markdown 開頭的 YAML metadata 內宣告的內容會輸出成文件的首頁</p>
  <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>如果 markdown 文件內有中文字，要在開頭的 YAML 內加入中文字型宣告</p>
-<p> <b><code>for Linux</code></b></p>
- <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">mainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+<li><h4 id="指定中文字型"><a href="#指定中文字型" class="headerlink" title="指定中文字型"></a>指定中文字型</h4><p> 如果 markdown 文件內有中文字，也要在 YAML metadata 內指定中文字型</p>
+<p> <a id="markdown-指定中文字型YAML" name="指定中文字型YAML"></a><br> <b><code>for Linux</code></b></p>
+ <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">mainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 
 <p> <b><code>for Windows</code></b></p>
- <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
+<li><h4 id="輸入-Pandoc-轉檔指令"><a href="#輸入-Pandoc-轉檔指令" class="headerlink" title="輸入 Pandoc 轉檔指令"></a>輸入 Pandoc 轉檔指令</h4><p> 在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
 <p> <b><code>for Linux</code></b></p>
  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-latex</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
 
@@ -40,16 +40,18 @@
 <li><code>--toc</code> : 在文件內產生 Table of Contents 目錄頁，並加上頁碼和連結 <strong>(選擇性參數)</strong></li>
 </ul>
 </li>
-<li><p><strong>轉檔指令與範例檔</strong></p>
-<p> pandoc &#34;<a href="example.txt">example.txt</a>&#34; -o &#34;<a href="example.pdf">example.pdf</a>&#34; –pdf-engine=xelatex –toc</p>
+<li><h4 id="轉檔指令-與-範例檔"><a href="#轉檔指令-與-範例檔" class="headerlink" title="轉檔指令 與 範例檔"></a>轉檔指令 與 範例檔</h4><p> pandoc &#34;<a href="example.txt">example.txt</a>&#34; -o &#34;<a href="example.pdf">example.pdf</a>&#34; –pdf-engine=xelatex –toc</p>
 <p> 從輸出結果 <a href="example.pdf">example.pdf</a> 來看，雖然轉換出來的格式不完美，但已可將中文內容轉出，也有 Table of Contents 目錄頁含頁碼與連結、以及文章大標題的書籤連結。</p>
+<blockquote>
+<p><a href="example.txt">example.txt</a> 內的 YAML metadata 內容會被網站平台過濾掉，在原檔是存在的<br> 請參考 <a href="#指定中文字型YAML">2. 指定中文字型 的 YAML metadata 內容</a></p>
+</blockquote>
 </li>
 </ol>
 </li>
 </ul>
 <hr>
 <ul>
-<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔做為 template 格式輸出，輸出的格式最完美，也是最費工的做法，小弟想把時間留給家人，暫無打算將生命浪費在此，若有人研究出心得，還請您留言分享，感謝您<br>  (待補，很可能永遠不會補 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</p>
+<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔指定為 template 格式輸出，輸出的格式最完美，也是最費工的做法，我目前的文章內容還沒多到需要製成這麼精致的 PDF，所以先打住，等將來需要的時候再繼續研究，或是您有使用的經驗，也請不吝留言分享，感謝您<br>  (待補，也可能永遠不會補 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</p>
 <blockquote>
 <p><a href="https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#using-markdown-templates" target="_blank" rel="noopener">Using Markdown Templates</a></p>
 </blockquote>
