@@ -67,7 +67,7 @@
   使用 HTML 連結語法 <a href="http://www.google.com" target="_blank">Google</a><br />
 
 <p>  含有<span style="color:#ff00ff"> <em>顏色</em> </span>的段落內容<br>  </div></p>
-  <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">範例內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">範例內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">使用 HTML 連結語法 <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.google.com"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">含有<span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">"color:ff00ff"</span>&gt;</span> *顏色* <span class="tag">&lt;/<span class="name">span</span>&gt;</span>的段落內容</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">範例內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">範例內容<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">使用 HTML 連結語法 <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.google.com"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">含有<span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">"color:#ff00ff"</span>&gt;</span> *顏色* <span class="tag">&lt;/<span class="name">span</span>&gt;</span>的段落內容</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <hr>
 <h1 id="程式碼區塊"><a href="#程式碼區塊" class="headerlink" title="程式碼區塊"></a>程式碼區塊</h1><ul>
@@ -213,6 +213,18 @@ function MyFunc()
 </ul>
 <figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="bullet">- </span>無序列表 1</span><br><span class="line"><span class="bullet">- </span>無序列表 2</span><br><span class="line"><span class="bullet">  - </span>無序列表 1-1</span><br><span class="line"><span class="bullet">  - </span>無序列表 1-2</span><br><span class="line"><span class="bullet">    - </span>無序列表為 <span class="code">`*`</span> 或 <span class="code">`+`</span> 或 <span class="code">`-`</span></span><br><span class="line"><span class="code">    &gt; - 可搭配引言符號 `&gt;`</span></span><br><span class="line"><span class="code">    &gt; 1. 可搭配有序列表 `數字` + `.` + `空白鍵`</span></span><br><span class="line"><span class="code">    &gt; 2. 可搭配有序列表 `數字` + `.` + `空白鍵`</span></span><br><span class="line"><span class="code">    &gt; 3. 可搭配有序列表 `數字` + `.` + `空白鍵`</span></span><br><span class="line"><span class="bullet">  - </span>無序列表 1-3 結尾加 <span class="code">`兩個空白鍵`</span> + <span class="code">`換行`</span> __  </span><br><span class="line"><span class="code">    這行文字就會對齊</span></span><br><span class="line"><span class="bullet">  - </span>無序列表 1-4</span><br><span class="line"><span class="bullet">- </span>無序列表 3</span><br></pre></td></tr></table></figure>
 
+<hr>
+<h1 id="待辦事項"><a href="#待辦事項" class="headerlink" title="待辦事項"></a>待辦事項</h1><ul>
+<li><input disabled="" type="checkbox"> 工作</li>
+<li><input checked="" disabled="" type="checkbox"> <del>休息</del></li>
+<li><input checked="" disabled="" type="checkbox"> <del>睡覺</del></li>
+</ul>
+<figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="bullet">- </span>[ ] 工作</span><br><span class="line"><span class="bullet">- </span>[x] ~~休息~~</span><br><span class="line"><span class="bullet">- </span>[X] ~~睡覺~~</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="表情符號-emoji"><a href="#表情符號-emoji" class="headerlink" title="表情符號 (emoji)"></a>表情符號 (emoji)</h1><blockquote>
+<p>太多了，請參考 <a href="https://www.webfx.com/tools/emoji-cheat-sheet" target="_blank" rel="noopener">https://www.webfx.com/tools/emoji-cheat-sheet</a></p>
+</blockquote>
 <hr>
 <h1 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h1><ul>
 <li><h2 id="關於換行"><a href="#關於換行" class="headerlink" title="關於換行"></a>關於換行</h2><p>若遇到多行段落內容在顯示時沒有正確換行，可在要換行內容的結尾加 <code>兩個空白鍵</code> 例如：  </p>
