@@ -52,7 +52,7 @@
 </blockquote>
 <hr>
 <h2 id="輸出樣式"><a href="#輸出樣式" class="headerlink" title="輸出樣式"></a>輸出樣式</h2><ol>
-<li><h3 id="預設樣式"><a href="#預設樣式" class="headerlink" title="預設樣式"></a>預設樣式</h3><p> 如前例，輸出時未指定 template 樣式會以預設格式輸出，預設格式並未指定每個 markdown 語法要對應的字型、顏色、格式，因此輸出的文件版面不美觀，甚至可能會遇到中文段落的文字不會自動換行，超出版面的問題。</p>
+<li><h3 id="預設樣式"><a href="#預設樣式" class="headerlink" title="預設樣式"></a>預設樣式</h3><p> 執行轉檔指令沒有指定 template 樣式會以預設格式輸出，預設格式不會針對 markdown 每個語法去對應不同字型、顏色、格式，因此輸出的文件版面不美觀，甚至可能會遇到中文段落的文字不會自動換行，或超出版面的問題，最顯而易見的是邊界空白區就佔了將近版面 40%。</p>
 </li>
 <li><h3 id="使用-LaTeX-template-自訂樣式"><a href="#使用-LaTeX-template-自訂樣式" class="headerlink" title="使用 LaTeX template 自訂樣式"></a>使用 LaTeX template 自訂樣式</h3><p> 可依需求自行撰寫 LaTeX template 的樣式檔，輸出時只要指定使用此樣式檔，只要樣式檔沒寫錯，就會照我們預期的版面樣式輸出。</p>
 <p> 若想自訂樣式檔，可參考 LaTeX template 的寫法  </p>
