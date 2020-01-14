@@ -19,45 +19,18 @@
 
 <hr>
 <ul>
-<li><h3 id="輸出-PDF-步驟-方法一"><a href="#輸出-PDF-步驟-方法一" class="headerlink" title="輸出 PDF 步驟 (方法一)"></a>輸出 PDF 步驟 (方法一)</h3><p>  使用預設格式輸出，最簡單，輸出的內容格式也不會太美</p>
-<ol>
-<li><h4 id="使用-YAML-metedata"><a href="#使用-YAML-metedata" class="headerlink" title="使用 YAML metedata"></a>使用 YAML metedata</h4><p> markdown 開頭的 YAML metadata 內宣告的內容會輸出成文件的首頁</p>
- <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><h4 id="指定中文字型"><a href="#指定中文字型" class="headerlink" title="指定中文字型"></a>指定中文字型</h4><p> 如果 markdown 文件內有中文字，也要在 YAML metadata 內指定中文字型</p>
-<p> <a id="markdown-指定中文字型YAML" name="指定中文字型YAML"></a><br> <b><code>Linux</code></b></p>
- <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">mainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+<li><h3 id="YAML-metadata-區塊"><a href="#YAML-metadata-區塊" class="headerlink" title="YAML metadata 區塊"></a>YAML metadata 區塊</h3><p>  在 markdown 開頭寫 YAML metadata 區塊，依此區塊用到的不同參數，會對應 template 格式檔而輸出至文件指定的位置，如：頁首、頁尾、字體格式等。</p>
+<p>  <a id="markdown-YAML的mainfont參數" name="YAML的mainfont參數"></a></p>
+  <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">mainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 
-<p> <b><code>Windows</code></b></p>
- <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><h4 id="輸入-Pandoc-指令轉檔"><a href="#輸入-Pandoc-指令轉檔" class="headerlink" title="輸入 Pandoc 指令轉檔"></a>輸入 Pandoc 指令轉檔</h4><p> 在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
-<p> <b><code>Linux</code></b></p>
- <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-latex</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
-
-<p> <b><code>Windows</code></b></p>
- <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
-
-<p> <strong>參數說明</strong></p>
-<ul>
-<li><code>-o &#39;destination.pdf&#39;</code><br>  指定輸出檔名</li>
-<li><code>--latex-engine=xelatex</code> 或 <code>--pdf-engine=xelatex</code><br>  指定 LaTeX engine 使用 xelatex 製作 PDF  </li>
-<li><code>--toc</code> <strong>(選擇性參數)</strong><br>  在 PDF 內用 markdown 的標題產生 Table of Contents 目錄頁，同時加上頁碼和連結</li>
-</ul>
-</li>
-<li><h4 id="轉檔指令-與-範例檔"><a href="#轉檔指令-與-範例檔" class="headerlink" title="轉檔指令 與 範例檔"></a>轉檔指令 與 範例檔</h4><p> pandoc &#34;<a href="example.txt">example.txt</a>&#34; -o &#34;<a href="example.pdf">example.pdf</a>&#34; –pdf-engine=xelatex –toc</p>
-<p> 從輸出結果 <a href="example.pdf">example.pdf</a> 來看，雖然轉換出來的格式不完美，但已可將中文內容轉出，也有 Table of Contents 目錄頁含頁碼與連結、以及文章大標題的書籤連結。</p>
+<h4 id="YAML-metadata-參數"><a href="#YAML-metadata-參數" class="headerlink" title="YAML metadata 參數"></a>YAML metadata 參數</h4><ul>
+<li><p><strong>mainfont</strong><br>  指定字型檔，預設為 SourceSansPro-Bold.otf 字型 (不支援中文字)<br>  若文件內有中文字，必須在 YAML metadata 區塊加上中文字型的指定，否則會出錯。<br>  <span style="color:#ff0000"><strong>準確一點的說法：指定的字型檔必須包含到文件內所有用到的字元</strong></span><br>  也就是，若輸入 Unicode 的 emoji 字元，若字型檔內沒有此字元，一樣會出錯。</p>
+<p>  <strong>參考資料</strong></p>
 <blockquote>
-<p><a href="example.txt">example.txt</a> 內的 YAML metadata 內容會被網站平台過濾掉，在原檔是存在的<br> 請參考 <a href="#指定中文字型YAML">2. 指定中文字型 的 YAML metadata 內容</a></p>
+<p><a href="https://github.com/jgm/pandoc/wiki/Pandoc-with-Chinese" target="_blank" rel="noopener">Pandoc with Chinese</a></p>
 </blockquote>
-</li>
-</ol>
-<ul>
-<li><p>參考資料</p>
-<blockquote>
-<ul>
-<li><a href="https://pandoc.org/demos.html" target="_blank" rel="noopener">Pandoc 官網轉換各種文件的範例</a></li>
-</ul>
+<h4 id="YAML-metadata-參數說明"><a href="#YAML-metadata-參數說明" class="headerlink" title="YAML metadata 參數說明"></a>YAML metadata 參數說明</h4><blockquote>
+<p><a href="https://pandoc.org/MANUAL.html#templates" target="_blank" rel="noopener">官方文件 (Pandoc User’s Guide - Templates)</a>  </p>
 </blockquote>
 </li>
 </ul>
@@ -65,25 +38,122 @@
 </ul>
 <hr>
 <ul>
-<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔並指定為輸出格式用的 template，輸出的格式最完美，也是最費工的做法，這裡先打住，等將來需要用到的時候再繼續研究，若是您有使用的經驗，也請不吝留言分享，感謝您<br>  <span style="color:#ff0000"><strong>(待補，也可能永遠不會補 😆)</strong></span></p>
+<li><h3 id="執行-Pandoc-轉檔指令"><a href="#執行-Pandoc-轉檔指令" class="headerlink" title="執行 Pandoc 轉檔指令"></a>執行 Pandoc 轉檔指令</h3><p>  在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
+<p>  <b><code>Linux</code></b></p>
+  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'example.md'</span> <span class="literal">-o</span> <span class="string">'example.pdf'</span> -<span class="literal">-latex</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span> -<span class="literal">-toc</span><span class="literal">-depth</span>=<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>  <b><code>Windows</code></b></p>
+  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'example.md'</span> <span class="literal">-o</span> <span class="string">'example.pdf'</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span> -<span class="literal">-toc</span><span class="literal">-depth</span>=<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="指令參數說明"><a href="#指令參數說明" class="headerlink" title="指令參數說明"></a>指令參數說明</h4><ul>
+<li><p><code>-o &#39;example.pdf&#39;</code><br>  指定輸出檔名</p>
+</li>
+<li><p><code>--latex-engine=xelatex</code> 或 <code>--pdf-engine=xelatex</code><br>  指定 LaTeX engine 使用 xelatex 製作 PDF  </p>
+</li>
+<li><p><code>--toc</code> <strong>(選擇性參數)</strong><br>  在 PDF 內用 markdown 的標題產生 Table of Contents 目錄頁，同時加上頁碼和連結</p>
+</li>
+<li><p><code>--toc-depth=NUMBER</code> <strong>(選擇性參數)</strong><br>  Table of Contents 目錄要包含多少層的 markdown Header<br>  NUMBER 可設定的值為 1~6 (預設為 3)</p>
+<h4 id="指令參數參考文件"><a href="#指令參數參考文件" class="headerlink" title="指令參數參考文件"></a>指令參數參考文件</h4><blockquote>
+<p><a href="https://pandoc.org/MANUAL.html#options" target="_blank" rel="noopener">官方文件 (Pandoc User’s Guide - Options)</a>  </p>
+</blockquote>
+<h4 id="執行範例-預設格式"><a href="#執行範例-預設格式" class="headerlink" title="執行範例 (預設格式)"></a>執行範例 (預設格式)</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">"example.txt"</span> <span class="literal">-o</span> <span class="string">"example.pdf"</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><a href="example.txt">example.txt (點擊可下載原始檔)</a> 是 markdown 來源檔名稱<br>  若下載的原始檔沒看到 YAML metadata 區塊內容，可能是被網站平台過濾掉了，該區塊內容可以參考 <a href="#YAML的mainfont參數">YAML metadata 區塊</a> 段落說明</p>
+</li>
+<li><p>此範例未指定輸出樣式檔，會使用預設樣式輸出，從結果 <a href="example.pdf">example.pdf (點擊連結可看原始檔內容)</a> 來看，雖然已將中文內容轉成 PDF 文件，也包含有 Table of Contents 目錄、頁碼與文章標題的書籤連結，但轉換出來的版面不完美。</p>
+<h4 id="Pandoc-指令參考資料"><a href="#Pandoc-指令參考資料" class="headerlink" title="Pandoc 指令參考資料"></a>Pandoc 指令參考資料</h4><blockquote>
+<p><a href="https://pandoc.org/demos.html" target="_blank" rel="noopener">Pandoc 官網轉換各種文件的範例</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="指定輸出樣式"><a href="#指定輸出樣式" class="headerlink" title="指定輸出樣式"></a>指定輸出樣式</h3><ul>
+<li><h4 id="預設樣式"><a href="#預設樣式" class="headerlink" title="預設樣式"></a>預設樣式</h4><p>  如前例，輸出時未指定 template 樣式會以預設格式輸出，預設格式並未指定每個 markdown 語法要對應的字型、顏色、格式，因此輸出的文件版面不美觀，甚至可能會遇到中文段落的文字不會自動換行，超出版面的問題。</p>
+</li>
+<li><h4 id="使用-LaTeX-template-自訂樣式"><a href="#使用-LaTeX-template-自訂樣式" class="headerlink" title="使用 LaTeX template 自訂樣式"></a>使用 LaTeX template 自訂樣式</h4><p>  可依需求自行撰寫 LaTeX template 的樣式檔，輸出時只要指定使用此樣式檔，只要樣式檔沒寫錯，就會照我們預期的版面樣式輸出。</p>
+<p>  若想自訂樣式檔，可參考 LaTeX template 的寫法  </p>
 <blockquote>
 <ul>
 <li><a href="https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#using-markdown-templates" target="_blank" rel="noopener">Using Markdown Templates</a>  </li>
-<li><a href="http://xiaodc.github.io/%E6%8A%80%E6%9C%AF%E5%8D%9A%E6%96%87/2019/09/08/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-pandoc-%E5%92%8C-latex-%E5%88%B6%E4%BD%9C%E6%BC%82%E4%BA%AE%E7%9A%84-pdf/" target="_blank" rel="noopener">如何使用 pandoc 和 LaTeX 製作漂亮的 pdf</a>  </li>
-<li><a href="https://github.com/Wandmalfarbe/pandoc-latex-template" target="_blank" rel="noopener">Eisvogel - A pandoc LaTeX template to convert markdown files to PDF or LaTeX.</a></li>
-<li><a href="https://pandoc.org/MANUAL.html#variables-for-latex" target="_blank" rel="noopener">Pandoc 可用的 LaTeX 參數</a></li>
+<li><a href="https://pandoc.org/MANUAL.html#variables-for-latex" target="_blank" rel="noopener">官方文件 (Pandoc User’s Guide - Variables for LaTeX)</a></li>
 </ul>
 </blockquote>
+</li>
+<li><h4 id="使用-Eisvogel-LaTeX-template-樣式"><a href="#使用-Eisvogel-LaTeX-template-樣式" class="headerlink" title="使用 Eisvogel LaTeX template 樣式"></a>使用 Eisvogel LaTeX template 樣式</h4><p>  自製 LaTeX template 樣式輸出的格式最完美，但也是最曠日費時的做法，人生短暫，我們可以使用別人寫好現成的 LaTex template，把省下的時間用來創造更美好的事物，這裡選用開源專案的 Eisvogel LaTeX template。</p>
+<ul>
+<li><h5 id="下載-Eisvogel-LaTex-template"><a href="#下載-Eisvogel-LaTex-template" class="headerlink" title="下載 Eisvogel LaTex template"></a>下載 Eisvogel LaTex template</h5><ol>
+<li><p><a href="https://github.com/Wandmalfarbe/pandoc-latex-template/releases/latest" target="_blank" rel="noopener">Eisvogel LaTex template</a>  </p>
+</li>
+<li><p>解壓縮 Zip  </p>
+</li>
+<li><p>將裡面的 <code>eisvogel.tex</code> 複製到 pandoc templates 目錄，並改名為 <code>eisvogel.latex</code>，pandoc templates 的路徑為<br><a id="markdown-Template預設目錄" name="Template預設目錄"></a></p>
+<ul>
+<li><p>Unix、Linux、macOS :<br>  <code>/Users/USERNAME/.local/share/pandoc/templates/</code><br>  或<br>  <code>/Users/USERNAME/.pandoc/templates/</code></p>
+</li>
+<li><p>Windows :<br>  <code>C:\Users\USERNAME\AppData\Roaming\pandoc\templates\</code>  </p>
+<p>如果目錄不存在，請自己建立</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><h5 id="使用-Eisvogel-LaTeX-template"><a href="#使用-Eisvogel-LaTeX-template" class="headerlink" title="使用 Eisvogel LaTeX template"></a>使用 Eisvogel LaTeX template</h5><p>  在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
+<p>  <b><code>Linux</code></b></p>
+  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'example.md'</span> <span class="literal">-o</span> <span class="string">'example.pdf'</span> -<span class="literal">-latex</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span> -<span class="literal">-from</span> markdown -<span class="literal">-template</span> eisvogel -<span class="literal">-listings</span></span><br></pre></td></tr></table></figure>
+
+<p>  <b><code>Windows</code></b></p>
+  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'example.md'</span> <span class="literal">-o</span> <span class="string">'example.pdf'</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span> -<span class="literal">-from</span> markdown -<span class="literal">-template</span> eisvogel -<span class="literal">-listings</span></span><br></pre></td></tr></table></figure>
+
+<p>  <strong>參數說明</strong></p>
+<ul>
+<li><code>-o &#39;example.pdf&#39;</code><br>  指定輸出檔名</li>
+<li><code>--latex-engine=xelatex</code> 或 <code>--pdf-engine=xelatex</code><br>  指定 LaTeX engine 使用 xelatex 製作 PDF  </li>
+<li><code>--toc</code> <strong>(選擇性參數)</strong><br>  在 PDF 內用 markdown 的標題產生 Table of Contents 目錄頁，同時加上頁碼和連結  </li>
+</ul>
+</li>
+<li><p>參考資料</p>
+<blockquote>
+<ul>
+<li><a href="http://xiaodc.github.io/%E6%8A%80%E6%9C%AF%E5%8D%9A%E6%96%87/2019/09/08/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-pandoc-%E5%92%8C-latex-%E5%88%B6%E4%BD%9C%E6%BC%82%E4%BA%AE%E7%9A%84-pdf/" target="_blank" rel="noopener">如何使用 pandoc 和 LaTeX 製作漂亮的 pdf</a>  </li>
+<li><a href="https://github.com/Wandmalfarbe/pandoc-latex-template" target="_blank" rel="noopener">Eisvogel - A pandoc LaTeX template to convert markdown files to PDF or LaTeX.</a></li>
+</ul>
+</blockquote>
+</li>
+<li><h5 id="Eisvogel-LaTeX-template-可用的-YAML-metadata-參數"><a href="#Eisvogel-LaTeX-template-可用的-YAML-metadata-參數" class="headerlink" title="Eisvogel LaTeX template 可用的 YAML metadata 參數"></a>Eisvogel LaTeX template 可用的 YAML metadata 參數</h5><p>  <span style="color:#ff0000"><strong>不用修改 template 檔，只要在 markdown 的 YAML metadata 加入參數即可再調整出更精致的版面</strong></span></p>
+<blockquote>
+<p><a href="https://github.com/Wandmalfarbe/pandoc-latex-template#custom-template-variables" target="_blank" rel="noopener">Eisvogel GitHub Repo 說明 - Custom Template  Variables</a></p>
+</blockquote>
+</li>
+</ul>
+<h4 id="執行範例-Eisvogel-template-格式"><a href="#執行範例-Eisvogel-template-格式" class="headerlink" title="執行範例 (Eisvogel template 格式)"></a>執行範例 (Eisvogel template 格式)</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">"example.txt"</span> <span class="literal">-o</span> <span class="string">"example_with_template.pdf"</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br><span class="line"></span><br><span class="line">pandoc <span class="string">"example.txt"</span> <span class="literal">-o</span> <span class="string">"example_with_template.pdf"</span> -<span class="literal">-from</span> markdown -<span class="literal">-template</span> eisvogel -<span class="literal">-listings</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span> -<span class="literal">-toc</span><span class="literal">-depth</span>=<span class="number">5</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><em>指令參數說明*</em></p>
+</li>
+<li><p><code>--from markdown</code><br>  指定來源為 markdown 格式</p>
+</li>
+<li><p><code>--template eisvogel</code><br>  指定要使用的 template 樣式檔<br>  此例會到 <a href="#Template預設目錄">Template 預設目錄</a> 找eisvogel.latex</p>
+</li>
+<li><p><code>--listings</code><br>  用來處理 LaTeX code block 的 listings 套件</p>
+</li>
+<li><p><em>範例結果*</em></p>
+</li>
+<li><p><a href="example.txt">example.txt (點擊可下載原始檔)</a> 是 markdown 來源檔名稱，內容同前例<br>  若下載的原始檔沒看到 YAML metadata 區塊內容，可能是被網站平台過濾掉了，該區塊內容可以參考 <a href="#YAML的mainfont參數">YAML metadata 區塊</a> 段落說明</p>
+</li>
+<li><p>使用 Eisvogel template 樣式輸出的結果 <a href="example_with_template.pdf">example.pdf (點擊連結可看原始檔內容)</a> 版面好看多了。</p>
+</li>
+</ul>
 </li>
 </ul>
 <hr>
 <ul>
 <li><h3 id="補充參考資料"><a href="#補充參考資料" class="headerlink" title="補充參考資料"></a>補充參考資料</h3><blockquote>
 <ul>
-<li><a href="https://github.com/jgm/pandoc/wiki/Pandoc-with-Chinese" target="_blank" rel="noopener">Pandoc with Chinese</a></li>
 <li><a href="http://pages.tzengyuxio.me/pandoc/" target="_blank" rel="noopener">Pandoc’s Markdown 語法 (中文翻譯)</a></li>
-<li><a href="http://project.mde.tw/blog/pandoc-markdown-zhuan-pdf-ge-shi.html" target="_blank" rel="noopener">Pandoc - Markdown 轉 PDF 格式</a></li>
 <li><a href="http://project.mde.tw/blog/pandoc-markdown-ji-ben-yu-fa-jie-shao.html" target="_blank" rel="noopener">Pandoc - Markdown 基本語法介紹</a></li>
+<li><a href="http://project.mde.tw/blog/pandoc-markdown-zhuan-pdf-ge-shi.html" target="_blank" rel="noopener">Pandoc - Markdown 轉 PDF 格式</a></li>
 </ul>
 </blockquote>
 </li>
