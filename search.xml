@@ -89,7 +89,8 @@
 </li>
 <li><p>解壓縮 Zip  </p>
 </li>
-<li><p>將裡面的 <code>eisvogel.tex</code> 複製到 pandoc templates 目錄，並改名為 <code>eisvogel.latex</code>，pandoc templates 的路徑為<br><a id="markdown-Template預設目錄" name="Template預設目錄"></a></p>
+<li><p>將裡面的 <code>eisvogel.tex</code> 複製到 pandoc templates 目錄，並改名為 <code>eisvogel.latex</code>，pandoc templates 的路徑為  </p>
+<p> <a id="markdown-Template預設目錄" name="Template預設目錄"></a></p>
 <ul>
 <li><p>Unix、Linux、macOS :<br>  <code>/Users/USERNAME/.local/share/pandoc/templates/</code><br>  或<br>  <code>/Users/USERNAME/.pandoc/templates/</code></p>
 </li>
@@ -122,7 +123,7 @@
 </ul>
 </blockquote>
 </li>
-<li><h5 id="Eisvogel-LaTeX-template-可用的-YAML-metadata-參數"><a href="#Eisvogel-LaTeX-template-可用的-YAML-metadata-參數" class="headerlink" title="Eisvogel LaTeX template 可用的 YAML metadata 參數"></a>Eisvogel LaTeX template 可用的 YAML metadata 參數</h5><p>  <span style="color:#ff0000"><strong>不用修改 template 檔，只要在 markdown 的 YAML metadata 加入參數即可再調整出更精致的版面</strong></span></p>
+<li><h5 id="Eisvogel-LaTeX-template-可用的-YAML-metadata-參數"><a href="#Eisvogel-LaTeX-template-可用的-YAML-metadata-參數" class="headerlink" title="Eisvogel LaTeX template 可用的 YAML metadata 參數"></a>Eisvogel LaTeX template 可用的 YAML metadata 參數</h5><p>  <span style="color:#ff0000"><strong>不用修改 template 檔，在 markdown 的 YAML metadata 內只要直接加入參數即可再調整出更精致的版面</strong></span></p>
 <blockquote>
 <p><a href="https://github.com/Wandmalfarbe/pandoc-latex-template#custom-template-variables" target="_blank" rel="noopener">Eisvogel GitHub Repo 說明 - Custom Template  Variables</a></p>
 </blockquote>
