@@ -4,6 +4,11 @@
     <title>使用 Pandoc 將 Markdown 轉為 PDF 文件</title>
     <url>/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<ul>
+<li><h3 id="什麼是-Pandoc"><a href="#什麼是-Pandoc" class="headerlink" title="什麼是 Pandoc"></a>什麼是 Pandoc</h3><p>  Pandoc 是功能很強的文件轉換器，可以將各種文件格式互轉，<em>Will 保哥</em> 有很詳細的介紹文章  </p>
+<blockquote>
+<p><a href="https://blog.miniasp.com/post/2018/10/06/Useful-tool-Pandoc-universal-document-converter" target="_blank" rel="noopener">介紹好用工具：Pandoc ( 萬用的文件轉換器 )</a></p>
+</blockquote>
+</li>
 <li><h3 id="準備環境"><a href="#準備環境" class="headerlink" title="準備環境"></a>準備環境</h3><ul>
 <li>安裝 <a href="https://pandoc.org/" target="_blank" rel="noopener">Pandoc</a> : 功能強的萬用文件轉換器</li>
 <li>安裝 <a href="https://miktex.org/" target="_blank" rel="noopener">MiKTeX</a> : 在 Pandoc 轉檔時會自動安裝缺少的套件 (例如處理中文字就需要 cjk 套件)</li>
@@ -20,24 +25,24 @@
  <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><h4 id="指定中文字型"><a href="#指定中文字型" class="headerlink" title="指定中文字型"></a>指定中文字型</h4><p> 如果 markdown 文件內有中文字，也要在 YAML metadata 內指定中文字型</p>
-<p> <a id="markdown-指定中文字型YAML" name="指定中文字型YAML"></a><br> <b><code>for Linux</code></b></p>
+<p> <a id="markdown-指定中文字型YAML" name="指定中文字型YAML"></a><br> <b><code>Linux</code></b></p>
  <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">mainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 
-<p> <b><code>for Windows</code></b></p>
+<p> <b><code>Windows</code></b></p>
  <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2020</span><span class="number">-01</span><span class="number">-13</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">Microsoft</span> <span class="string">YaHei</span> <span class="string">Mono</span>  </span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><h4 id="輸入-Pandoc-轉檔指令"><a href="#輸入-Pandoc-轉檔指令" class="headerlink" title="輸入 Pandoc 轉檔指令"></a>輸入 Pandoc 轉檔指令</h4><p> 在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
-<p> <b><code>for Linux</code></b></p>
+<li><h4 id="輸入-Pandoc-指令轉檔"><a href="#輸入-Pandoc-指令轉檔" class="headerlink" title="輸入 Pandoc 指令轉檔"></a>輸入 Pandoc 指令轉檔</h4><p> 在 Terminal 或 PowerShell 或 CMD 輸入 Pandoc 指令</p>
+<p> <b><code>Linux</code></b></p>
  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-latex</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
 
-<p> <b><code>for Windows</code></b></p>
+<p> <b><code>Windows</code></b></p>
  <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">pandoc <span class="string">'source.md'</span> <span class="literal">-o</span> <span class="string">'destination.pdf'</span> -<span class="literal">-pdf</span><span class="literal">-engine</span>=xelatex -<span class="literal">-toc</span></span><br></pre></td></tr></table></figure>
 
 <p> <strong>參數說明</strong></p>
 <ul>
-<li><code>-o &#39;destination.pdf&#39;</code> : 輸出檔名</li>
-<li><code>--latex-engine=xelatex</code> 或 <code>--pdf-engine=xelatex</code> : 指定 LaTeX engine 用 xelatex 做為 PDF 的編碼器</li>
-<li><code>--toc</code> : 在文件內產生 Table of Contents 目錄頁，並加上頁碼和連結 <strong>(選擇性參數)</strong></li>
+<li><code>-o &#39;destination.pdf&#39;</code><br>  指定輸出檔名</li>
+<li><code>--latex-engine=xelatex</code> 或 <code>--pdf-engine=xelatex</code><br>  指定 LaTeX engine 使用 xelatex 製作 PDF  </li>
+<li><code>--toc</code> <strong>(選擇性參數)</strong><br>  在 PDF 內用 markdown 的標題產生 Table of Contents 目錄頁，同時加上頁碼和連結</li>
 </ul>
 </li>
 <li><h4 id="轉檔指令-與-範例檔"><a href="#轉檔指令-與-範例檔" class="headerlink" title="轉檔指令 與 範例檔"></a>轉檔指令 與 範例檔</h4><p> pandoc &#34;<a href="example.txt">example.txt</a>&#34; -o &#34;<a href="example.pdf">example.pdf</a>&#34; –pdf-engine=xelatex –toc</p>
@@ -47,24 +52,40 @@
 </blockquote>
 </li>
 </ol>
+<ul>
+<li><p>參考資料</p>
+<blockquote>
+<ul>
+<li><a href="https://pandoc.org/demos.html" target="_blank" rel="noopener">Pandoc 官網轉換各種文件的範例</a></li>
+</ul>
+</blockquote>
+</li>
+</ul>
 </li>
 </ul>
 <hr>
 <ul>
-<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔指定為 template 格式輸出，輸出的格式最完美，也是最費工的做法，我目前的文章內容還沒多到需要製成這麼精致的 PDF，所以先打住，等將來需要的時候再繼續研究，或是您有使用的經驗，也請不吝留言分享，感謝您<br>  <span style="color:#ff0000"><strong>(待補，也可能永遠不會補 😆)</strong></span></p>
+<li><h3 id="輸出-PDF-步驟-方法二"><a href="#輸出-PDF-步驟-方法二" class="headerlink" title="輸出 PDF 步驟 (方法二)"></a>輸出 PDF 步驟 (方法二)</h3><p>  製作 LaTeX 檔並指定為輸出格式用的 template，輸出的格式最完美，也是最費工的做法，這裡先打住，等將來需要用到的時候再繼續研究，若是您有使用的經驗，也請不吝留言分享，感謝您<br>  <span style="color:#ff0000"><strong>(待補，也可能永遠不會補 😆)</strong></span></p>
 <blockquote>
-<p><a href="https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#using-markdown-templates" target="_blank" rel="noopener">Using Markdown Templates</a></p>
+<ul>
+<li><a href="https://github.com/jgm/pandoc/wiki/Pandoc-Tricks#using-markdown-templates" target="_blank" rel="noopener">Using Markdown Templates</a>  </li>
+<li><a href="http://xiaodc.github.io/%E6%8A%80%E6%9C%AF%E5%8D%9A%E6%96%87/2019/09/08/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-pandoc-%E5%92%8C-latex-%E5%88%B6%E4%BD%9C%E6%BC%82%E4%BA%AE%E7%9A%84-pdf/" target="_blank" rel="noopener">如何使用 pandoc 和 LaTeX 製作漂亮的 pdf</a>  </li>
+<li><a href="https://github.com/Wandmalfarbe/pandoc-latex-template" target="_blank" rel="noopener">Eisvogel - A pandoc LaTeX template to convert markdown files to PDF or LaTeX.</a></li>
+<li><a href="https://pandoc.org/MANUAL.html#variables-for-latex" target="_blank" rel="noopener">Pandoc 可用的 LaTeX 參數</a></li>
+</ul>
 </blockquote>
 </li>
-<li><h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ul>
-<li><a href="https://blog.miniasp.com/post/2018/10/06/Useful-tool-Pandoc-universal-document-converter" target="_blank" rel="noopener">介紹好用工具：Pandoc ( 萬用的文件轉換器 )</a></li>
-<li><a href="https://pandoc.org/demos.html" target="_blank" rel="noopener">Pandoc 官網轉換各種文件的範例</a></li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="補充參考資料"><a href="#補充參考資料" class="headerlink" title="補充參考資料"></a>補充參考資料</h3><blockquote>
+<ul>
 <li><a href="https://github.com/jgm/pandoc/wiki/Pandoc-with-Chinese" target="_blank" rel="noopener">Pandoc with Chinese</a></li>
 <li><a href="http://pages.tzengyuxio.me/pandoc/" target="_blank" rel="noopener">Pandoc’s Markdown 語法 (中文翻譯)</a></li>
-<li><a href="https://pandoc.org/MANUAL.html#variables-for-latex" target="_blank" rel="noopener">Pandoc 可用的 LaTeX 參數</a></li>
 <li><a href="http://project.mde.tw/blog/pandoc-markdown-zhuan-pdf-ge-shi.html" target="_blank" rel="noopener">Pandoc - Markdown 轉 PDF 格式</a></li>
 <li><a href="http://project.mde.tw/blog/pandoc-markdown-ji-ben-yu-fa-jie-shao.html" target="_blank" rel="noopener">Pandoc - Markdown 基本語法介紹</a></li>
 </ul>
+</blockquote>
 </li>
 </ul>
 ]]></content>
@@ -75,6 +96,7 @@
         <tag>Markdown</tag>
         <tag>Pandoc</tag>
         <tag>PDF</tag>
+        <tag>LaTeX</tag>
       </tags>
   </entry>
   <entry>
