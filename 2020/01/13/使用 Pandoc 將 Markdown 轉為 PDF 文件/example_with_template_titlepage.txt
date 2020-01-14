@@ -5,6 +5,9 @@ date: "2020-01-13"
 subject: "鬼才看得懂"
 keywords: [Markdown, Example]
 CJKmainfont: "Microsoft YaHei Mono"
+titlepage: true,
+titlepage-rule-color: "360049"
+titlepage-background: "background1.pdf"
 ---
 
 # 天書
