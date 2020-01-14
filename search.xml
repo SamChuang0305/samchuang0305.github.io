@@ -4,7 +4,7 @@
     <title>使用 Pandoc 將 Markdown 轉為 PDF 文件</title>
     <url>/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h2 id="什麼是-Pandoc"><a href="#什麼是-Pandoc" class="headerlink" title="什麼是 Pandoc"></a>什麼是 Pandoc</h2><p>Pandoc 是功能很強的文件轉換器，可以將各種文件格式互轉</p>
-<p><em>Will 保哥</em> 的介紹文章  </p>
+<p><strong>感謝 <em>Will 保哥</em> 這篇文章的啟蒙</strong>  </p>
 <blockquote>
 <p><a href="https://blog.miniasp.com/post/2018/10/06/Useful-tool-Pandoc-universal-document-converter" target="_blank" rel="noopener">介紹好用工具：Pandoc ( 萬用的文件轉換器 )</a></p>
 </blockquote>
@@ -148,7 +148,7 @@
 <h3 id="範例3-使用-Eisvogel-template-YAML-metadata"><a href="#範例3-使用-Eisvogel-template-YAML-metadata" class="headerlink" title="範例3 (使用 Eisvogel template + YAML metadata)"></a>範例3 (使用 Eisvogel template + YAML metadata)</h3><ol>
 <li><p><strong>製做封面底圖並存為 PDF 檔：<a href="background1.pdf">background1.pdf</a></strong></p>
 </li>
-<li><p><strong>在 YAML metadata 增加參數，啟用封面，並指定封面檔</strong></p>
+<li><p><strong>在 YAML metadata 增加 template 預留的參數，啟用封面，並指定封面檔</strong></p>
  <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="string">"2020-01-13"</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">"Microsoft YaHei Mono"</span></span><br><span class="line"><span class="attr">subject:</span> <span class="string">"Pandoc 轉檔教學"</span></span><br><span class="line"><span class="attr">keywords:</span> <span class="string">[Markdown,</span> <span class="string">Pandoc]</span></span><br><span class="line"><span class="attr">titlepage:</span> <span class="literal">true</span><span class="string">,</span></span><br><span class="line"><span class="attr">titlepage-rule-color:</span> <span class="string">"360049"</span></span><br><span class="line"><span class="attr">titlepage-background:</span> <span class="string">"background1.pdf"</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>執行指令</strong></p>
