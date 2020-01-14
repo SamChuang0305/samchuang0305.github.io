@@ -20,7 +20,7 @@
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">使用</span> <span class="string">Pandoc</span> <span class="string">將</span> <span class="string">Markdown</span> <span class="string">轉為</span> <span class="string">PDF</span> <span class="string">文件</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Sam</span> <span class="string">Chuang</span></span><br><span class="line"><span class="attr">date:</span> <span class="string">"2020-01-13"</span></span><br><span class="line"><span class="attr">CJKmainfont:</span> <span class="string">"Microsoft YaHei Mono"</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="YAML-metadata-參數"><a href="#YAML-metadata-參數" class="headerlink" title="YAML metadata 參數"></a>YAML metadata 參數</h3><ul>
-<li><p><strong>mainfont</strong><br>  指定字型檔，預設為 SourceSansPro-Bold.otf 字型 (不支援中文字)<br>  若文件內有中文字，必須在 YAML metadata 區塊加上中文字型的指定，否則會出錯。<br>  <span style="color:#ff0000"><strong>準確一點的說法：指定的字型檔必須包含到文件內所有用到的字元</strong></span><br>  也就是，若輸入 Unicode 的 emoji 字元，若字型檔內沒有此字元，一樣會出錯。</p>
+<li><p><strong>CJKmainfont</strong><br>  指定中文字型檔，預設為 SourceSansPro-Bold.otf 字型 (不支援中文字)<br>  若文件內有中文字，必須在 YAML metadata 區塊加上中文字型的指定，否則會轉檔失敗。<br>  <span style="color:#ff0000"><strong>準確一點的說法：指定的字型檔必須包含文件內所有用到的字元</strong></span><br>  也就是，若輸入 Unicode 的 emoji 字元，而字型檔內沒有此 emoji 字元，一樣會出錯。</p>
 <p>  <strong>參考資料</strong></p>
 <blockquote>
 <p><a href="https://github.com/jgm/pandoc/wiki/Pandoc-with-Chinese" target="_blank" rel="noopener">Pandoc with Chinese</a></p>
