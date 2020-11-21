@@ -58,32 +58,39 @@
   };
 </script>
 
-  <meta name="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
-<meta property="og:type" content="website">
-<meta property="og:title" content="金魚腦的海馬迴">
-<meta property="og:url" content="https://sam.webspace.tw/index.html">
+  <meta name="description" content="需求目前工作的開發環境有用 CI&#x2F;CD，且會執行 Fortify 掃網站弱點，PM 每次要手動將 Fortify 產出的 PDF 內數據表格整理到 Word 文件內，他希望這種重覆性質的工作可以做成自動化，這篇文章主要是記錄如何將 PDF 文件內的數據表格解析出來的過程。 概念 使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件 使用正規表達式將表格數據解析成資料集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用正規表達式解析 Fortify 產出的 PDF 文件數據">
+<meta property="og:url" content="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/index.html">
 <meta property="og:site_name" content="金魚腦的海馬迴">
-<meta property="og:description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
+<meta property="og:description" content="需求目前工作的開發環境有用 CI&#x2F;CD，且會執行 Fortify 掃網站弱點，PM 每次要手動將 Fortify 產出的 PDF 內數據表格整理到 Word 文件內，他希望這種重覆性質的工作可以做成自動化，這篇文章主要是記錄如何將 PDF 文件內的數據表格解析出來的過程。 概念 使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件 使用正規表達式將表格數據解析成資料集">
 <meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/01_PDF.png">
+<meta property="og:image" content="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/02_NuGet.png">
+<meta property="og:image" content="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/03_String.png">
+<meta property="og:image" content="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/04_List.png">
+<meta property="article:published_time" content="2020-11-22T04:55:15.000Z">
+<meta property="article:modified_time" content="2020-11-21T18:07:48.558Z">
 <meta property="article:author" content="Sam Chuang">
-<meta property="article:tag" content="C#">
-<meta property="article:tag" content=" ASP.NET MVC">
+<meta property="article:tag" content="Regular Expression">
+<meta property="article:tag" content="CSharp">
 <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://sam.webspace.tw/">
+<meta name="twitter:image" content="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/01_PDF.png">
+  <link rel="canonical" href="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>金魚腦的海馬迴 - 海馬迴存放所有的記憶</title>
+  <title>使用正規表達式解析 Fortify 產出的 PDF 文件數據 | 金魚腦的海馬迴</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156002640-1"></script>
     <script>
@@ -259,10 +266,10 @@
             
 
   <div class="posts-expand">
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -277,8 +284,9 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
+            使用正規表達式解析 Fortify 產出的 PDF 文件數據
             
-            <a href="/2020/11/22/Regular_Expression_Fortify_Report_PDF/" class="post-title-link" itemprop="url">使用正規表達式解析 Fortify 產出的 PDF 文件數據</a>
+
           
         </h1>
 
@@ -329,7 +337,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>目前工作的開發環境有用 CI/CD，且會執行 Fortify 掃網站弱點，PM 每次要手動將 Fortify 產出的 PDF 內數據表格整理到 Word 文件內，他希望這種重覆性質的工作可以做成自動化，這篇文章主要是記錄如何將 PDF 文件內的數據表格解析出來的過程。</p>
+        <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>目前工作的開發環境有用 CI/CD，且會執行 Fortify 掃網站弱點，PM 每次要手動將 Fortify 產出的 PDF 內數據表格整理到 Word 文件內，他希望這種重覆性質的工作可以做成自動化，這篇文章主要是記錄如何將 PDF 文件內的數據表格解析出來的過程。</p>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ol>
 <li>使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件</li>
 <li>使用正規表達式將表格數據解析成資料集合的物件</li>
@@ -353,445 +361,65 @@
 <p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/04_List.png" alt="04 解析出來的資料集合" title="04 解析出來的資料集合"></p>
 <p>收工！</p>
 
-        
-      
     </div>
 
     
     
     
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-    
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/">
+      
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sam Chuang">
-      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="金魚腦的海馬迴">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+      <footer class="post-footer">
           
             
-            <a href="/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">使用 Pandoc 將 Markdown 轉為 PDF 文件</a>
           
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              
-                
-              
-
-              <time title="創建時間：2020-01-13 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-13T00:00:00+08:00">2020-01-13</time>
-            </span>
-          
+          <div class="post-tags">
             
-
+              <a href="/tags/Regular-Expression/" rel="tag"><i class="fa fa-tag"></i> Regular Expression</a>
             
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2020-01-14 17:43:46" itemprop="dateModified" datetime="2020-01-14T17:43:46+08:00">2020-01-14</time>
-              </span>
+              <a href="/tags/CSharp/" rel="tag"><i class="fa fa-tag"></i> CSharp</a>
             
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Markdown/" itemprop="url" rel="index">
-                    <span itemprop="name">Markdown</span>
-                  </a>
-                </span>
+          </div>
+        
 
-                
-                
-              
-            </span>
-          
+        
+  <div class="post-widgets">
+    <div class="social-like">
+      
 
-          
-
+      
+        <div class="fb_like">
+          <div class="fb-like" data-layout="button_count" data-share="true"></div>
         </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="什麼是-Pandoc"><a href="#什麼是-Pandoc" class="headerlink" title="什麼是 Pandoc"></a>什麼是 Pandoc</h2><p>Pandoc 是功能很強的文件轉換器，可以將各種文件格式互轉</p>
-<p><strong>感謝 <em>Will 保哥</em> 這篇文章的啟蒙</strong>  </p>
-<blockquote>
-<p><a href="https://blog.miniasp.com/post/2018/10/06/Useful-tool-Pandoc-universal-document-converter" target="_blank" rel="noopener">介紹好用工具：Pandoc ( 萬用的文件轉換器 )</a></p>
-</blockquote>
-<h2 id="準備環境"><a href="#準備環境" class="headerlink" title="準備環境"></a>準備環境</h2><ul>
-<li>安裝 <a href="https://pandoc.org/" target="_blank" rel="noopener">Pandoc</a> : 功能強的萬用文件轉換器</li>
-<li>安裝 <a href="https://miktex.org/" target="_blank" rel="noopener">MiKTeX</a> : 在 Pandoc 轉檔時會自動安裝缺少的套件 (例如處理中文字就需要 cjk 套件)</li>
-</ul>
-          <!--noindex-->
-          
-            <div class="post-button">
-              <a class="btn" href="/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/#more" rel="contents">
-                閱讀全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
       
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
   
-  
-  
-
-    
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2020/01/10/Markdown%20%E5%B8%B8%E7%94%A8%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sam Chuang">
-      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="金魚腦的海馬迴">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            
-            <a href="/2020/01/10/Markdown%20%E5%B8%B8%E7%94%A8%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/" class="post-title-link" itemprop="url">Markdown 常用語法整理</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              
-                
-              
-
-              <time title="創建時間：2020-01-10 09:07:00" itemprop="dateCreated datePublished" datetime="2020-01-10T09:07:00+08:00">2020-01-10</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2020-01-14 02:46:24" itemprop="dateModified" datetime="2020-01-14T02:46:24+08:00">2020-01-14</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Markdown/" itemprop="url" rel="index">
-                    <span itemprop="name">Markdown</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="標題-H1"><a href="#標題-H1" class="headerlink" title="標題 H1"></a>標題 H1</h1><h2 id="標題-H2"><a href="#標題-H2" class="headerlink" title="標題 H2"></a>標題 H2</h2><h3 id="標題-H3"><a href="#標題-H3" class="headerlink" title="標題 H3"></a>標題 H3</h3><h4 id="標題-H4"><a href="#標題-H4" class="headerlink" title="標題 H4"></a>標題 H4</h4><h5 id="標題-H5"><a href="#標題-H5" class="headerlink" title="標題 H5"></a>標題 H5</h5><h6 id="標題-H6"><a href="#標題-H6" class="headerlink" title="標題 H6"></a>標題 H6</h6><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 標題 H1</span></span><br><span class="line"><span class="section">## 標題 H2</span></span><br><span class="line"><span class="section">### 標題 H3</span></span><br><span class="line"><span class="section">#### 標題 H4</span></span><br><span class="line"><span class="section">##### 標題 H5</span></span><br><span class="line"><span class="section">###### 標題 H6</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button">
-              <a class="btn" href="/2020/01/10/Markdown%20%E5%B8%B8%E7%94%A8%E8%AA%9E%E6%B3%95%E6%95%B4%E7%90%86/#more" rel="contents">
-                閱讀全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-    
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2019/12/24/Bookmarklet%20for%20search%20Udemy%20FREE%20courses/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sam Chuang">
-      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="金魚腦的海馬迴">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            
-            <a href="/2019/12/24/Bookmarklet%20for%20search%20Udemy%20FREE%20courses/" class="post-title-link" itemprop="url">搜尋 Udemy 免費課程的 Bookmarklet</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              
-                
-              
-
-              <time title="創建時間：2019-12-24 23:55:15" itemprop="dateCreated datePublished" datetime="2019-12-24T23:55:15+08:00">2019-12-24</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2020-01-13 22:13:02" itemprop="dateModified" datetime="2020-01-13T22:13:02+08:00">2020-01-13</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B0%8F%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index">
-                    <span itemprop="name">小工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>用 Javascript 寫的 Bookmarklet</p>
-<p>直接按下方連結即可搜尋 Udemy 免費課程</p>
-<p>也可將連結拖拉至瀏覽器書籤列，以後點擊書籤即可立即搜尋 Udemy 免費課程</p>
-<p><a href="javascript:(function(){var%20q=prompt('search%20for%20Udemy%20FREE%20courses','');if(q!=null&&q!='')window.open('https://www.udemy.com/courses/search/?price=price-free&src=ukw&q='+escape(q));})();">搜尋 Udemy 免費課程</a></p>
-
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-    
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2019/07/11/SQL-JOIN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sam Chuang">
-      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="金魚腦的海馬迴">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            
-            <a href="/2019/07/11/SQL-JOIN/" class="post-title-link" itemprop="url">SQL JOIN 的圖解筆記</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              
-                
-              
-
-              <time title="創建時間：2019-07-11 17:37:00" itemprop="dateCreated datePublished" datetime="2019-07-11T17:37:00+08:00">2019-07-11</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2020-01-13 22:12:54" itemprop="dateModified" datetime="2020-01-13T22:12:54+08:00">2020-01-13</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/T-SQL/" itemprop="url" rel="index">
-                    <span itemprop="name">T-SQL</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>今早在復習 SQL 語法，看到十年前的 JOIN 筆記，決定把他圖形化，以後若要用到就一目瞭然了<br>既然都做了，就貼上來分享，有需要的人請自取 🙂</p>
-          <!--noindex-->
-          
-            <div class="post-button">
-              <a class="btn" href="/2019/07/11/SQL-JOIN/#more" rel="contents">
-                閱讀全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-    
   </div>
 
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/" rel="next" title="使用 Pandoc 將 Markdown 轉為 PDF 文件">
+                  <i class="fa fa-chevron-left"></i> 使用 Pandoc 將 Markdown 轉為 PDF 文件
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
   
 
+  </div>
 
 
           </div>
@@ -808,6 +436,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
@@ -820,6 +453,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求"><span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#實作"><span class="nav-text">實作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-IFilterTextReader-NuGet-套件-讀取-PDF-文件"><span class="nav-text">使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件</span></a></li></ol></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
@@ -1033,72 +668,6 @@
 
   
 
-  
-    
-      
-    
-      
-    
-      
-        
-      
-    
-      
-    
-      
-    
-  
-    
-      
-<script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        extensions: ['[mhchem]/mhchem.js'],
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
   
 
   

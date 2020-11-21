@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>使用正規表達式解析 Fortify 產出的 PDF 文件數據</title>
+    <url>/2020/11/22/Regular_Expression_Fortify_Report_PDF/</url>
+    <content><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>目前工作的開發環境有用 CI/CD，且會執行 Fortify 掃網站弱點，PM 每次要手動將 Fortify 產出的 PDF 內數據表格整理到 Word 文件內，他希望這種重覆性質的工作可以做成自動化，這篇文章主要是記錄如何將 PDF 文件內的數據表格解析出來的過程。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ol>
+<li>使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件</li>
+<li>使用正規表達式將表格數據解析成資料集合的物件</li>
+<li>將資料集合填入到 Word 文件 (本文不會實作)</li>
+</ol>
+<h2 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h2><h3 id="使用-IFilterTextReader-NuGet-套件-讀取-PDF-文件"><a href="#使用-IFilterTextReader-NuGet-套件-讀取-PDF-文件" class="headerlink" title="使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件"></a>使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件</h3><h4 id="1、PDF-文件內容"><a href="#1、PDF-文件內容" class="headerlink" title="1、PDF 文件內容"></a>1、PDF 文件內容</h4><p>  紅框是這次要解析出來使用的資料數據表格</p>
+<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/01_PDF.png" alt="01 PDF文件內容" title="01 PDF文件內容"></p>
+<h4 id="2、安裝-NuGet-套件"><a href="#2、安裝-NuGet-套件" class="headerlink" title="2、安裝 NuGet 套件"></a>2、安裝 NuGet 套件</h4><p>  安裝 IFilterTextReader</p>
+<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/02_NuGet.png" alt="02 IFilterTextReader" title="02 IFilterTextReader"></p>
+<h4 id="3、引用-IFilterTextReader-並讀取-PDF-文件"><a href="#3、引用-IFilterTextReader-並讀取-PDF-文件" class="headerlink" title="3、引用 IFilterTextReader 並讀取 PDF 文件"></a>3、引用 IFilterTextReader 並讀取 PDF 文件</h4><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> IFilterTextReader;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 讀取 PDF</span></span><br><span class="line"><span class="keyword">string</span> filePath = <span class="string">@"X:\SomeWhere\Fortify.pdf"</span>;</span><br><span class="line"><span class="keyword">string</span> source = <span class="keyword">new</span> IFilterTextReader.FilterReader(filePath).ReadToEnd();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 輸出檢視讀取的文件內容</span></span><br><span class="line">Console.WriteLine(source);</span><br></pre></td></tr></table></figure>
+
+<p>  PDF 讀取出來的內容被轉換成純文字了，這次需要表格數據的部份如下</p>
+<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/03_String.png" alt="03 表格數據的字串" title="03 表格數據的字串"></p>
+<h4 id="4、使用正規表達式解析內容"><a href="#4、使用正規表達式解析內容" class="headerlink" title="4、使用正規表達式解析內容"></a>4、使用正規表達式解析內容</h4><p>先準備用來存放解析結果的資料類別</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 用來存放解析結果的資料類別</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">DataColumn</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> IssueName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Critical &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> High &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Medium &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Low &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> TotalIssues &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Effort &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>開始進行解析並存入結果資料集合物件</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> IFilterTextReader;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存放解析結果用的資料集合物件</span></span><br><span class="line">List&lt;DataColumn&gt; dataList = <span class="keyword">new</span> List&lt;DataColumn&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 讀取 PDF</span></span><br><span class="line"><span class="keyword">string</span> filePath = <span class="string">@"X:\SomeWhere\Fortify.pdf"</span>;</span><br><span class="line"><span class="keyword">string</span> source = <span class="keyword">new</span> IFilterTextReader.FilterReader(filePath).ReadToEnd();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解析用 Pattern</span></span><br><span class="line"><span class="keyword">string</span> pattern = <span class="string">@"(?'IssueName'\bA\d+\b [a-zA-Z0-9 \-\(\)]+) (?'Critical'\b\d+\b) (?'Medium'\b\d+\b) (?'High'\b\d+\b) (?'Low'\b\d+\b) (?'TotalIssues'\b\d+\b) (?'Effort'\b\d+\.\d+\b)"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解析成集合物件</span></span><br><span class="line">MatchCollection matches = Regex.Matches(source, pattern);</span><br><span class="line"><span class="keyword">if</span> (matches.Count &gt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 從解析集合物件逐筆填入解析結果資料集合物件</span></span><br><span class="line">  <span class="keyword">foreach</span> (Match match <span class="keyword">in</span> matches)</span><br><span class="line">  &#123;</span><br><span class="line">    dataList.Add(</span><br><span class="line">      <span class="keyword">new</span> DataColumn</span><br><span class="line">      &#123;</span><br><span class="line">        IssueName = match.Groups[<span class="string">"IssueName"</span>].ToString(),</span><br><span class="line">        Critical = match.Groups[<span class="string">"Critical"</span>].ToString(),</span><br><span class="line">        High = match.Groups[<span class="string">"High"</span>].ToString(),</span><br><span class="line">        Medium = match.Groups[<span class="string">"Medium"</span>].ToString(),</span><br><span class="line">        Low = match.Groups[<span class="string">"Low"</span>].ToString(),</span><br><span class="line">        TotalIssues = match.Groups[<span class="string">"TotalIssues"</span>].ToString(),</span><br><span class="line">        Effort = match.Groups[<span class="string">"Effort"</span>].ToString(),</span><br><span class="line">      &#125;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 顯示解析結果資料集合物件</span></span><br><span class="line">  dataList.Dump(); <span class="comment">// (此為 LINQPad 的方法，輸出結果如下圖)</span></span><br><span class="line">&#125;</span><br><span class="line">Console.WriteLine(<span class="string">"執行結束"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>  從 LINQPad 檢視解析結果資料集合</p>
+<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/04_List.png" alt="04 解析出來的資料集合" title="04 解析出來的資料集合"></p>
+<p>收工！</p>
+]]></content>
+      <categories>
+        <category>工作雜記</category>
+      </categories>
+      <tags>
+        <tag>Regular Expression</tag>
+        <tag>CSharp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用 Pandoc 將 Markdown 轉為 PDF 文件</title>
     <url>/2020/01/13/%E4%BD%BF%E7%94%A8%20Pandoc%20%E5%B0%87%20Markdown%20%E8%BD%89%E7%82%BA%20PDF%20%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h2 id="什麼是-Pandoc"><a href="#什麼是-Pandoc" class="headerlink" title="什麼是 Pandoc"></a>什麼是 Pandoc</h2><p>Pandoc 是功能很強的文件轉換器，可以將各種文件格式互轉</p>
