@@ -293,7 +293,7 @@
                 
               
 
-              <time title="創建時間：2020-11-22 12:55:15 / 修改時間：08:50:31" itemprop="dateCreated datePublished" datetime="2020-11-22T12:55:15+08:00">2020-11-22</time>
+              <time title="創建時間：2020-11-22 12:55:15 / 修改時間：20:27:43" itemprop="dateCreated datePublished" datetime="2020-11-22T12:55:15+08:00">2020-11-22</time>
             </span>
           
             
@@ -329,48 +329,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>目前工作的開發環境有用 CI/CD，且會執行 Fortify 掃網站弱點，PM 每次要手動將 Fortify 產出的 PDF 內數據表格整理到 Word 文件內，他希望這種重覆性質的工作可以做成自動化，這篇文章主要是記錄如何將 PDF 文件內的數據表格解析出來的過程。</p>
+          <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>目前工作的開發環境有用 CI/CD，且會執行 Fortify 掃描網站弱點，PM 要手動將 Fortify 產出的 PDF 表格數據整理到 Word 文件，他希望這種重覆性質的工作可以做成自動化，本文主要是記錄如何將 PDF 文件內表格數據解析出來的過程。</p>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ol>
 <li>使用 IFilterTextReader (NuGet 套件) 讀取 PDF 文件</li>
 <li>使用正規表達式將表格數據解析成資料集合的物件</li>
 <li>將資料集合填入到 Word 文件 (本文不會實作)</li>
 </ol>
-<h2 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h2><h3 id="1、PDF-文件內容"><a href="#1、PDF-文件內容" class="headerlink" title="1、PDF 文件內容"></a>1、PDF 文件內容</h3><p>  紅框是這次要解析出來使用的資料數據表格</p>
-<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/01_PDF.png" alt="01 PDF文件內容" title="01 PDF文件內容"></p>
-<h3 id="2、安裝-NuGet-套件"><a href="#2、安裝-NuGet-套件" class="headerlink" title="2、安裝 NuGet 套件"></a>2、安裝 NuGet 套件</h3><p>  安裝 IFilterTextReader</p>
-<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/02_NuGet.png" alt="02 IFilterTextReader" title="02 IFilterTextReader"></p>
-<h3 id="3、引用-IFilterTextReader-並讀取-PDF-文件"><a href="#3、引用-IFilterTextReader-並讀取-PDF-文件" class="headerlink" title="3、引用 IFilterTextReader 並讀取 PDF 文件"></a>3、引用 IFilterTextReader 並讀取 PDF 文件</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> IFilterTextReader;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 讀取 PDF</span></span><br><span class="line"><span class="keyword">string</span> filePath = <span class="string">@"X:\SomeWhere\Fortify.pdf"</span>;</span><br><span class="line"><span class="keyword">string</span> source = <span class="keyword">new</span> IFilterTextReader.FilterReader(filePath).ReadToEnd();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 輸出檢視讀取的文件內容</span></span><br><span class="line">Console.WriteLine(source);</span><br></pre></td></tr></table></figure>
-
-<p>  PDF 讀取出來的內容被轉換成純文字了，這次需要表格數據的部份如下</p>
-<p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/03_String.png" alt="03 表格數據的字串" title="03 表格數據的字串"></p>
-<h3 id="4、使用正規表達式解析內容"><a href="#4、使用正規表達式解析內容" class="headerlink" title="4、使用正規表達式解析內容"></a>4、使用正規表達式解析內容</h3><p>  將需要使用的文字片段手動排版一下，以便思考要怎麼寫正規表達式的 pattern</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">A1 Injection 0 21 0 1 22 1.2</span><br><span class="line">A2 Broken Authentication and Session Management 0 1 0 0 1 0.2</span><br><span class="line">A3 Cross-Site Scripting (XSS) 0 8 0 0 8 0.2</span><br><span class="line">A4 Insecure Direct Object References 0 40 0 12 52 3.2</span><br><span class="line">A5 Security Misconfiguration 1 0 3 0 4 0.5</span><br><span class="line">A6 Sensitive Data Exposure 3 19 0 0 22 1.8</span><br><span class="line">A7 Missing Function Level Access Control 0 0 0 0 0 0.0</span><br><span class="line">A8 Cross-Site Request Forgery (CSRF) 0 0 0 0 0 0.0</span><br><span class="line">A9 Using Components with Known Vulnerabilities 0 0 0 0 0 0.0</span><br><span class="line">A10 Unvalidated Redirects and Forwards 0 0 0 0 0 0.0</span><br></pre></td></tr></table></figure>
-
-<h4 id="找出文字的固定規律"><a href="#找出文字的固定規律" class="headerlink" title="找出文字的固定規律"></a>找出文字的固定規律</h4><p>A3 的標題內帶有特殊符號，為相對複雜的情況，故以 A3 為例</p>
-<ul>
-<li>IssueName: <b>A3 Cross-Site Scripting (XSS)</b><br>字串開頭固定為 <b>A流水號</b>，內容可能會有多組單字，且可能會有 <b>-</b>, <b>(</b>, <b>)</b> 等符號<br>給正規表達式用的 Pattern: <b>\bA\d+\b [a-zA-Z0-9 \-\(\)]+</b>  </li>
-<li>Critical: <b>0</b><br><b>正整數</b><br>給正規表達式用的 Pattern: <b>\b\d+\b</b>  </li>
-<li>High: <b>8</b><br><b>正整數</b><br>給正規表達式用的 Pattern: <b>\b\d+\b</b>  </li>
-<li>Medium: <b>0</b><br><b>正整數</b><br>給正規表達式用的 Pattern: <b>\b\d+\b</b>  </li>
-<li>Low: <b>0</b><br><b>正整數</b><br>給正規表達式用的 Pattern: <b>\b\d+\b</b>  </li>
-<li>TotalIssues: <b>8</b><br><b>正整數</b><br>給正規表達式用的 Pattern: <b>\b\d+\b</b>  </li>
-<li>Effort: <b>0.2</b><br><b>浮點數</b><br>給正規表達式用的 Pattern: <b>\b\d+\.\d+\b</b>  </li>
-</ul>
-<h4 id="準備用來存放解析結果的資料類別"><a href="#準備用來存放解析結果的資料類別" class="headerlink" title="準備用來存放解析結果的資料類別"></a>準備用來存放解析結果的資料類別</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用來存放解析結果的資料類別</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">DataColumn</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> IssueName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Critical &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> High &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Medium &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Low &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> TotalIssues &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Effort &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="開始進行解析並存入結果資料集合物件"><a href="#開始進行解析並存入結果資料集合物件" class="headerlink" title="開始進行解析並存入結果資料集合物件"></a>開始進行解析並存入結果資料集合物件</h4><p>使用前面準備好的 Pattern 加上 <b>群組+命名</b> 的寫法，方便後面將取出的資料對應到物件的動作</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> IFilterTextReader;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存放解析結果用的資料集合物件</span></span><br><span class="line">List&lt;DataColumn&gt; dataList = <span class="keyword">new</span> List&lt;DataColumn&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 讀取 PDF</span></span><br><span class="line"><span class="keyword">string</span> filePath = <span class="string">@"X:\SomeWhere\Fortify.pdf"</span>;</span><br><span class="line"><span class="keyword">string</span> source = <span class="keyword">new</span> IFilterTextReader.FilterReader(filePath).ReadToEnd();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解析用 Pattern</span></span><br><span class="line"><span class="keyword">string</span> pattern = <span class="string">@"(?'IssueName'\bA\d+\b [a-zA-Z0-9 \-\(\)]+) (?'Critical'\b\d+\b) (?'Medium'\b\d+\b) (?'High'\b\d+\b) (?'Low'\b\d+\b) (?'TotalIssues'\b\d+\b) (?'Effort'\b\d+\.\d+\b)"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解析成集合物件</span></span><br><span class="line">MatchCollection matches = Regex.Matches(source, pattern);</span><br><span class="line"><span class="keyword">if</span> (matches.Count &gt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 從解析集合物件逐筆填入解析結果資料集合物件</span></span><br><span class="line">  <span class="keyword">foreach</span> (Match match <span class="keyword">in</span> matches)</span><br><span class="line">  &#123;</span><br><span class="line">    dataList.Add(</span><br><span class="line">      <span class="keyword">new</span> DataColumn</span><br><span class="line">      &#123;</span><br><span class="line">        IssueName = match.Groups[<span class="string">"IssueName"</span>].ToString(),</span><br><span class="line">        Critical = match.Groups[<span class="string">"Critical"</span>].ToString(),</span><br><span class="line">        High = match.Groups[<span class="string">"High"</span>].ToString(),</span><br><span class="line">        Medium = match.Groups[<span class="string">"Medium"</span>].ToString(),</span><br><span class="line">        Low = match.Groups[<span class="string">"Low"</span>].ToString(),</span><br><span class="line">        TotalIssues = match.Groups[<span class="string">"TotalIssues"</span>].ToString(),</span><br><span class="line">        Effort = match.Groups[<span class="string">"Effort"</span>].ToString(),</span><br><span class="line">      &#125;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 顯示解析結果資料集合物件</span></span><br><span class="line">  dataList.Dump(); <span class="comment">// (此為 LINQPad 的方法，輸出結果如下圖)</span></span><br><span class="line">&#125;</span><br><span class="line">Console.WriteLine(<span class="string">"執行結束"</span>);</span><br></pre></td></tr></table></figure>
-
-<h4 id="用-LINQPad-檢視解析結果資料集合"><a href="#用-LINQPad-檢視解析結果資料集合" class="headerlink" title="用 LINQPad 檢視解析結果資料集合"></a>用 LINQPad 檢視解析結果資料集合</h4><p>  <img src="/2020/11/22/Regular_Expression_Fortify_Report_PDF/04_List.png" alt="04 解析出來的資料集合" title="04 解析出來的資料集合"></p>
-<p>感謝正規表達式讓我們快速完成需求，收工！</p>
-<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><blockquote>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank" rel="noopener">MDN</a></li>
-<li><a href="https://regex101.com/" target="_blank" rel="noopener">Regex101 正規表達式視覺化、說明</a></li>
-<li><a href="https://blog.kalan.dev/2020-10-20-how-to-add-comma-into-number/" target="_blank" rel="noopener">將數字加上 comma 的正規表達式說明</a></li>
-</ul>
-</blockquote>
-
+          <!--noindex-->
+          
+            <div class="post-button">
+              <a class="btn" href="/2020/11/22/Regular_Expression_Fortify_Report_PDF/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
