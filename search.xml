@@ -45,7 +45,7 @@
 <ul>
 <li><a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank" rel="noopener">MDN</a><br>有正規表達式特殊字元的解釋、使用範例</li>
 <li><a href="https://regex101.com/" target="_blank" rel="noopener">Regex101 正規表達式視覺化、說明</a><br>提供正規表達式視覺化的線上工具，畫面上也提供特殊字元的說明</li>
-<li><a href="https://blog.kalan.dev/2020-10-20-how-to-add-comma-into-number/" target="_blank" rel="noopener">將數字加上 comma 的正規表達式說明</a><br>這篇文章對 \b (word boundary) 有很好的解釋，個人認為掌握 word boundary 的熟悉度，可提升正規表達式比對的正確性</li>
+<li><a href="https://blog.kalan.dev/2020-10-20-how-to-add-comma-into-number/" target="_blank" rel="noopener">將數字加上 comma 的正規表達式說明</a><br>這篇文章對 \b (word boundary) 有很好的解釋，個人認為掌握 word boundary 的用法，可提升正規表達式比對的正確性</li>
 </ul>
 </blockquote>
 ]]></content>
