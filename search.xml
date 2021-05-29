@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Git 離線同步版控記錄 git format-patch 和 git bundle 的差異</title>
+    <title>離線同步 Git 版控記錄：git format-patch 和 git bundle 的差異</title>
     <url>/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/</url>
     <content><![CDATA[<h2 id="模擬情境"><a href="#模擬情境" class="headerlink" title="模擬情境"></a>模擬情境</h2><p>公司有 Sam 和 Jack 兩位開發者，用公司內部 Git 版控儲存庫進行開發。</p>
 <p>簡述版控流程，開發者先在自己的分支開發，再將結果合併回 <code>Develop</code> 分支驗測功能，驗證無誤再透過 PR 程序合併至 <code>master</code> 分支上線。</p>
