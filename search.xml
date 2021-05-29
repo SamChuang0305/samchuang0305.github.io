@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Git 版控 git format-patch 和 git bundle 的差異</title>
+    <title>Git 離線同步版控記錄 git format-patch 和 git bundle 的差異</title>
     <url>/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/</url>
-    <content><![CDATA[<h2 id="情境說明"><a href="#情境說明" class="headerlink" title="情境說明"></a>情境說明</h2><p>公司有 Sam 和 Jack 兩位開發者，用公司內部 Git 版控儲存庫進行開發。</p>
+    <content><![CDATA[<h2 id="模擬情境"><a href="#模擬情境" class="headerlink" title="模擬情境"></a>模擬情境</h2><p>公司有 Sam 和 Jack 兩位開發者，用公司內部 Git 版控儲存庫進行開發。</p>
 <p>簡述版控流程，開發者先在自己的分支開發，再將結果合併回 <code>Develop</code> 分支驗測功能，驗證無誤再透過 PR 程序合併至 <code>master</code> 分支上線。</p>
-<p>公司內部版控儲存庫不提供任何管道給外部網路連線使用。</p>
-<p>如下圖，假設公司在 <code>Commit ID e3251c8</code> 時開始實施 <strong>Work From Home</strong>，從這裡開始就無法再連線至公司內的遠端儲存庫。</p>
+<p>公司內部版控儲存庫不提供任何管道給外部網路連線使用，但有開放 VPN 可遠端連線進去控制公司內部的電腦。</p>
+<p>如下圖，假設公司在 Commit ID <code>e3251c8</code> 時開始實施 <strong>Work From Home</strong>，從這裡開始就無法再連線至公司內的遠端儲存庫。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image001.png" alt="image001.png" title="image001.png"></p>
-<p><strong>Work From Home</strong> 後，Sam 修改本地 <code>Develop_Sam</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支</p>
+<p><strong>Work From Home</strong> 後，Sam 修改本地 <code>Develop_Sam</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image003.png" alt="image003.png" title="image003.png"></p>
-<p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支</p>
+<p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image005.png" alt="image005.png" title="image005.png"></p>
 <p>前兩張圖可看到 Sam 與 Jack 在本地 <code>Develop</code> 分支的版控記錄已經不一致了，雙方的 <code>README.md</code> 檔案內容如下</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image007.png" alt="image007.png" title="image007.png"></p>
 <p>接下來 Sam 和 Jack 要同步彼此的開發進度，但是連不到公司的版控儲存庫了，此時有以下幾種選擇</p>
-<h2 id="可用的做法"><a href="#可用的做法" class="headerlink" title="可用的做法"></a>可用的做法</h2><ol>
-<li><p>用私有 Git 遠端儲存庫同步彼此的版控記錄 <em><del>(適合不守規定的人偷偷用)</del></em></p>
+<h2 id="可用的方法"><a href="#可用的方法" class="headerlink" title="可用的方法"></a>可用的方法</h2><ol>
+<li><p>在私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(公司沒有禁止的情況適用)</em></p>
 <ul>
-<li>此做法只能解決開發者間的版控同步問題，也或許會違反公司規定，且仍無法解決如何上版至公司內部儲存庫的問題</li>
+<li><p>此做法無法解決上版至公司內部儲存庫的問題，<strong>只能解決開發者間的版控同步問題</strong></p>
+</li>
+<li><p>公司不一定允許 Source Code 存放在外部的私有遠端儲存庫</p>
+</li>
 </ul>
 </li>
-<li><p>將 Source Code (包含 <code>.git</code>) 目錄通通打包傳給其他開發者或公司 <em>(你瘋了嗎？ <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</em></p>
+<li><p>將 Source Code (包含 <code>.git 目錄</code>) 通通打包傳給其他開發者或公司 <em>(你瘋了嗎？ <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</em></p>
 </li>
 <li><p><strong>用 <code>git bundle</code> 產生版控記錄檔 <em>(★ 推薦)</em></strong></p>
 <ul>
-<li><p>會產生一個 binary 檔案，裡面有檔案的修改內容，也包含 commit 版控記錄  </p>
+<li><p>會產生一個 binary 檔案，裡面<strong>有檔案的修改內容，也包含 commit 版控記錄</strong>  </p>
 </li>
-<li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 至本地分支，並且保持原有的開發版控記錄，當然也可以送入公司同步版控記錄</p>
+<li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 至本地分支，並且保持開發的版控記錄，也可以送入公司同步版控記錄</p>
 </li>
 </ul>
 </li>
 <li><p>用 <code>git format-patch</code> 產生內容修補檔 <em>(只適合交付修補程式用，不適合開發用)</em>  </p>
 <ul>
-<li><p>開發者可套用修補檔以更新彼此修改過的檔案內容，也可送入公司上版，但是在開發過程中，每個人的版控記錄會不一致  </p>
+<li><p>開發者可套用修補檔以更新彼此修改過的檔案內容，也可送入公司上版，但是<strong>在開發過程中，每個人的版控記錄會不一致</strong>  </p>
 </li>
 <li><p>修補檔記錄的是 <code>git diff</code> 的差異內容，不會保留版控記錄，套用修補檔時，在背後是使用 <code>git commit</code> 方式處理，會產生新的版控記錄 (commit hash)  </p>
 </li>
-<li><p>因為版控記錄脫鉤了，不僅造成溝通上的困難，將來解封回公司連版控儲存庫時，很可能要再面臨一次解決大量合併衝突的問題  </p>
+<li><p>版控記錄脫鉤了，不僅造成溝通上的困難，將來解封回公司連版控儲存庫時，很可能要再面臨一次大量衝突合併的問題  </p>
 </li>
-<li><p>因此 <code>git format-patch</code> 只適合交付修補程式用，不適合開發用</p>
+<li><p>因此 <code>git format-patch</code> <strong>只適合交付修補程式用，不適合開發同步版控用</strong></p>
 </li>
 </ul>
 </li>
@@ -48,24 +51,26 @@
 <ul>
 <li><p>如果公司<strong>禁止</strong>使用私有儲存庫  </p>
 <ul>
-<li>用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，並交付給其他開發者同步 <code>Develop</code> 分支的版控記錄  </li>
-<li>如果自己有修改過檔案，在 <code>git pull</code> 合併完後要再做一份 <code>git bundle</code> 給其他開發人員同步</li>
+<li><p>用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，交付給其他開發者同步 <code>Develop</code> 分支的版控記錄  </p>
+</li>
+<li><p>如果開發者的修改已告一段落，在 <code>git pull</code> 合併完別人的版控記錄後，就再做一份 <code>git bundle</code> 給其他開發人員同步，<strong>可把這步驟當成原本要 <code>git push</code> 的替代操作</strong>  </p>
+</li>
 </ul>
 </li>
-<li><p>如果公司<strong>同意</strong>使用私有儲存庫 <em>(★ 個人認為這是最好的狀況)</em>  </p>
+<li><p>如果公司<strong>同意</strong>使用私有儲存庫 <em>(★ 個人認為這是最佳狀況)</em>  </p>
 <ul>
 <li>平時用私有 Git 儲存庫進行開發  </li>
 </ul>
 <p>  <strong>(安全性要做好，否則 Source Code 外流就……<del><em>會變成 Open Source</em></del> <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span> )</strong>  </p>
 <ul>
-<li>只有最後要進公司上版時，再用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔丟到公司內做 <code>git pull</code> 即可</li>
+<li>在開發完成要上版到公司時，先用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，再丟到公司內做 <code>git pull</code> 即可 (前提是公司有開放 VPN 可遠端連線內部電腦作業的情況)  </li>
 </ul>
 </li>
 </ul>
 <p>接下來說實作，有興趣的人請繼續看下去</p>
 <a id="more"></a>
 
-<h2 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h2><h3 id="私有-Git-遠端儲存庫"><a href="#私有-Git-遠端儲存庫" class="headerlink" title="私有 Git 遠端儲存庫"></a>私有 Git 遠端儲存庫</h3><p>這個做法就不說明了，有免費的、付費的、私有自架的…路很多條，任君挑選。</p>
+<h2 id="實作方式"><a href="#實作方式" class="headerlink" title="實作方式"></a>實作方式</h2><h3 id="私有-Git-遠端儲存庫"><a href="#私有-Git-遠端儲存庫" class="headerlink" title="私有 Git 遠端儲存庫"></a>私有 Git 遠端儲存庫</h3><p>這個做法就不說明了，有免費的、付費的、私有自架的…路很多條，任君挑選。</p>
 <p>一樣為了節省大家寶貴的時間，先說個人推薦的 <code>git bundle</code> 實作方式</p>
 <h3 id="用-git-bundle-產生版控記錄檔-★-推薦"><a href="#用-git-bundle-產生版控記錄檔-★-推薦" class="headerlink" title="用 git bundle 產生版控記錄檔 (★ 推薦)"></a>用 git bundle 產生版控記錄檔 (★ 推薦)</h3><p>先把時光回朔到公司開始實施 <strong>Work From Home</strong>，並且 Sam 和 Jack 都在自己的本地分支修改檔案的狀態</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image009.png" alt="image009.png" title="image009.png"></p>
@@ -81,10 +86,10 @@
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image013.png" alt="image013.png" title="image013.png"></p>
 <p>把 <code>Develop_FromSam</code> 想像成是一個遠端儲存庫，裡面有一個 <code>Develop</code> 遠端分支  </p>
 <p>Jack 現在想把遠端 <code>Develop</code> 分支 Pull 到本地 <code>Develop</code> 分支  </p>
-<p>流程和平常 Pull 一樣<strong>先 <code>checkout</code> 到本地 <code>Develop</code> 分支</strong>，然後 <code>git pull</code> 遠端儲存庫的 <code>Develop</code> 分支  </p>
+<p>和平常 pull 流程一樣，<u><strong>先 checkout 到本地 Develop 分支</strong></u>，然後 <code>git pull</code> 遠端儲存庫的 <code>Develop</code> 分支  </p>
 <figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git pull Develop_FromSam Develop</span><br></pre></td></tr></table></figure>
 
-<p>此時發生衝突進入 <strong><em>MERGING</em></strong> 狀態了，因為遠端 <code>Develop</code> 分支有 Sam 的修改</p>
+<p>此時發生衝突進入 <strong><em>MERGING</em></strong> 狀態了，因為 Sam 在遠端 <code>Develop</code> 已經有新的修改</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image015.png" alt="image015.png" title="image015.png"></p>
 <p>解決衝突，圖內 <code>Develop_FromSam</code> 檔案可無視，等 <code>git pull</code> 完就可以刪掉了</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image017.png" alt="image017.png" title="image017.png"></p>
@@ -92,11 +97,11 @@
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image021.png" alt="image021.png" title="image021.png"></p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image023.png" alt="image023.png" title="image023.png"></p>
 <p>因為 Jack 有處理過衝突，所以合併好的本地 <code>Develop</code> 也輸出版控記錄給 Sam  </p>
-<p>用 Sam 也有的 <code>Commit ID e3251c8</code> 做為基準點，並將產生的 <code>Develop_FromJack</code> 檔案交付給 Sam</p>
+<p>用 Sam 也有的 Commit ID <code>e3251c8</code> 做為基準點，並將產生的 <code>Develop_FromJack</code> 檔案交付給 Sam</p>
 <figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git bundle create Develop_FromJack e3251c8..Develop</span><br></pre></td></tr></table></figure>
 
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image025.png" alt="image025.png" title="image025.png"></p>
-<p>Sam 收到後一樣先確認一下版控記錄檔內是否有 <code>Develop</code> 遠端分支和必要的 <code>Commit ID e3251c8</code>  </p>
+<p>Sam 收到後一樣先確認一下版控記錄檔內是否有 <code>Develop</code> 遠端分支和必要的 Commit ID <code>e3251c8</code>  </p>
 <p>沒問題就直接 <code>git pull</code> 到本地 <code>Develop</code> 分支，因為 Jack 已經解完衝突，所以本地 <code>Develop</code> 分支直接 Pull 就完成了  </p>
 <p>記得將 <code>Develop_FromJack</code> 檔案刪除</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image027.png" alt="image027.png" title="image027.png"></p>
@@ -148,7 +153,7 @@
 <p>等等，做到這邊，有人注意到 Sam 還沒拿到 Jack 合併後的結果嗎？  </p>
 <p>所以 Jack 要再 <code>git format-patch</code> 產生 <code>Develop</code> 分支的修補檔回去給 Sam？  </p>
 <p>Sam 將 Jack 給的修補檔合併到自己本地 <code>Develop</code> 分支又產生新的 commit，版控記錄越來越不一致…  </p>
-<p>在可以連到遠端儲存庫之前，大家的 Commit ID 都對不起來，有時會造成溝通或追查問題的困難，即使連到遠端儲存庫了，也免不了要再解合併衝突  </p>
+<p><strong>在可以連到遠端儲存庫之前，大家的 Commit ID 都對不起來，有時會造成溝通或追查問題的困難</strong>，即使連到遠端儲存庫了，也免不了要再解決合併衝突  </p>
 <p>由此看來 <code>git format-patch</code> 並不適合開發過程的版控交換用途，他的重點是檔案的修補，做為交付修補程式的一種方式，而非版控記錄</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image050.png" alt="image050.png" title="image050.png"></p>
 <p>以上是小弟個人的理解和實務操作經驗分享，如果有錯誤的地方還請不吝指點，謝謝  <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f60a.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f60a.png?v8">&#x1f60a;</span></p>
