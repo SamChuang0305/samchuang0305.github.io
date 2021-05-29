@@ -293,11 +293,19 @@
                 
               
 
-              <time title="創建時間：2021-05-29 15:54:00 / 修改時間：20:12:47" itemprop="dateCreated datePublished" datetime="2021-05-29T15:54:00+08:00">2021-05-29</time>
+              <time title="創建時間：2021-05-29 15:54:00" itemprop="dateCreated datePublished" datetime="2021-05-29T15:54:00+08:00">2021-05-29</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2021-05-30 03:04:20" itemprop="dateModified" datetime="2021-05-30T03:04:20+08:00">2021-05-30</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -334,17 +342,17 @@
 <p>公司內部版控儲存庫不提供任何管道給外部網路連線使用，但有開放 VPN 可遠端連線進去控制公司內部的電腦。</p>
 <p>如下圖，假設公司在 Commit ID <code>e3251c8</code> 時開始實施 <strong>Work From Home</strong>，從這裡開始就無法再連線至公司內的遠端儲存庫。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image001.png" alt="image001.png" title="image001.png"></p>
-<p><strong>Work From Home</strong> 後，Sam 修改本地 <code>Develop_Sam</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支。</p>
+<p>實施 <strong>Work From Home</strong> 後，Sam 開始修改本地 <code>Develop_Sam</code> 分支的 <code>README.md</code> 檔案內容，並且合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image003.png" alt="image003.png" title="image003.png"></p>
-<p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支。</p>
+<p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，也合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image005.png" alt="image005.png" title="image005.png"></p>
-<p>前兩張圖可看到 Sam 與 Jack 在本地 <code>Develop</code> 分支的版控記錄已經不一致了，雙方的 <code>README.md</code> 檔案內容如下</p>
+<p>前兩張圖可看到 Sam 與 Jack 本地 <code>Develop</code> 分支的版控記錄 (Commit ID) 已經不一致了，雙方的 <code>README.md</code> 檔案內容如下，之後若要合併肯定會發生衝突</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image007.png" alt="image007.png" title="image007.png"></p>
 <p>接下來 Sam 和 Jack 要同步彼此的開發進度，但是連不到公司的版控儲存庫了，此時有以下幾種選擇</p>
 <h2 id="可用的方法"><a href="#可用的方法" class="headerlink" title="可用的方法"></a>可用的方法</h2><ol>
-<li><p>在私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(公司沒有禁止的情況適用)</em></p>
+<li><p>在外部私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(公司沒有禁止的情況適用)</em></p>
 <ul>
-<li><p>此做法無法解決上版至公司內部儲存庫的問題，<strong>只能解決開發者間的版控同步問題</strong></p>
+<li><p>此做法無法解決上版至公司內部儲存庫的問題，<strong>只能解決開發者間的版控同步問題 (光是解決這個問題，就可省下大半的時間了)</strong></p>
 </li>
 <li><p>公司不一定允許 Source Code 存放在外部的私有遠端儲存庫</p>
 </li>
@@ -357,6 +365,8 @@
 <li><p>會產生一個 binary 檔案，裡面<strong>有檔案的修改內容，也包含 commit 版控記錄</strong>  </p>
 </li>
 <li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 至本地分支，並且保持開發的版控記錄，也可以送入公司同步版控記錄</p>
+</li>
+<li><p><strong>可把 <code>git bundle</code> 當成原本 <code>git push</code> 的替代操作</strong>  </p>
 </li>
 </ul>
 </li>
@@ -377,19 +387,19 @@
 <ul>
 <li><p>如果公司<strong>禁止</strong>使用私有儲存庫  </p>
 <ul>
-<li><p>用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，交付給其他開發者同步 <code>Develop</code> 分支的版控記錄  </p>
+<li><p>開發過程的版控同步<br>每位開發者的修改告一段落，就用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，交付給其他開發者同步 <code>Develop</code> 分支的版控記錄  </p>
 </li>
-<li><p>如果開發者的修改已告一段落，在 <code>git pull</code> 合併完別人的版控記錄後，就再做一份 <code>git bundle</code> 給其他開發人員同步，<strong>可把這步驟當成原本要 <code>git push</code> 的替代操作</strong>  </p>
+<li><p>功能開發完成，要回傳公司上版<br>用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，只是這次要傳進公司，遠端遙控公司內部電腦操作 <code>git pull</code> 將版控記錄檔合併到 <code>Develop</code> 分支，驗測無誤後再 PR 合併至 <code>master</code> 分支  </p>
 </li>
 </ul>
 </li>
 <li><p>如果公司<strong>同意</strong>使用私有儲存庫 <em>(★ 個人認為這是最佳狀況)</em>  </p>
 <ul>
-<li>平時用私有 Git 儲存庫進行開發  </li>
+<li>開發過程的版控同步<br>使用私有 Git 儲存庫進行開發，只有在這種非常時期才深刻體會到能用 <code>git push</code> 是幸福的 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>  </li>
 </ul>
-<p>  <strong>(安全性要做好，否則 Source Code 外流就……<del><em>會變成 Open Source</em></del> <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span> )</strong>  </p>
+<p>  <strong>(安全性要記得做好，否則 Source Code 外流就……<del><em>會變成 Open Source</em></del> <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span> )</strong>  </p>
 <ul>
-<li>在開發完成要上版到公司時，先用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，再丟到公司內做 <code>git pull</code> 即可 (前提是公司有開放 VPN 可遠端連線內部電腦作業的情況)  </li>
+<li>功能開發完成，要回傳公司上版<br>用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，只是這次要傳進公司，遠端遙控公司內部電腦操作 <code>git pull</code> 將版控記錄檔合併到 <code>Develop</code> 分支，驗測無誤後再 PR 合併至 <code>master</code> 分支  </li>
 </ul>
 </li>
 </ul>
