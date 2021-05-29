@@ -263,6 +263,161 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sam Chuang">
+      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金魚腦的海馬迴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            
+            <a href="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/" class="post-title-link" itemprop="url">Git 版控 git format-patch 和 git bundle 的差異</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              
+                
+              
+
+              <time title="創建時間：2021-05-29 15:54:00 / 修改時間：17:50:27" itemprop="dateCreated datePublished" datetime="2021-05-29T15:54:00+08:00">2021-05-29</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E9%9B%9C%E8%A8%98/" itemprop="url" rel="index">
+                    <span itemprop="name">工作雜記</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="情境說明"><a href="#情境說明" class="headerlink" title="情境說明"></a>情境說明</h2><p>舉例情境，公司有 Sam 和 Jack 兩位開發者，用公司內部 Git 版控儲存庫進行開發。</p>
+<p>簡述版控流程，開發者先在自己的分支開發，再將結果合併回 <code>Develop</code> 分支驗測功能，驗證無誤再透過 PR 程序合併至 <code>master</code> 分支上線。</p>
+<p>公司因為安全性議題，內部版控儲存庫不提供任何管道給外部網路連線使用</p>
+<p>如下圖，假設公司在 <code>Commit ID e3251c8</code> 時開始實施 <strong>Work From Home</strong>，從這裡開始就無法再連線至公司內的遠端儲存庫。</p>
+<p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image001.png" alt="image001.png" title="image001.png"></p>
+<p><strong>Work From Home</strong> 後，Sam 修改本地 <code>Develop_Sam</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支</p>
+<p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image003.png" alt="image003.png" title="image003.png"></p>
+<p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，且合併回本地的 <code>Develop</code> 分支</p>
+<p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image005.png" alt="image005.png" title="image005.png"></p>
+<p>前兩張圖可看到 Sam 與 Jack 在本地 <code>Develop</code> 分支的版控記錄已經不一致了，雙方的 <code>README.md</code> 檔案內容如下</p>
+<p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image007.png" alt="image007.png" title="image007.png"></p>
+<p>接下來 Sam 和 Jack 要同步彼此的開發進度，但是連不到公司的版控儲存庫了，此時有以下幾種選擇</p>
+<h2 id="可用的做法"><a href="#可用的做法" class="headerlink" title="可用的做法"></a>可用的做法</h2><ol>
+<li><p>用私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(適合不守規定的人偷偷用)</em></p>
+<ul>
+<li>此做法只能解決開發者間的版控問題，但仍然無法解決公司內部儲存庫的上版，而且可能違反規定</li>
+</ul>
+</li>
+<li><p>將 Source Code (包含 <code>.git</code>) 目錄通通打包傳給其他開發者或公司 <em>(你瘋了嗎？ <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</em></p>
+</li>
+<li><p>用 <code>git bundle</code> 產生版控記錄檔 <em>(★ 推薦)</em></p>
+<ul>
+<li><p>這是一個 binary 的檔案，裡面除了有檔案的修改內容，也包含 commit 版控記錄  </p>
+</li>
+<li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 至本地分支，並且保持原有的開發版控記錄，當然也可以送入公司同步版控記錄</p>
+</li>
+</ul>
+</li>
+<li><p>用 <code>git format-patch</code> 產生內容修補檔 <em>(只適合交付修補程式用，不適合開發用)</em>  </p>
+<ul>
+<li><p>開發者可套用修補檔以更新彼此修改過的檔案內容，也可送入公司上版，但是會汙染版控記錄，最終大家的版控記錄都會不一致  </p>
+</li>
+<li><p>修補檔記錄的是 <code>git diff</code> 的差異內容，不會保留版控記錄，套用修補檔時，在背後是使用 <code>git commit</code> 方式處理，會產生新的版控記錄 (commit hash)  </p>
+</li>
+<li><p>因為版控記錄脫鉤了，不僅造成溝通上的困難，將來解封回公司連版控儲存庫時，也會再痛一次要解決大量合併衝突的問題  </p>
+</li>
+<li><p>因此 <code>git format-patch</code> 只適合交付修補程式用，不適合開發用</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>為了節省大家寶貴的時間，先說結論</p>
+<ul>
+<li><p>如果你是守規定的開發人員  </p>
+<ul>
+<li>用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔，並交付給其他開發者同步 <code>Develop</code> 分支的版控記錄  </li>
+<li>如果自己有修改過檔案，在 <code>git pull</code> 合併完後要再做一份 <code>git bundle</code> 給其他開發人員同步</li>
+</ul>
+</li>
+<li><p>如果你是無視規定的開發人員  </p>
+<ul>
+<li>平時用私有 Git 儲存庫進行開發  </li>
+</ul>
+<p>  <strong>(安全性要做好，否則 Source Code 外流就……<del><em>會變成 Open Source</em></del> <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span> )</strong>  </p>
+<ul>
+<li>只有最後要進公司上版時，才用 <code>git bundle</code> 產生 <code>Develop</code> 分支的版控記錄檔丟到公司內做 <code>git pull</code> 即可</li>
+</ul>
+</li>
+</ul>
+<p>接下來說實作，有興趣的人請繼續看下去</p>
+          <!--noindex-->
+          
+            <div class="post-button">
+              <a class="btn" href="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+    
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2020/11/22/Regular_Expression_Fortify_Report_PDF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -828,7 +983,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -854,7 +1009,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">標籤</span>
         </a>
       </div>
@@ -930,8 +1085,8 @@
         
 
 <div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -1025,6 +1180,8 @@
   
 
   
+    
+      
     
       
     
