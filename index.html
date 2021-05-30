@@ -278,7 +278,7 @@
         <h1 class="post-title" itemprop="name headline">
           
             
-            <a href="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/" class="post-title-link" itemprop="url">離線同步 Git 版控記錄：git format-patch 和 git bundle 的差異</a>
+            <a href="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/" class="post-title-link" itemprop="url">離線同步 Git 版控記錄實踐：git format-patch 和 git bundle 的差異</a>
           
         </h1>
 
@@ -304,7 +304,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2021-05-30 03:04:20" itemprop="dateModified" datetime="2021-05-30T03:04:20+08:00">2021-05-30</time>
+                <time title="修改時間：2021-05-30 10:37:05" itemprop="dateModified" datetime="2021-05-30T10:37:05+08:00">2021-05-30</time>
               </span>
             
           
@@ -346,9 +346,9 @@
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image003.png" alt="image003.png" title="image003.png"></p>
 <p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，也合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image005.png" alt="image005.png" title="image005.png"></p>
-<p>前兩張圖可看到 Sam 與 Jack 本地 <code>Develop</code> 分支的版控記錄 (Commit ID) 已經不一致了，雙方的 <code>README.md</code> 檔案內容如下，之後若要合併肯定會發生衝突</p>
+<p>前兩張圖可看到 Sam 與 Jack 本地 <code>Develop</code> 分支的版控記錄 (Commit ID) 已經不一致了，雙方的 <code>README.md</code> 檔案內容如下，之後若要合併肯定會發生衝突。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image007.png" alt="image007.png" title="image007.png"></p>
-<p>接下來 Sam 和 Jack 要同步彼此的開發進度，但是連不到公司的版控儲存庫了，此時有以下幾種選擇</p>
+<p>接下來 Sam 和 Jack 要同步彼此的開發進度，但是連不到公司的版控儲存庫了，此時有以下幾種選擇。</p>
 <h2 id="可用的方法"><a href="#可用的方法" class="headerlink" title="可用的方法"></a>可用的方法</h2><ol>
 <li><p>在外部私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(公司沒有禁止的情況適用)</em></p>
 <ul>
@@ -395,7 +395,7 @@
 </li>
 <li><p>如果公司<strong>同意</strong>使用私有儲存庫 <em>(★ 個人認為這是最佳狀況)</em>  </p>
 <ul>
-<li>開發過程的版控同步<br>使用私有 Git 儲存庫進行開發，只有在這種非常時期才深刻體會到能用 <code>git push</code> 是幸福的 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>  </li>
+<li>開發過程的版控同步<br>使用私有 Git 儲存庫進行開發，只有在這種非常時期才深刻體會到可以 <code>git push</code> 是幸福的 <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>  </li>
 </ul>
 <p>  <strong>(安全性要記得做好，否則 Source Code 外流就……<del><em>會變成 Open Source</em></del> <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span> )</strong>  </p>
 <ul>
