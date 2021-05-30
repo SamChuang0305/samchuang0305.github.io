@@ -304,7 +304,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2021-05-30 10:59:50" itemprop="dateModified" datetime="2021-05-30T10:59:50+08:00">2021-05-30</time>
+                <time title="修改時間：2021-05-30 23:05:34" itemprop="dateModified" datetime="2021-05-30T23:05:34+08:00">2021-05-30</time>
               </span>
             
           
@@ -339,35 +339,35 @@
       
           <h2 id="模擬情境"><a href="#模擬情境" class="headerlink" title="模擬情境"></a>模擬情境</h2><p>公司有 Sam 和 Jack 兩位開發者，用公司內部 Git 版控儲存庫進行開發。</p>
 <p>簡述版控流程，開發者先在自己的分支開發，再將結果合併回 <code>Develop</code> 分支驗測功能，驗證無誤再透過 PR 程序合併至 <code>master</code> 分支上線。</p>
-<p>公司內部版控儲存庫不提供任何管道給外部網路連線使用，但有開放 VPN 可遠端連線進去控制公司內部的電腦。</p>
-<p>如下圖，假設公司在 Commit ID <code>e3251c8</code> 時開始實施 <strong>Work From Home</strong>，從這裡開始就無法再連線至公司內的遠端儲存庫。</p>
+<p>公司內部版控儲存庫不提供任何管道給外部網路連線使用，但有開放 Webex 可遠端連線進去控制公司內部的電腦。</p>
+<p>如下圖，假設公司在 commit <code>e3251c8</code> 時開始實施 <strong>Work From Home</strong>，從這裡開始就無法再連線至公司內的遠端儲存庫。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image001.png" alt="image001.png" title="image001.png"></p>
 <p>實施 <strong>Work From Home</strong> 後，Sam 開始修改本地 <code>Develop_Sam</code> 分支的 <code>README.md</code> 檔案內容，並且合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image003.png" alt="image003.png" title="image003.png"></p>
 <p>同時，Jack 也在修改本地 <code>Develop_Jack</code> 分支的 <code>README.md</code> 檔案內容，也合併回本地的 <code>Develop</code> 分支。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image005.png" alt="image005.png" title="image005.png"></p>
-<p>前兩張圖可看到 Sam 與 Jack 本地 <code>Develop</code> 分支的版控記錄 (Commit ID) 已經不一致了，雙方的 <code>README.md</code> 檔案內容如下，之後若要合併肯定會發生衝突。</p>
+<p>前兩張圖可看到 Sam 與 Jack 在本地 <code>Develop</code> 分支的版控記錄 (Commit ID) 已經不一致了，雙方修改過的 <code>README.md</code> 檔案內容如下，之後若要合併肯定會發生衝突。</p>
 <p>  <img src="/2021/05/29/Git_what_is_the_difference_between_format-patch_and_bundle/image007.png" alt="image007.png" title="image007.png"></p>
 <p>接下來 Sam 和 Jack 要同步彼此的開發進度，但是連不到公司的版控儲存庫了，此時有以下幾種選擇。</p>
 <h2 id="可用的方法"><a href="#可用的方法" class="headerlink" title="可用的方法"></a>可用的方法</h2><ol>
-<li><p>在外部私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(公司沒有禁止的情況適用)</em></p>
+<li><p>使用外部私有 Git 遠端儲存庫同步彼此的版控記錄 <em>(公司沒有禁止的情況適用)</em></p>
 <ul>
-<li><p>此做法無法解決上版至公司內部儲存庫的問題，<strong>只能解決開發者間的版控同步問題 (光是解決這個問題，就可省下大半的時間了)</strong></p>
+<li><p>此做法無法解決上版至公司內部儲存庫的問題，<strong>只能解決開發者間的版控同步問題 (但光是解決這個問題，就可省下大半的時間了)</strong></p>
 </li>
-<li><p>公司不一定允許 Source Code 存放在外部的私有遠端儲存庫</p>
+<li><p>公司不一定允許 Source Code 放在外部的私有儲存庫</p>
 </li>
 </ul>
 </li>
 <li><p>將 Source Code (包含 <code>.git 目錄</code>) 通通打包傳給其他開發者或公司 <em>(你瘋了嗎？ <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</em></p>
 <ul>
-<li>每次交付的檔案都很大包，就算只修改一個字，要上版都要整包傳輸，我實在想不到這個做法的優點…</li>
+<li>每次交付的檔案都很大包，就算只改一個字，要上版都要整包傳輸，我實在想不到這個做法的優點…</li>
 </ul>
 </li>
 <li><p><strong>用 <code>git bundle</code> 產生版控記錄檔 <em>(★ 推薦)</em></strong></p>
 <ul>
-<li><p>會產生一個容量很小的 binary 檔案利於傳輸，檔案大小取決於要包含版控記錄的範圍多寡，裡面<strong>有檔案的修改內容，也包含 commit 版控記錄</strong>  </p>
+<li><p>會產生一個容量很小的 binary 檔案利於傳輸，檔案大小取決於要包含的版控記錄多寡，裡面會有<strong>修改的檔案內容，以及 commit 版控記錄</strong>  </p>
 </li>
-<li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 至本地分支，並且保持開發的版控記錄，也可以送入公司同步版控記錄</p>
+<li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 合併至本地分支，並且保持開發的版控記錄，也可以送入公司同步版控記錄</p>
 </li>
 <li><p><strong>可把 <code>git bundle</code> 當成原本 <code>git push</code> 的替代操作，只是變成離線版</strong>  </p>
 </li>
@@ -379,9 +379,9 @@
 </li>
 <li><p>修補檔記錄的是 <code>git diff</code> 的差異內容，檔案也不大，但不會保留版控記錄，套用修補檔時，<strong>背後是透過 <code>git commit</code> 在處理，會產生新的版控記錄 (commit hash)</strong>  </p>
 </li>
-<li><p><strong>版控記錄脫鉤，造成查找問題或溝通上的困難，將來連回公司內部的版控儲存庫時，有可能要再面臨大量合併衝突的問題</strong>  </p>
+<li><p><strong>版控記錄脫鉤，會造成查找問題或溝通上的困難，將來連回公司內部的版控儲存庫時，有可能要再面臨大量合併衝突的問題</strong>  </p>
 </li>
-<li><p><code>git format-patch</code> <strong>只適合交付修補程式用，不適合開發過程同步版控用</strong>，如果不打算同步版控記錄就沒差了</p>
+<li><p><code>git format-patch</code> <strong>只適合交付修補程式用，不適合開發過程同步版控用</strong>，若不打算同步版控記錄就沒差了</p>
 </li>
 </ul>
 </li>
