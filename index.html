@@ -304,7 +304,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2021-05-30 10:37:05" itemprop="dateModified" datetime="2021-05-30T10:37:05+08:00">2021-05-30</time>
+                <time title="修改時間：2021-05-30 10:59:50" itemprop="dateModified" datetime="2021-05-30T10:59:50+08:00">2021-05-30</time>
               </span>
             
           
@@ -359,26 +359,29 @@
 </ul>
 </li>
 <li><p>將 Source Code (包含 <code>.git 目錄</code>) 通通打包傳給其他開發者或公司 <em>(你瘋了嗎？ <span class="github-emoji" style="background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8)" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f606.png?v8">&#x1f606;</span>)</em></p>
+<ul>
+<li>每次交付的檔案都很大包，就算只修改一個字，要上版都要整包傳輸，我實在想不到這個做法的優點…</li>
+</ul>
 </li>
 <li><p><strong>用 <code>git bundle</code> 產生版控記錄檔 <em>(★ 推薦)</em></strong></p>
 <ul>
-<li><p>會產生一個 binary 檔案，裡面<strong>有檔案的修改內容，也包含 commit 版控記錄</strong>  </p>
+<li><p>會產生一個容量很小的 binary 檔案利於傳輸，檔案大小取決於要包含版控記錄的範圍多寡，裡面<strong>有檔案的修改內容，也包含 commit 版控記錄</strong>  </p>
 </li>
 <li><p>本地端可透過 <code>git pull</code> 將記錄檔的版控內容 pull 至本地分支，並且保持開發的版控記錄，也可以送入公司同步版控記錄</p>
 </li>
-<li><p><strong>可把 <code>git bundle</code> 當成原本 <code>git push</code> 的替代操作</strong>  </p>
+<li><p><strong>可把 <code>git bundle</code> 當成原本 <code>git push</code> 的替代操作，只是變成離線版</strong>  </p>
 </li>
 </ul>
 </li>
-<li><p>用 <code>git format-patch</code> 產生內容修補檔 <em>(只適合交付修補程式用，不適合開發用)</em>  </p>
+<li><p>用 <code>git format-patch</code> 產生內容修補檔 <em>(只適合交付修補程式用，不適合開發過程同步版控用)</em>  </p>
 <ul>
 <li><p>開發者可套用修補檔以更新彼此修改過的檔案內容，也可送入公司上版，但是<strong>在開發過程中，每個人的版控記錄會不一致</strong>  </p>
 </li>
-<li><p>修補檔記錄的是 <code>git diff</code> 的差異內容，不會保留版控記錄，套用修補檔時，在背後是使用 <code>git commit</code> 方式處理，會產生新的版控記錄 (commit hash)  </p>
+<li><p>修補檔記錄的是 <code>git diff</code> 的差異內容，檔案也不大，但不會保留版控記錄，套用修補檔時，<strong>背後是透過 <code>git commit</code> 在處理，會產生新的版控記錄 (commit hash)</strong>  </p>
 </li>
-<li><p>版控記錄脫鉤了，不僅造成溝通上的困難，將來解封回公司連版控儲存庫時，很可能要再面臨一次大量衝突合併的問題  </p>
+<li><p><strong>版控記錄脫鉤，造成查找問題或溝通上的困難，將來連回公司內部的版控儲存庫時，有可能要再面臨大量合併衝突的問題</strong>  </p>
 </li>
-<li><p>因此 <code>git format-patch</code> <strong>只適合交付修補程式用，不適合開發同步版控用</strong></p>
+<li><p><code>git format-patch</code> <strong>只適合交付修補程式用，不適合開發過程同步版控用</strong>，如果不打算同步版控記錄就沒差了</p>
 </li>
 </ul>
 </li>
