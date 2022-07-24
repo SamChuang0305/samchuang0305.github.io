@@ -57,10 +57,11 @@
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg" alt="相同的 GetHashCode 與不相等的 Equals 加入 HashSet"></p>
 ]]></content>
       <categories>
-        <category>C#</category>
+        <category>CSharp</category>
       </categories>
       <tags>
-        <tag>C# 資料結構</tag>
+        <tag>CSharp</tag>
+        <tag>資料結構</tag>
       </tags>
   </entry>
   <entry>
