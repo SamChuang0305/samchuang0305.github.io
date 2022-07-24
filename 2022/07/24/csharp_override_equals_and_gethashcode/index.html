@@ -75,7 +75,7 @@
 <meta property="og:image" content="https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/Add_AnonymousType_GetHashCode_To_HashSet.jpg">
 <meta property="og:image" content="https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg">
 <meta property="article:published_time" content="2022-07-24T02:06:00.000Z">
-<meta property="article:modified_time" content="2022-07-24T12:17:58.958Z">
+<meta property="article:modified_time" content="2022-07-24T16:13:52.129Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="資料結構">
@@ -306,11 +306,19 @@
                 
               
 
-              <time title="創建時間：2022-07-24 10:06:00 / 修改時間：20:17:58" itemprop="dateCreated datePublished" datetime="2022-07-24T10:06:00+08:00">2022-07-24</time>
+              <time title="創建時間：2022-07-24 10:06:00" itemprop="dateCreated datePublished" datetime="2022-07-24T10:06:00+08:00">2022-07-24</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2022-07-25 00:13:52" itemprop="dateModified" datetime="2022-07-25T00:13:52+08:00">2022-07-25</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -332,6 +340,22 @@
           
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/07/24/csharp_override_equals_and_gethashcode/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/24/csharp_override_equals_and_gethashcode/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -350,49 +374,49 @@
 <blockquote>
 <p><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/fundamentals/tutorials/inheritance#implicit-inheritance" target="_blank" rel="noopener">C# 中的繼承 Microsoft Docs</a></p>
 </blockquote>
-<p>因此用所有型別建立出來的物件都可以使用從 Object 繼承來的方法，例如下圖</p>
+<p>因此用所有型別建立出來的物件都可以使用從 Object 繼承來的方法，如下圖</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/implicit-inheritance.jpg" alt="隱含繼承 Object 類別的方法"></p>
-<h3 id="Object-的-Equals-方法"><a href="#Object-的-Equals-方法" class="headerlink" title="Object 的 Equals 方法"></a>Object 的 Equals 方法</h3><p>宣告一個 Data 類別，並分別建立出兩個物件給 data1 和 data2 變數，我們刻意將欄位都填入同樣的值，再用繼承自 Object 的 Equals 方法比較兩個物件是否相等。</p>
+<h3 id="Object-的-Equals-方法"><a href="#Object-的-Equals-方法" class="headerlink" title="Object 的 Equals 方法"></a>Object 的 Equals 方法</h3><p>宣告一個 Data 類別，並分別建立出兩個物件給 data1 和 data2 變數，這裡刻意將欄位都填入相同的值，再用繼承自 Object 的 Equals 方法比較兩個物件是否相等。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Object.Equals.jpg" alt="Object 的 Equals 方法"></p>
 <p>因為是 Reference Type (參考型別)，雖然 data1 和 data2 所有欄位的值都相同，但兩個變數在 Stack 內儲存的記憶體位址的值是不同的，因此 Equals 回傳的結果為 False。</p>
-<h3 id="覆寫-Equals-方法"><a href="#覆寫-Equals-方法" class="headerlink" title="覆寫 Equals 方法"></a>覆寫 Equals 方法</h3><p>如果我們希望對這兩個物件做值的比對，可以覆寫 Equals 方法，自訂比對的條件，例如我們希望這個物件的 Equals 要同時比對 Id 和 Name 兩個欄位的值，可以這樣寫：</p>
+<h3 id="覆寫-Equals-方法"><a href="#覆寫-Equals-方法" class="headerlink" title="覆寫 Equals 方法"></a>覆寫 Equals 方法</h3><p>如果我們希望將比對條件改為物件內欄位的值，可以覆寫 Equals 方法，自訂比對的條件，例如希望這個物件的 Equals 要同時比對 Id 和 Name 兩個欄位的值，可以這樣寫：</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/override_Equals.jpg" alt="覆寫 Equals 方法"></p>
 <p>自訂比對的條件，覆寫 Equals 方法：</p>
 <ul>
 <li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 False。  </li>
 <li>若傳入的物件參數是 Data 型別，比對 Id 和 Name 兩個欄位的值是否相等，並回傳比對結果。  </li>
 </ul>
-<p>此時 IDE 在 Data 類別的宣告處出現綠蝌蚪的提示訊息，提示我們覆寫 Equals 方法時，也要覆寫 GetHashCode 方法，在說明 GetHashCode 之前，先科普什麼是「雜湊表」。</p>
+<p>此時 IDE 在 Data 類別的宣告處出現綠蝌蚪的提示訊息，提示當我們覆寫 Equals 方法，也要覆寫 GetHashCode 方法，什麼是 GetHashCode？為什麼要覆寫這個方法？，在說明，先科普什麼是「雜湊表」。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/should_override_GetHashCode.jpg" alt="IDE 提示要覆寫 GetHashCode 方法的訊息"></p>
 <h3 id="關於雜湊表"><a href="#關於雜湊表" class="headerlink" title="關於雜湊表"></a>關於雜湊表</h3><p>資料結構中有一種組織資料的方式稱為「雜湊表」，在 C# 語言中 HashSet&lt;T&gt;、Dictionary&lt;TKey, TValue&gt;、…等集合種類就是用雜湊表實現的。</p>
-<p>可以把雜湊表想像成很多個桶子，每個桶子都有唯一的識別編號，而且每個桶子都可放入不止一件物品。</p>
+<p><font color='red'>可以把雜湊表想像成很多個桶子，每個桶子都有唯一的識別編號，而且每個桶子都可放入不止一件物品。</font></p>
 <p>這種資料結構的優點是，當我們知道物品所在桶子的編號，只要先找到指定編號的桶子，再到這個桶子裡去找，一定會找到我們要的東西，找東西的速度會很快。比起每個桶子都打開來找，會省下不少時間。</p>
-<p>雜湊表的概念中，把每個物品 <u><em>平均分配到不同編號</em></u> 的桶子是很重要的，如果把所有東西通通放進同一個編號的桶子，找東西時打開這個桶子，還要巡過每一個物品才能確定找到要的東西，那用雜湊表就沒有意義了，不如放到陣列或 List 裡。</p>
+<p>雜湊表的概念中，把每個物品<font color='red'>平均分配到不同編號</font>的桶子是很重要的，如果把所有東西通通放進同一個編號的桶子，找東西時只打開這一個桶子，還要逐一巡過每個物品才能確定要找的東西，那用雜湊表就沒有意義了，不如放到陣列或 List 裡。</p>
 <p>雜湊表的概念在現實生活中的應用：圖書館的書本分類存放方式、書本的目錄、字典的索引頁。</p>
 <a id="more"></a>
 
-<h3 id="覆寫-GetHashCode-方法"><a href="#覆寫-GetHashCode-方法" class="headerlink" title="覆寫 GetHashCode 方法"></a>覆寫 GetHashCode 方法</h3><p>GetHashCode 就是產生雜湊編號的方法，得到編號後，在雜湊表中將這個物件放到這個編號的桶子裡，日後只要先呼叫物件的 GetHashCode 得到編號，再到雜湊表裡去找出桶子，從桶子裡取出得到這個物件，速度就快了。</p>
+<h3 id="覆寫-GetHashCode-方法"><a href="#覆寫-GetHashCode-方法" class="headerlink" title="覆寫 GetHashCode 方法"></a>覆寫 GetHashCode 方法</h3><p>GetHashCode 就是產生雜湊編號的方法，得到編號後，在雜湊表中將物件放進這個編號的桶子裡，需要時，只要先呼叫物件的 GetHashCode 得到編號，到雜湊表找出這個編號的桶子，再從桶子裡取出這個物件，速度就快了。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/GetHashCode.jpg" alt="GetHashCode 產生雜湊編號"></p>
 <p>上圖可看到 data1 和 data2 即使欄位的值都相同，但兩個物件是不同執行個體 (不同 new Data 所產生的物件)，繼承自 Object 的 GetHashCode 方法就會產生不同的雜湊編號。</p>
-<p>但我們在比較是否相等的條件，希望比對的是 Id 和 Name 兩個欄位的值，在 data1 和 data2 的內容都相同的情況下，我們希望他的雜湊號碼要一樣，此時可以覆寫 GetHashCode 方法，用我們定義的條件去產生雜湊編號（如下圖）。</p>
+<p>但前面我們覆寫 Equals 方法比較是否相等的條件，比對的是 Id 和 Name 兩個欄位的值，在 data1 和 data2 的內容都相同的情況下，我們希望他的雜湊號碼要一樣，此時可以覆寫 GetHashCode 方法，用自訂的條件去產生雜湊編號（如下圖）。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/AnonymousType_GetHashCode.jpg" alt="匿名型別的 GetHashCode 方法"></p>
-<p>上圖的 GetHashCode 方法內用到一個實用的技巧是大神 <a href="https://www.facebook.com/91agile" target="_blank" rel="noopener">Joey Chen</a> 教的，我們借用匿名型別實作的 GetHashCode 方法，在 new 匿名型別時，只要傳入欄位的值都一樣，產生出來的雜湊碼就會相同。</p>
+<p>上面 GetHashCode 方法用到一個實用的技巧是大神 <a href="https://www.facebook.com/91agile" target="_blank" rel="noopener">Joey Chen</a> 教的，借用匿名型別實作的 GetHashCode 方法，在 new 匿名型別時，只要傳入欄位的值都一樣，產生出來的雜湊碼就會相同。</p>
 <h3 id="C-用雜湊表實現的集合類別"><a href="#C-用雜湊表實現的集合類別" class="headerlink" title="C# 用雜湊表實現的集合類別"></a>C# 用雜湊表實現的集合類別</h3><p>在 C# 語言中，用雜湊表實現的集合類別有很多種，例如 HashSet&lt;T&gt;、Dictionary&lt;TKey, TValue&gt;、SortedList<br>&lt;TKey, TValue&gt;、HashTable、SortedList、…等。</p>
-<p>我們用 Data 類別建立 data1、data2 兩個物件，並將這兩個物件加入到 HashSet&lt;T&gt; 內，試試以下不同情境，看看會發生什麼事。</p>
+<p>接下來用 Data 類別建立 data1、data2 兩個物件，並將這兩個物件加入到 HashSet&lt;Data&gt; 內，試試以下不同情境，看看會發生什麼事。</p>
 <ul>
-<li><p>雜湊碼用 Object 的 GetHashCode 方法產生。<br>data1、data2 兩個物件的 GetHashCode 都不同，因此兩個物件都會加入到 HashSet&lt;Data&gt; 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_Object_GetHashCode_To_HashSet.jpg" alt="用 Object 的 GetHashCode 方法加入 HashSet"></p>
+<li><p>用 Object 的 GetHashCode 方法產生雜湊碼。<br>data1、data2 兩個物件的 GetHashCode 都不同，所以如預期的，兩個物件都會加入到 HashSet&lt;Data&gt; 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_Object_GetHashCode_To_HashSet.jpg" alt="用 Object 的 GetHashCode 方法加入 HashSet"></p>
 </li>
-<li><p>雜湊碼用自訂的 GetHashCode 方法產生，條件是用 Id + Name 欄位的值產生。<br>data1、data2 雖然是兩個執行個體，但 GetHashCode 的值是相同的，在加入到雜湊表集合時，會先呼叫 GetHashCode 並檢查雜湊表內是否存已存在這組雜湊碼。  </p>
-<ul>
-<li>若雜湊碼不存在，將物件加入雜湊表。  </li>
-<li>若雜湊碼已存在，另外呼叫 Equals 方法比對既有物件與新加入物件是否相同，當回傳為 False 才加入雜湊表。<br>此例只有 data1 會加入到 hashSet 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_AnonymousType_GetHashCode_To_HashSet.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></li>
-</ul>
+<li><p>用自訂的 GetHashCode 方法產生雜湊碼，條件是用 Id + Name 欄位的值產生。<br>data1、data2 是兩個執行個體，但我們讓兩個物件的 GetHashCode 的值相同，在加入到雜湊表集合時，會先呼叫 GetHashCode 檢查雜湊表內是否存已存在這組雜湊碼，接著：  </p>
+<ol>
+<li>若雜湊碼不存在，將物件加入雜湊表<br>data1.GetHashCode() 不存在雜湊表，將 data1 物件加入。  </li>
+<li>若雜湊碼已存在，取出表內雜湊碼相同的所有物件，逐一呼叫物件的 Equals 方法和新加入物件相比是否相同，當回傳為 False 才加入雜湊表。<br>data1.Equals(data2) == true，因此 data2 不加入雜湊表。<br>此例最終只有 data1 會加入到 hashSet 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_AnonymousType_GetHashCode_To_HashSet.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></li>
+</ol>
 </li>
 </ul>
-<h3 id="什麼情況會遇到-GetHashCode-相同，但-Equals-為-False-的情況？"><a href="#什麼情況會遇到-GetHashCode-相同，但-Equals-為-False-的情況？" class="headerlink" title="什麼情況會遇到 GetHashCode 相同，但 Equals 為 False 的情況？"></a>什麼情況會遇到 GetHashCode 相同，但 Equals 為 False 的情況？</h3><p>當 GetHashCode、Equals 兩個方法使用不同欄位條件時，就會遇到這種情境。</p>
-<p>如下圖，GetHashCode 只用 Id 欄位去產生，但 Equals 用 Id + Name 欄位的值比對，此時三個 Data 物件都會加入到雜湊表集合內，並且都放在同一個雜湊碼的桶子裡。</p>
-<p>我們在 Equals 和 GetHashCode 方法內加入 Console.WriteLine() 觀察程式執行的流程，可看到雜湊表取資料，遇到相同 GetHashCode 時，會取出同一個桶子內的所有資料，再逐一呼叫 Equals 比對結果，最後才把比對吻合的那筆資料出來。</p>
-<p>前面有解釋過原理，在這種情況下要取出相同 GetHashCode 的物件時，並沒有享受到雜湊表的優勢。</p>
+<h3 id="什麼情況會遇到-GetHashCode-相同，但-Equals-為-False-的情況？"><a href="#什麼情況會遇到-GetHashCode-相同，但-Equals-為-False-的情況？" class="headerlink" title="什麼情況會遇到 GetHashCode 相同，但 Equals 為 False 的情況？"></a>什麼情況會遇到 GetHashCode 相同，但 Equals 為 False 的情況？</h3><p>當 GetHashCode、Equals 兩個方法使用不同欄位條件時，就會遇到。</p>
+<p>如下圖，GetHashCode 只用 Id 欄位去產生，但 Equals 是用 Id + Name 欄位的值比對，此時三個 Data 物件都會加入到雜湊表集合內，並且都放在同一個雜湊碼的桶子裡。</p>
+<p>我們在 Equals 和 GetHashCode 方法內加入 Console.WriteLine() 觀察雜湊表取資料的過程，當遇到相同 GetHashCode 時，會取出同一個桶子內的所有資料，再逐一呼叫 Equals 方法比對，最後取出比對結果相符的物件。</p>
+<p>在這個案例，就沒有發揮出雜湊表的優勢。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg" alt="相同的 GetHashCode 與不相等的 Equals 加入 HashSet"></p>
 
     </div>
@@ -458,6 +482,15 @@
 
           </div>
           
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
 
         </div>
           
@@ -707,6 +740,39 @@
   
 
   
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://samchuang0305.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function disqus_config() {
+    this.page.url = "https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/";
+    this.page.identifier = "2022/07/24/csharp_override_equals_and_gethashcode/";
+    this.page.title = 'C# 覆寫 Equals 和 GetHashCode 方法';
+  }
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://samchuang0305.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+  
+</script>
 
 </body>
 </html>
