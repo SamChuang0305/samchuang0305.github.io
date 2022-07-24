@@ -30,6 +30,8 @@
 <p>這種資料結構的優點是，當我們知道物品所在桶子的編號，只要先找到指定編號的桶子，再到這個桶子裡去找，一定會找到我們要的東西，找東西的速度會很快。比起每個桶子都打開來找，會省下不少時間。</p>
 <p>雜湊表的概念中，把每個物品 <u><em>平均分配到不同編號</em></u> 的桶子是很重要的，如果把所有東西通通放進同一個編號的桶子，找東西時打開這個桶子，還要巡過每一個物品才能確定找到要的東西，那用雜湊表就沒有意義了，不如放到陣列或 List 裡。</p>
 <p>雜湊表的概念在現實生活中的應用：圖書館的書本分類存放方式、書本的目錄、字典的索引頁。</p>
+<a id="more"></a>
+
 <h3 id="覆寫-GetHashCode-方法"><a href="#覆寫-GetHashCode-方法" class="headerlink" title="覆寫 GetHashCode 方法"></a>覆寫 GetHashCode 方法</h3><p>GetHashCode 就是產生雜湊編號的方法，得到編號後，在雜湊表中將這個物件放到這個編號的桶子裡，日後只要先呼叫物件的 GetHashCode 得到編號，再到雜湊表裡去找出桶子，從桶子裡取出得到這個物件，速度就快了。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/GetHashCode.jpg" alt="GetHashCode 產生雜湊編號"></p>
 <p>上圖可看到 data1 和 data2 即使欄位的值都相同，但兩個物件是不同執行個體 (不同 new Data 所產生的物件)，繼承自 Object 的 GetHashCode 方法就會產生不同的雜湊編號。</p>
