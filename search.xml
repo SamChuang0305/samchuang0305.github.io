@@ -24,15 +24,15 @@
 <li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 False。  </li>
 <li>若傳入的物件參數是 Data 型別，比對 Id 和 Name 兩個欄位的值是否相等，並回傳比對結果。  </li>
 </ul>
-<p>此時 IDE 在 Data 類別的宣告處出現綠蝌蚪的提示訊息，提示當我們覆寫 Equals 方法，也要覆寫 GetHashCode 方法，什麼是 GetHashCode？為什麼要覆寫這個方法？，在說明，先科普什麼是「雜湊表」。</p>
+<p>此時 IDE 在 Data 類別的宣告處出現綠色波浪提示訊息，提示我們覆寫 Equals 方法時，也要覆寫 GetHashCode 方法，什麼是 GetHashCode？為什麼要覆寫這個方法？在說明前，先科普什麼是「雜湊表」。</p>
+<a id="more"></a>
+
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/should_override_GetHashCode.jpg" alt="IDE 提示要覆寫 GetHashCode 方法的訊息"></p>
 <h3 id="關於雜湊表"><a href="#關於雜湊表" class="headerlink" title="關於雜湊表"></a>關於雜湊表</h3><p>資料結構中有一種組織資料的方式稱為「雜湊表」，在 C# 語言中 HashSet&lt;T&gt;、Dictionary&lt;TKey, TValue&gt;、…等集合種類就是用雜湊表實現的。</p>
 <p><font color='red'>可以把雜湊表想像成很多個桶子，每個桶子都有唯一的識別編號，而且每個桶子都可放入不止一件物品。</font></p>
 <p>這種資料結構的優點是，當我們知道物品所在桶子的編號，只要先找到指定編號的桶子，再到這個桶子裡去找，一定會找到我們要的東西，找東西的速度會很快。比起每個桶子都打開來找，會省下不少時間。</p>
 <p>雜湊表的概念中，把每個物品<font color='red'>平均分配到不同編號</font>的桶子是很重要的，如果把所有東西通通放進同一個編號的桶子，找東西時雖然只打開這一個桶子，卻還要每個物品逐一巡過比對才能找到確定要的東西，那用雜湊表就沒有意義了，不如放到陣列或 List 裡用迴圈比對。</p>
 <p>雜湊表的概念在現實生活中的應用：圖書館的書本分類存放方式、書本的目錄、字典的索引頁。</p>
-<a id="more"></a>
-
 <h3 id="覆寫-GetHashCode-方法"><a href="#覆寫-GetHashCode-方法" class="headerlink" title="覆寫 GetHashCode 方法"></a>覆寫 GetHashCode 方法</h3><p>從上面的說明可知，雜湊表需要雜湊值，GetHashCode 就是產生雜湊值的方法，在雜湊表中將物件放進這個編號的桶子裡，需要時，只要先呼叫物件的 GetHashCode 得到雜湊值，在雜湊表找出這個編號的桶子，再從桶子裡取出這個物件，速度就快了。</p>
 <p>如果物件不需要放入雜湊表，則 GetHashCode 方法就不會用到，但我們無法預期別人會如何使用這個物件，所以在覆寫 Equals 方法時，先將 GetHashCode 寫好就很重要了。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/GetHashCode.jpg" alt="GetHashCode 產生雜湊值"></p>
@@ -88,8 +88,8 @@
         <category>CSharp</category>
       </categories>
       <tags>
-        <tag>CSharp</tag>
         <tag>資料結構</tag>
+        <tag>CSharp 集合</tag>
       </tags>
   </entry>
   <entry>
