@@ -304,7 +304,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-07-30 12:56:49" itemprop="dateModified" datetime="2022-07-30T12:56:49+08:00">2022-07-30</time>
+                <time title="修改時間：2022-07-30 13:05:32" itemprop="dateModified" datetime="2022-07-30T13:05:32+08:00">2022-07-30</time>
               </span>
             
           
@@ -366,12 +366,12 @@
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/implicit-inheritance.jpg" alt="隱含繼承 Object 類別的方法"></p>
 <h3 id="Object-的-Equals-方法"><a href="#Object-的-Equals-方法" class="headerlink" title="Object 的 Equals 方法"></a>Object 的 Equals 方法</h3><p>宣告一個 Data 類別，並分別建立出兩個物件給 data1 和 data2 變數，這裡刻意將欄位都填入相同的值，再用繼承自 Object 的 Equals 方法比較兩個物件是否相等。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Object.Equals.jpg" alt="Object 的 Equals 方法"></p>
-<p>因為是 Reference Type (參考型別)，雖然 data1 和 data2 所有欄位的值都相同，但兩個變數在 Stack 內儲存的記憶體位址的值是不同的，因此 Equals 回傳的結果為 False。</p>
+<p>因為是 Reference Type (參考型別)，雖然 data1 和 data2 所有欄位的值都相同，但兩個變數在 Stack 內儲存的記憶體位址的值是不同的，因此 Equals 回傳的結果為 false。</p>
 <h3 id="覆寫-Equals-方法"><a href="#覆寫-Equals-方法" class="headerlink" title="覆寫 Equals 方法"></a>覆寫 Equals 方法</h3><p>如果我們希望將比對條件改為物件內欄位的值，可以覆寫 Equals 方法，自訂比對的條件，例如希望這個物件的 Equals 要同時比對 Id 和 Name 兩個欄位的值，可以這樣寫：</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/override_Equals.jpg" alt="覆寫 Equals 方法"></p>
 <p>自訂比對的條件，覆寫 Equals 方法：</p>
 <ul>
-<li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 False。  </li>
+<li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 false。  </li>
 <li>若傳入的物件參數是 Data 型別，比對 Id 和 Name 兩個欄位的值是否相等，並回傳比對結果。  </li>
 </ul>
 <p>此時 IDE 在 Data 類別的宣告處出現綠色波浪提示訊息，提示我們覆寫 Equals 方法時，也要覆寫 GetHashCode 方法。</p>

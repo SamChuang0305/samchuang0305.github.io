@@ -16,12 +16,12 @@
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/implicit-inheritance.jpg" alt="隱含繼承 Object 類別的方法"></p>
 <h3 id="Object-的-Equals-方法"><a href="#Object-的-Equals-方法" class="headerlink" title="Object 的 Equals 方法"></a>Object 的 Equals 方法</h3><p>宣告一個 Data 類別，並分別建立出兩個物件給 data1 和 data2 變數，這裡刻意將欄位都填入相同的值，再用繼承自 Object 的 Equals 方法比較兩個物件是否相等。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Object.Equals.jpg" alt="Object 的 Equals 方法"></p>
-<p>因為是 Reference Type (參考型別)，雖然 data1 和 data2 所有欄位的值都相同，但兩個變數在 Stack 內儲存的記憶體位址的值是不同的，因此 Equals 回傳的結果為 False。</p>
+<p>因為是 Reference Type (參考型別)，雖然 data1 和 data2 所有欄位的值都相同，但兩個變數在 Stack 內儲存的記憶體位址的值是不同的，因此 Equals 回傳的結果為 false。</p>
 <h3 id="覆寫-Equals-方法"><a href="#覆寫-Equals-方法" class="headerlink" title="覆寫 Equals 方法"></a>覆寫 Equals 方法</h3><p>如果我們希望將比對條件改為物件內欄位的值，可以覆寫 Equals 方法，自訂比對的條件，例如希望這個物件的 Equals 要同時比對 Id 和 Name 兩個欄位的值，可以這樣寫：</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/override_Equals.jpg" alt="覆寫 Equals 方法"></p>
 <p>自訂比對的條件，覆寫 Equals 方法：</p>
 <ul>
-<li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 False。  </li>
+<li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 false。  </li>
 <li>若傳入的物件參數是 Data 型別，比對 Id 和 Name 兩個欄位的值是否相等，並回傳比對結果。  </li>
 </ul>
 <p>此時 IDE 在 Data 類別的宣告處出現綠色波浪提示訊息，提示我們覆寫 Equals 方法時，也要覆寫 GetHashCode 方法。</p>
@@ -54,12 +54,12 @@
 <li><p>用自訂的 GetHashCode 方法產生雜湊碼，條件是用 Id + Name 欄位的值產生。<br>data1、data2 是兩個執行個體，但我們讓兩個物件的 GetHashCode 的值相同，在加入到雜湊表集合時，會先呼叫 GetHashCode 檢查雜湊表內是否存已存在這組雜湊碼，接著：  </p>
 <ol>
 <li>若雜湊碼不存在，將物件加入雜湊表<br>data1.GetHashCode() 不存在雜湊表，將 data1 物件加入。  </li>
-<li>若雜湊碼已存在，取出表內雜湊碼相同的所有物件，逐一呼叫物件的 Equals 方法和新加入物件相比是否相同，當回傳為 False 才加入雜湊表。<br>data1.Equals(data2) == true，因此 data2 不加入雜湊表。<br>此例最終只有 data1 會加入到 hashSet 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_HashSet.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></li>
+<li>若雜湊碼已存在，取出表內雜湊碼相同的所有物件，逐一呼叫物件的 Equals 方法和新加入物件相比是否相同，當回傳為 false 才加入雜湊表。<br>data1.Equals(data2) == true，因此 data2 不加入雜湊表。<br>此例最終只有 data1 會加入到 hashSet 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_HashSet.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></li>
 </ol>
 </li>
 </ul>
 <p>同樣的情形，在 Dictionary 會出現例外<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_Dictionary.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></p>
-<h3 id="什麼情況會遇到-GetHashCode-相同，但-Equals-為-False-的情況？"><a href="#什麼情況會遇到-GetHashCode-相同，但-Equals-為-False-的情況？" class="headerlink" title="什麼情況會遇到 GetHashCode 相同，但 Equals 為 False 的情況？"></a>什麼情況會遇到 GetHashCode 相同，但 Equals 為 False 的情況？</h3><p>當 GetHashCode、Equals 兩個方法使用不同欄位條件時，就會遇到。</p>
+<h3 id="什麼情況會遇到-GetHashCode-相同，但-Equals-為-false-的情況？"><a href="#什麼情況會遇到-GetHashCode-相同，但-Equals-為-false-的情況？" class="headerlink" title="什麼情況會遇到 GetHashCode 相同，但 Equals 為 false 的情況？"></a>什麼情況會遇到 GetHashCode 相同，但 Equals 為 false 的情況？</h3><p>當 GetHashCode、Equals 兩個方法使用不同欄位條件時，就會遇到。</p>
 <p>如下圖，GetHashCode 只用 Id 欄位去產生，但 Equals 是用 Id + Name 欄位的值比對，此時三個 Data 物件都會加入到雜湊表集合內，並且都放在同一個雜湊碼的桶子裡。</p>
 <p>我們在 Equals 和 GetHashCode 方法內加入 Console.WriteLine() 觀察雜湊表取資料的過程，當遇到相同 GetHashCode 時，會取出同一個桶子內的所有資料，再逐一呼叫 Equals 方法比對，最後取出比對結果相符的物件。</p>
 <p>在這個案例，沒有發揮出雜湊表的優勢。</p>
@@ -85,6 +85,7 @@
 <li><p><font color='red'>再呼叫 Equals 方法，逐一比對物件內容是否相等</font>，若相等，回傳這個物件。</p>
 </li>
 </ol>
+<p><b>雜湊表內「<font color='red'>重複</font>」的定義</b>：「<font color='red'>GetHashCode 相同</font>」 且 「<font color='red'>Equals 為 true</font>」。</p>
 <h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><blockquote>
 <p><a href="https://stackoverflow.com/questions/371328/why-is-it-important-to-override-gethashcode-when-equals-method-is-overridden" target="_blank" rel="noopener">c# - Why is it important to override GetHashCode when Equals method is overridden</a><br><a href="https://stackoverflow.com/questions/10916995/why-is-c-sharp-hashset-accepting-the-adding-of-two-objects-with-same-gethashcode" target="_blank" rel="noopener">Why is C# hashSet accepting the adding of two objects with same getHashCode() value</a>  </p>
 </blockquote>
