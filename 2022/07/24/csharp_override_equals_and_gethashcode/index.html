@@ -77,7 +77,7 @@
 <meta property="og:image" content="https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_Dictionary.jpg">
 <meta property="og:image" content="https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg">
 <meta property="article:published_time" content="2022-07-24T02:06:00.000Z">
-<meta property="article:modified_time" content="2022-07-30T04:46:50.816Z">
+<meta property="article:modified_time" content="2022-07-30T04:56:49.792Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="資料結構">
@@ -320,7 +320,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-07-30 12:46:50" itemprop="dateModified" datetime="2022-07-30T12:46:50+08:00">2022-07-30</time>
+                <time title="修改時間：2022-07-30 12:56:49" itemprop="dateModified" datetime="2022-07-30T12:56:49+08:00">2022-07-30</time>
               </span>
             
           
@@ -431,9 +431,9 @@
 <p>在這個案例，沒有發揮出雜湊表的優勢。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg" alt="相同的 GetHashCode 與不相等的 Equals 加入 HashSet"></p>
 <h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><ul>
-<li><p>比較物件是否相等，使用的是 Equals 方法，可覆寫此方法自訂比對的條件。</p>
+<li><p><font color='red'>比較物件是否相等，使用的是 Equals 方法</font>，可覆寫此方法自訂物件比對的條件。</p>
 </li>
-<li><p>無法預期別人是否會將這個物件放入雜湊表，先根據 Equals 的條件覆寫 GetHashCode 方法，避免將來遇到未預期的狀況。</p>
+<li><p><font color='red'>雜湊表會用到 GetHashCode 方法</font>，因為無法預期別人是否會將物件放入雜湊表，建議先根據 Equals 的條件覆寫 GetHashCode 方法，避免用在雜湊表時遭遇非預期的結果。</p>
 </li>
 </ul>
 <p><b>在雜湊表加入物件的規則，物件不能<font color='red'>重複</font></b></p>
