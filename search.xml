@@ -24,7 +24,8 @@
 <li>若傳入 Equals 的物件參數(要比對的對象)不是 Data 型別，回傳 False。  </li>
 <li>若傳入的物件參數是 Data 型別，比對 Id 和 Name 兩個欄位的值是否相等，並回傳比對結果。  </li>
 </ul>
-<p>此時 IDE 在 Data 類別的宣告處出現綠色波浪提示訊息，提示我們覆寫 Equals 方法時，也要覆寫 GetHashCode 方法，什麼是 GetHashCode？為什麼要覆寫這個方法？在說明前，先科普什麼是「雜湊表」。</p>
+<p>此時 IDE 在 Data 類別的宣告處出現綠色波浪提示訊息，提示我們覆寫 Equals 方法時，也要覆寫 GetHashCode 方法。</p>
+<p>什麼是 GetHashCode？為什麼要覆寫這個方法？在說明前，先科普什麼是「雜湊表」。</p>
 <a id="more"></a>
 
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/should_override_GetHashCode.jpg" alt="IDE 提示要覆寫 GetHashCode 方法的訊息"></p>
