@@ -77,7 +77,7 @@
 <meta property="og:image" content="https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_Dictionary.jpg">
 <meta property="og:image" content="https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg">
 <meta property="article:published_time" content="2022-07-24T02:06:00.000Z">
-<meta property="article:modified_time" content="2022-07-30T05:05:32.902Z">
+<meta property="article:modified_time" content="2022-07-30T13:41:58.319Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="資料結構">
@@ -320,7 +320,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-07-30 13:05:32" itemprop="dateModified" datetime="2022-07-30T13:05:32+08:00">2022-07-30</time>
+                <time title="修改時間：2022-07-30 21:41:58" itemprop="dateModified" datetime="2022-07-30T21:41:58+08:00">2022-07-30</time>
               </span>
             
           
@@ -404,15 +404,19 @@
 <li>圖書館的書本分類存放方式<br>書籍分門別類放在不同編號的書櫃，在相同編號的書櫃裡，放著許多相同分類的書。<br>找書的時候，依分類先找到該編號的書櫃，再到該編號的書櫃即可找到需要的書（不用每一櫃都找）。</li>
 <li>書本、字典的索引頁<br>索引頁會列出每個關鍵字詞所在的頁數，不同字詞可能會出現在相同的頁數。<br>找內容時，先找到關鍵字詞所在的頁數，直接翻到該頁數即可找到指定字詞的內文（不用從第一頁找到最後一頁）。</li>
 </ul>
-<h3 id="覆寫-GetHashCode-方法"><a href="#覆寫-GetHashCode-方法" class="headerlink" title="覆寫 GetHashCode 方法"></a>覆寫 GetHashCode 方法</h3><p>從上面的說明可知，雜湊表會用到雜湊值，GetHashCode 就是產生雜湊值的方法，將物件放進這個雜湊值的桶子裡，需要時，先呼叫物件的 GetHashCode 得到雜湊值，在雜湊表找出這個編號的桶子，再從桶子裡取出這個物件，速度就快了。</p>
-<p>如果物件不需要放入雜湊表，則 GetHashCode 方法就不會用到，但我們無法預期別人會如何使用這個物件，所以在覆寫 Equals 方法時，先將 GetHashCode 寫好就很重要了。</p>
+<h3 id="覆寫-GetHashCode-方法"><a href="#覆寫-GetHashCode-方法" class="headerlink" title="覆寫 GetHashCode 方法"></a>覆寫 GetHashCode 方法</h3><p>從上面的說明可知，雜湊表會用到雜湊值，GetHashCode 就是產生雜湊值的方法，將物件放進這個雜湊值的桶子裡，需要時，先呼叫物件的 GetHashCode 得到雜湊值，在雜湊表找出這個雜湊值的桶子，從桶子裡取出這個物件，速度就加快了。</p>
+<p>如果物件不放入雜湊表，則 GetHashCode 方法用不到，但我們無法預期別人會如何使用這個物件，所以在覆寫 Equals 方法時，先將 GetHashCode 寫好就很重要了。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/GetHashCode.jpg" alt="GetHashCode 產生雜湊值"></p>
 <p>上圖可看到 data1 和 data2 即使欄位的值都相同，但兩個物件是不同執行個體 (不同 new Data 所產生的物件)，繼承自 Object 的 GetHashCode 方法就會產生不同的雜湊值。</p>
 <p>但前面我們覆寫 Equals 方法比較是否相等的條件，比對的是 Id 和 Name 兩個欄位的值，在 data1 和 data2 的內容都相同的情況下，我們希望他的雜湊值也要一樣，此時可以覆寫 GetHashCode 方法，用自訂的條件去產生雜湊值（如下圖）。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/AnonymousType_GetHashCode.jpg" alt="匿名型別的 GetHashCode 方法"></p>
-<p>上面 GetHashCode 方法用到一個實用的技巧是大神 <a href="https://www.facebook.com/91agile" target="_blank" rel="noopener">Joey Chen</a> 教的，借用匿名型別實作的 GetHashCode 方法，在 new 匿名型別時，只要傳入欄位的值都一樣，產生出來的雜湊值就會相同。</p>
+<p>上面在 GetHashCode 方法用到一個實用的技巧是大神 <a href="https://www.facebook.com/91agile" target="_blank" rel="noopener">Joey Chen</a> 教的，借用匿名型別實作的 GetHashCode 方法，在 new 匿名型別時，只要傳入欄位的值都一樣，產生出來的雜湊值就會相同。</p>
 <h3 id="C-用雜湊表實現的集合類別"><a href="#C-用雜湊表實現的集合類別" class="headerlink" title="C# 用雜湊表實現的集合類別"></a>C# 用雜湊表實現的集合類別</h3><p>在 C# 語言中，用雜湊表實現的集合類別有很多種，例如 HashSet&lt;T&gt;、Dictionary&lt;TKey, TValue&gt;、SortedList&lt;TKey, TValue&gt;、HashTable、SortedList、…等。</p>
-<p>當 GetHashCode 已存在雜湊表內，且 Equals 回傳為 true (物件比對相等)，表示新加入的物件已經存在雜湊表內，不再重複加入。這種情況出現在 HashSet 會忽略重複的物件，結果只會加入唯一的物件進去；但在 Dictionary&lt;TKey, TValue&gt; 會發生例外。</p>
+<p>當 GetHashCode 已存在雜湊表內，且 Equals 回傳為 true (物件比對相等)，表示新加入的物件已經存在雜湊表內，不再重複加入。</p>
+<ul>
+<li>在 HashSet 加入重複的物件會略過，只會加入唯一不重複的物件進去。</li>
+<li>在 Dictionary 加入重複的物件會發生例外。</li>
+</ul>
 <p>接下來用 Data 類別建立 data1、data2 兩個物件，並將這兩個物件加入到 HashSet&lt;Data&gt; 內，試試以下不同情境，看看會發生什麼事。</p>
 <ul>
 <li><p>用 Object 的 GetHashCode 方法產生雜湊碼。<br>data1、data2 兩個物件的 GetHashCode 都不同，所以如預期的，兩個物件都會加入到 HashSet&lt;Data&gt; 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_Object_GetHashCode_To_HashSet.jpg" alt="用 Object 的 GetHashCode 方法加入 HashSet"></p>
@@ -420,7 +424,7 @@
 <li><p>用自訂的 GetHashCode 方法產生雜湊碼，條件是用 Id + Name 欄位的值產生。<br>data1、data2 是兩個執行個體，但我們讓兩個物件的 GetHashCode 的值相同，在加入到雜湊表集合時，會先呼叫 GetHashCode 檢查雜湊表內是否存已存在這組雜湊碼，接著：  </p>
 <ol>
 <li>若雜湊碼不存在，將物件加入雜湊表<br>data1.GetHashCode() 不存在雜湊表，將 data1 物件加入。  </li>
-<li>若雜湊碼已存在，取出表內雜湊碼相同的所有物件，逐一呼叫物件的 Equals 方法和新加入物件相比是否相同，當回傳為 false 才加入雜湊表。<br>data1.Equals(data2) == true，因此 data2 不加入雜湊表。<br>此例最終只有 data1 會加入到 hashSet 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_HashSet.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></li>
+<li>若雜湊碼已存在，取出表內雜湊碼相同的所有物件，逐一呼叫物件的 Equals 方法和新加入物件相比是否相同，當回傳為 false 才加入雜湊表。<br>data1.Equals(data2) == true，因此 data2 不會加入雜湊表。<br>此例最終只有 data1 會加入到 hashSet 中。<br><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_Equals_To_HashSet.jpg" alt="用自訂的 GetHashCode 方法加入 HashSet"></li>
 </ol>
 </li>
 </ul>
@@ -430,30 +434,33 @@
 <p>我們在 Equals 和 GetHashCode 方法內加入 Console.WriteLine() 觀察雜湊表取資料的過程，當遇到相同 GetHashCode 時，會取出同一個桶子內的所有資料，再逐一呼叫 Equals 方法比對，最後取出比對結果相符的物件。</p>
 <p>在這個案例，沒有發揮出雜湊表的優勢。</p>
 <p><img src="/2022/07/24/csharp_override_equals_and_gethashcode/Add_SameHashCode_NotEquals_To_HashSet.jpg" alt="相同的 GetHashCode 與不相等的 Equals 加入 HashSet"></p>
-<h3 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h3><ul>
-<li><p><font color='red'>比較物件是否相等，使用的是 Equals 方法</font>，可覆寫此方法自訂物件比對的條件。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><ul>
+<li><p><font color='red'>比較物件是否相等，用的是 Equals 方法</font>，覆寫此方法可自訂比對的條件。</p>
 </li>
-<li><p><font color='red'>雜湊表會用到 GetHashCode 方法</font>，因為無法預期別人是否會將物件放入雜湊表，建議先根據 Equals 的條件覆寫 GetHashCode 方法，避免用在雜湊表時遭遇非預期的結果。</p>
+<li><p><font color='red'>雜湊表會用到 GetHashCode 方法</font>，因為無法預期別人是否會將物件用於雜湊表，建議可先依據 Equals 的條件覆寫 GetHashCode 方法，避免將來在雜湊表使用此物件時遇到非預期的結果。</p>
 </li>
 </ul>
-<p><b>在雜湊表加入物件的規則，物件不能<font color='red'>重複</font></b></p>
-<p>雜湊表內判斷物件是否「<font color='red'>重複</font>」的流程：</p>
+<p><b>決定雜湊表內物件是否「<font color='red'>重複</font>」的條件</b>：「<font color='red'>GetHashCode 相同</font>」 且 「<font color='red'>Equals 為 true</font>」。</p>
+<p><b>加入到至雜湊表的物件不能「<font color='red'>重複</font>」。</b></p>
+<p>判斷雜湊表內物件是否重複的流程：</p>
 <ol>
 <li><p><font color='red'>先呼叫 GetHashCode 方法，檢查雜湊表內是否已存在這個雜湊值</font>，若不存在，表示新加入的物件不重複，加入至雜湊表。</p>
 </li>
 <li><p><font color='red'>若雜湊值已存在，再呼叫 Equals 方法，比對雜湊值重複的物件內容</font>，若不相等，表示新加入的物件不重複，加入至雜湊表。</p>
 </li>
 </ol>
-<p><b>從雜湊表取出物件的流程</b></p>
+<p>從雜湊表取出物件的流程：</p>
 <ol>
 <li><p><font color='red'>先呼叫 GetHashCode 方法，取出雜湊表內放在這個雜湊值的所有物件</font>，物件數量越少越好。</p>
 </li>
 <li><p><font color='red'>再呼叫 Equals 方法，逐一比對物件內容是否相等</font>，若相等，回傳這個物件。</p>
 </li>
 </ol>
-<p><b>雜湊表內「<font color='red'>重複</font>」的定義</b>：「<font color='red'>GetHashCode 相同</font>」 且 「<font color='red'>Equals 為 true</font>」。</p>
 <h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><blockquote>
-<p><a href="https://stackoverflow.com/questions/371328/why-is-it-important-to-override-gethashcode-when-equals-method-is-overridden" target="_blank" rel="noopener">c# - Why is it important to override GetHashCode when Equals method is overridden</a><br><a href="https://stackoverflow.com/questions/10916995/why-is-c-sharp-hashset-accepting-the-adding-of-two-objects-with-same-gethashcode" target="_blank" rel="noopener">Why is C# hashSet accepting the adding of two objects with same getHashCode() value</a>  </p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/371328/why-is-it-important-to-override-gethashcode-when-equals-method-is-overridden" target="_blank" rel="noopener">c# - Why is it important to override GetHashCode when Equals method is overridden</a>  </li>
+<li><a href="https://stackoverflow.com/questions/10916995/why-is-c-sharp-hashset-accepting-the-adding-of-two-objects-with-same-gethashcode" target="_blank" rel="noopener">Why is C# hashSet accepting the adding of two objects with same getHashCode() value</a>  </li>
+</ul>
 </blockquote>
 
     </div>
@@ -559,7 +566,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前置知識"><span class="nav-text">前置知識</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隱含繼承-Object-類別"><span class="nav-text">隱含繼承 Object 類別</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-的-Equals-方法"><span class="nav-text">Object 的 Equals 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆寫-Equals-方法"><span class="nav-text">覆寫 Equals 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關於雜湊表"><span class="nav-text">關於雜湊表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆寫-GetHashCode-方法"><span class="nav-text">覆寫 GetHashCode 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-用雜湊表實現的集合類別"><span class="nav-text">C# 用雜湊表實現的集合類別</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什麼情況會遇到-GetHashCode-相同，但-Equals-為-false-的情況？"><span class="nav-text">什麼情況會遇到 GetHashCode 相同，但 Equals 為 false 的情況？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#結論"><span class="nav-text">結論</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#參考資料"><span class="nav-text">參考資料</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前置知識"><span class="nav-text">前置知識</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隱含繼承-Object-類別"><span class="nav-text">隱含繼承 Object 類別</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-的-Equals-方法"><span class="nav-text">Object 的 Equals 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆寫-Equals-方法"><span class="nav-text">覆寫 Equals 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關於雜湊表"><span class="nav-text">關於雜湊表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆寫-GetHashCode-方法"><span class="nav-text">覆寫 GetHashCode 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-用雜湊表實現的集合類別"><span class="nav-text">C# 用雜湊表實現的集合類別</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什麼情況會遇到-GetHashCode-相同，但-Equals-為-false-的情況？"><span class="nav-text">什麼情況會遇到 GetHashCode 相同，但 Equals 為 false 的情況？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#總結"><span class="nav-text">總結</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#參考資料"><span class="nav-text">參考資料</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
