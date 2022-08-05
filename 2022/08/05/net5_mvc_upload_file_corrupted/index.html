@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <meta name="google-site-verification" content="MLb6JifP_d6j3eigpmzpvXYv6ecMb-gC6i2tznANrUU">
+  <meta property="fb:admins" content="">
+  <meta property="fb:app_id" content="1099372750454457">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '複製',
+      copy_success: '複製成功',
+      copy_failure: '複製失敗'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。 為了修正問題，在匯入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題">
+<meta property="og:url" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/index.html">
+<meta property="og:site_name" content="金魚腦的海馬迴">
+<meta property="og:description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。 為了修正問題，在匯入">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Startup_cs.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png">
+<meta property="article:published_time" content="2022-08-05T13:53:00.000Z">
+<meta property="article:modified_time" content="2022-08-05T16:55:48.296Z">
+<meta property="article:author" content="Sam Chuang">
+<meta property="article:tag" content="Middleware">
+<meta property="article:tag" content="ASP.NET Core 5 MVC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png">
+  <link rel="canonical" href="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題 | 金魚腦的海馬迴</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156002640-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-156002640-1');
+      }
+    </script>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金魚腦的海馬迴</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">海馬迴存放所有的記憶</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首頁</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>歸檔</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分類</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>標籤</a>
+
+  </li>
+      
+    
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">
+          <i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜尋..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sam Chuang">
+      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金魚腦的海馬迴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題
+            
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              
+                
+              
+
+              <time title="創建時間：2022-08-05 21:53:00" itemprop="dateCreated datePublished" datetime="2022-08-05T21:53:00+08:00">2022-08-05</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2022-08-06 00:55:48" itemprop="dateModified" datetime="2022-08-06T00:55:48+08:00">2022-08-06</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E9%9B%9C%E8%A8%98/" itemprop="url" rel="index">
+                    <span itemprop="name">工作雜記</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/08/05/net5_mvc_upload_file_corrupted/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/05/net5_mvc_upload_file_corrupted/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="/2022/08/05/net5_mvc_upload_file_corrupted"><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png" alt="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題"></a></p>
+<h2 id="問題描述"><a href="#問題描述" class="headerlink" title="問題描述"></a>問題描述</h2><p>昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。</p>
+<p>問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。</p>
+<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，訊息分別如下：</p>
+<ul>
+<li><p>ClosedXML：FileFormatException: File contains corrupted data</p>
+</li>
+<li><p>NPOI：ZipException: EOF in header</p>
+</li>
+<li><p>ExcelDataReader：Offset to Central Directory cannot be held in an Int64</p>
+</li>
+</ul>
+<p>後來他發現上傳到 Server 的檔案都無法正常開啟，似乎檔案損壞了。</p>
+<a id="more"></a>
+
+<h2 id="處理經過"><a href="#處理經過" class="headerlink" title="處理經過"></a>處理經過</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>因為是檔案上傳功能，且在 IDE 執行正常，只有發佈到測試機 IIS 異常，一開始我猜會不會和寫入權限有關，但既然檔案都寫進去了，只是寫壞掉，那就可排除權限問題。</p>
+<p>接下來我懷疑是檔案上傳的時候，可能遇到 UTF8 編碼相關問題，造成寫出壞檔的結果。</p>
+<h3 id="原始碼"><a href="#原始碼" class="headerlink" title="原始碼"></a>原始碼</h3><p>以下是上傳檔案相關的 Code，包含 View Model、View、JS、Controller 等，簡化內容只保留必要的部份。</p>
+<ul>
+<li><p><strong>View (HTML 部份) 原始碼</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"file_Choose"</span> <span class="attr">width</span>=<span class="string">"400"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn_FileUpload"</span>&gt;</span>確認上傳<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>View (JS 部份) 原始碼</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//確定上傳</span></span><br><span class="line">$(<span class="string">'#btn_FileUpload'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (confirmVerify()) &#123;</span><br><span class="line">        <span class="keyword">var</span> file = $(<span class="string">'#file_Choose'</span>)[<span class="number">0</span>].files[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">var</span> inputData = <span class="keyword">new</span> FormData();</span><br><span class="line">        inputData.append(<span class="string">'FormFile'</span>, file);</span><br><span class="line">        Upload(inputData);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//確認上傳</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Upload</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'UploadExample'</span>,</span><br><span class="line">        data: data,</span><br><span class="line">        type: <span class="string">'POST'</span>,</span><br><span class="line">        dataType: <span class="string">'json'</span>,</span><br><span class="line">        contentType: <span class="literal">false</span>,</span><br><span class="line">        processData: <span class="literal">false</span>,</span><br><span class="line">        <span class="keyword">async</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>View Model 原始碼</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">InputModel</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IFormFile FormFile &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Controller 原始碼</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">IgnoreAntiforgeryToken</span>]</span><br><span class="line">[<span class="meta">HttpPost</span>]</span><br><span class="line">[<span class="meta">Route(<span class="meta-string">"UploadExample"</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IActionResult&gt; <span class="title">UploadExampleAsync</span>(<span class="params">[FromForm] InputModel input</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> fs = <span class="keyword">new</span> FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 儲存檔案</span></span><br><span class="line">        <span class="keyword">await</span> input.FormFile.CopyToAsync(fs);</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="縮小問題範圍"><a href="#縮小問題範圍" class="headerlink" title="縮小問題範圍"></a>縮小問題範圍</h3><p>上面的 Code 看起來很正常，頁面是用 AJAX Post 檔案到 Controller，Controller 再用 FileStream 將檔案寫入硬碟，看不出有哪邊會讓檔案壞掉的地方，也沒看到檔案有經過編碼處理的問題。</p>
+<p>且對方說在 IDE 執行是正常的，只在測試機 IIS 上有問題，那就先排除這邊 Code 的問題。</p>
+<p>接下來，我將問題分為「內在因素」和「外在因素」兩個方向，並試著排除掉一個方向，先把問題的範圍縮小，否則會像無頭蒼蠅亂猜，很沒效率。</p>
+<ul>
+<li>「內在因素」：我的假設是 Debug 模式和發佈版本之間的差異，在這個差異的地方造成問題。</li>
+<li>「外在因素」：我的假設是，或許連線到測試主機有經過一些網通設備，在上傳檔案時，封包被這些設備加料，導致寫檔損壞。</li>
+</ul>
+<p>先從「內在因素」開始試，我請對方將發佈給測試主機的打包，放到自己本機 IIS 裡去跑看看，是否可以重現出相同問題。對方測試後，果然在本機 IIS 重現問題了，這時我鬆了一口氣，到這邊我已經有 9 成把握可以肯定問題就是出在 Debug 和發佈版的差異處了，這個差異不難找，範圍瞬間縮小。</p>
+<h3 id="找到問題"><a href="#找到問題" class="headerlink" title="找到問題"></a>找到問題</h3><p>接下來我請對方提供 Program.cs、Startup.cs、Appsettings.json 等檔案。</p>
+<ul>
+<li><strong>Startup.cs 原始碼</strong></li>
+</ul>
+<p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Startup_cs.png" alt="Startup.cs"></p>
+<p>在 pipeline 註冊 Middleware 的地方果然看到可疑分子，我再請對方提供 ExceptionMiddleware 原始碼給我看。</p>
+<ul>
+<li><strong>ExceptionMiddleware.cs 原始碼</strong></li>
+</ul>
+<p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png" alt="ExceptionMiddleware.cs"></p>
+<p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪寫出壞檔，果然和我一開始的預感一樣。</p>
+<h3 id="問題解決"><a href="#問題解決" class="headerlink" title="問題解決"></a>問題解決</h3><p>雖然找到問題很開心，但是問題還沒有解決，而且會有這段轉換一定有他的原因，又不能直接拔掉。</p>
+<p>對方也是剛接手這個案子，不了解這段存在的意義，最後我們決定做比較安全的修改，在這段程式碼外包一層判斷，當 Content-Type 是 multipart/form-data 時，就不要跑進這一段，這樣就不會影響檔案上傳的功能了。</p>
+<p>完成修改，重新發佈到測試機 IIS 測試，問題終於排除了。</p>
+<p>之前上一堆課、看一堆文章和書果然都沒白費，累積的知識點都用上了，如果沒有這些知識點，我也不具備可在短時間內找到這個問題的能力，所以決定把這段經歷寫出來，希望未來有天也能幫到其他人。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Middleware/" rel="tag"><i class="fa fa-tag"></i> Middleware</a>
+            
+              <a href="/tags/ASP-NET-Core-5-MVC/" rel="tag"><i class="fa fa-tag"></i> ASP.NET Core 5 MVC</a>
+            
+          </div>
+        
+
+        
+  <div class="post-widgets">
+    <div class="social-like">
+      
+
+      
+        <div class="fb_like">
+          <div class="fb-like" data-layout="button_count" data-share="true"></div>
+        </div>
+      
+    </div>
+  
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2022/07/24/csharp_override_equals_and_gethashcode/" rel="next" title="C# 覆寫 Equals 方法，為何要覆寫 GetHashCode 方法">
+                  <i class="fa fa-chevron-left"></i> C# 覆寫 Equals 方法，為何要覆寫 GetHashCode 方法
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理經過"><span class="nav-text">處理經過</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#找到問題"><span class="nav-text">找到問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#問題解決"><span class="nav-text">問題解決</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar.jpg"
+      alt="Sam Chuang">
+  <p class="site-author-name" itemprop="name">Sam Chuang</p>
+  <div class="site-description" itemprop="description">用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分類</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">標籤</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/about/" title="關於我 &amp;rarr; &#x2F;about&#x2F;"><i class="fa fa-fw fa-user"></i>關於我</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/" title="回首頁 &amp;rarr; &#x2F;"><i class="fa fa-fw fa-home"></i>回首頁</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:samchuang@myhost.idv.tw" title="E-Mail &amp;rarr; mailto:samchuang@myhost.idv.tw" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.facebook.com/chuangsam" title="FB Page &amp;rarr; https:&#x2F;&#x2F;www.facebook.com&#x2F;chuangsam" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>FB Page</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sam Chuang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 強力驅動 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主題 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.4.2.js"></script>
+
+<script src="/js/motion.js?v=7.4.2.js"></script>
+
+
+<script src="/js/schemes/pisces.js?v=7.4.2.js"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.4.2.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+    function fbAsyncInit() {
+      FB.init({
+        appId  : '1099372750454457',
+        xfbml  : true,
+        version: 'v3.3'
+      });
+    }
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/zh_TW/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+
+
+
+
+  
+<script src="/js/local-search.js?v=7.4.2.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://samchuangblog.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function disqus_config() {
+    this.page.url = "https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/";
+    this.page.identifier = "2022/08/05/net5_mvc_upload_file_corrupted/";
+    this.page.title = '工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題';
+  }
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://samchuangblog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+</body>
+</html>
