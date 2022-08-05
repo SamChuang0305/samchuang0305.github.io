@@ -58,18 +58,18 @@
   };
 </script>
 
-  <meta name="description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。 為了修正問題，在匯入">
+  <meta name="description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。 為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題">
 <meta property="og:url" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/index.html">
 <meta property="og:site_name" content="金魚腦的海馬迴">
-<meta property="og:description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。 為了修正問題，在匯入">
+<meta property="og:description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。 為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Startup_cs.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png">
 <meta property="article:published_time" content="2022-08-05T13:53:00.000Z">
-<meta property="article:modified_time" content="2022-08-05T17:03:10.265Z">
+<meta property="article:modified_time" content="2022-08-05T17:17:30.583Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="Middleware">
 <meta property="article:tag" content="ASP.NET Core 5 MVC">
@@ -311,7 +311,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-08-06 01:03:10" itemprop="dateModified" datetime="2022-08-06T01:03:10+08:00">2022-08-06</time>
+                <time title="修改時間：2022-08-06 01:17:30" itemprop="dateModified" datetime="2022-08-06T01:17:30+08:00">2022-08-06</time>
               </span>
             
           
@@ -362,8 +362,8 @@
       
         <p><a href="/2022/08/05/net5_mvc_upload_file_corrupted"><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png" alt="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題"></a></p>
 <h2 id="問題描述"><a href="#問題描述" class="headerlink" title="問題描述"></a>問題描述</h2><p>昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。</p>
-<p>問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。</p>
-<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，訊息分別如下：</p>
+<p>對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。</p>
+<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，訊息如下：</p>
 <ul>
 <li><p>ClosedXML：FileFormatException: File contains corrupted data</p>
 </li>
@@ -372,37 +372,38 @@
 <li><p>ExcelDataReader：Offset to Central Directory cannot be held in an Int64</p>
 </li>
 </ul>
-<p>後來他發現上傳到 Server 的檔案都無法正常開啟，似乎檔案損壞了。</p>
+<p>後來他發現上傳到 Server 的 Excel 檔案都無法開啟，檔案似乎都壞了。</p>
 <a id="more"></a>
 
-<h2 id="處理經過"><a href="#處理經過" class="headerlink" title="處理經過"></a>處理經過</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>因為是檔案上傳功能，且在 IDE 執行正常，只有發佈到測試機 IIS 異常，一開始我猜會不會和寫入權限有關，但既然檔案都寫進去了，只是寫壞掉，那就可排除權限問題。</p>
-<p>接下來我懷疑是檔案上傳的時候，可能遇到 UTF8 編碼相關問題，造成寫出壞檔的結果。</p>
-<h3 id="原始碼"><a href="#原始碼" class="headerlink" title="原始碼"></a>原始碼</h3><p>以下是上傳檔案相關的 Code，包含 View Model、View、JS、Controller 等，簡化內容只保留必要的部份。</p>
+<h2 id="處理經過"><a href="#處理經過" class="headerlink" title="處理經過"></a>處理經過</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>檔案上傳，在 IDE 執行正常，發佈到測試機 IIS 異常，一開始我猜會不會和寫入權限有關，但既然檔案都寫進去了，只是檔案壞掉，那就排除權限問題。</p>
+<p>接下來我懷疑檔案上傳的時候，可能遇到 UTF8 編碼相關問題，造成寫出壞檔的結果，先跟對方拿原始碼來看看。</p>
+<h3 id="原始碼"><a href="#原始碼" class="headerlink" title="原始碼"></a>原始碼</h3><p>以下是相關的程式碼，包含 View Model、View、JS、Controller 等，簡化內容並稍作修改，只保留必要的部份。</p>
 <ul>
 <li><p><strong>View (HTML 部份) 原始碼</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"file_Choose"</span> <span class="attr">width</span>=<span class="string">"400"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn_FileUpload"</span>&gt;</span>確認上傳<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>View (JS 部份) 原始碼</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//確定上傳</span></span><br><span class="line">$(<span class="string">'#btn_FileUpload'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (confirmVerify()) &#123;</span><br><span class="line">        <span class="keyword">var</span> file = $(<span class="string">'#file_Choose'</span>)[<span class="number">0</span>].files[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">var</span> inputData = <span class="keyword">new</span> FormData();</span><br><span class="line">        inputData.append(<span class="string">'FormFile'</span>, file);</span><br><span class="line">        Upload(inputData);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//確認上傳</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Upload</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'UploadExample'</span>,</span><br><span class="line">        data: data,</span><br><span class="line">        type: <span class="string">'POST'</span>,</span><br><span class="line">        dataType: <span class="string">'json'</span>,</span><br><span class="line">        contentType: <span class="literal">false</span>,</span><br><span class="line">        processData: <span class="literal">false</span>,</span><br><span class="line">        <span class="keyword">async</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//確定上傳</span></span><br><span class="line">$(<span class="string">'#btn_FileUpload'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (confirmVerify()) &#123;</span><br><span class="line">        <span class="keyword">var</span> file = $(<span class="string">'#file_Choose'</span>)[<span class="number">0</span>].files[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">var</span> inputData = <span class="keyword">new</span> FormData();</span><br><span class="line">        inputData.append(<span class="string">'FormFile'</span>, file);</span><br><span class="line">        Upload(inputData);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//上傳</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Upload</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'UploadExample'</span>,</span><br><span class="line">        data: data,</span><br><span class="line">        type: <span class="string">'POST'</span>,</span><br><span class="line">        dataType: <span class="string">'json'</span>,</span><br><span class="line">        contentType: <span class="literal">false</span>,</span><br><span class="line">        processData: <span class="literal">false</span>,</span><br><span class="line">        <span class="keyword">async</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>View Model 原始碼</strong></p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">InputModel</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IFormFile FormFile &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Controller 原始碼</strong></p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">IgnoreAntiforgeryToken</span>]</span><br><span class="line">[<span class="meta">HttpPost</span>]</span><br><span class="line">[<span class="meta">Route(<span class="meta-string">"UploadExample"</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IActionResult&gt; <span class="title">UploadExampleAsync</span>(<span class="params">[FromForm] InputModel input</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> fs = <span class="keyword">new</span> FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 儲存檔案</span></span><br><span class="line">        <span class="keyword">await</span> input.FormFile.CopyToAsync(fs);</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">HttpPost</span>]</span><br><span class="line">[<span class="meta">Route(<span class="meta-string">"UploadExample"</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IActionResult&gt; <span class="title">UploadExampleAsync</span>(<span class="params">[FromForm] InputModel input</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> fs = <span class="keyword">new</span> FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 儲存檔案</span></span><br><span class="line">        <span class="keyword">await</span> input.FormFile.CopyToAsync(fs);</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
 <h3 id="縮小問題範圍"><a href="#縮小問題範圍" class="headerlink" title="縮小問題範圍"></a>縮小問題範圍</h3><p>上面的 Code 看起來很正常，頁面是用 AJAX Post 檔案到 Controller，Controller 再用 FileStream 將檔案寫入硬碟，看不出有哪邊會讓檔案壞掉的地方，也沒看到檔案有經過編碼處理的問題。</p>
-<p>且對方說在 IDE 執行是正常的，只在測試機 IIS 上有問題，那就先排除這邊 Code 的問題。</p>
-<p>接下來，我將問題分為「內在因素」和「外在因素」兩個方向，並試著排除掉一個方向，先把問題的範圍縮小，否則會像無頭蒼蠅亂猜，很沒效率。</p>
-<p>以下是現階段我的猜測</p>
+<p>且對方說在 IDE 執行是正常的，那就先排除這邊 Code 的問題。</p>
+<p>接下來，我將問題分為「內在因素」和「外在因素」兩個方向，並試著排除掉一個方向，先把問題的範圍縮小，否則像無頭蒼蠅亂猜，對解問題很沒效率。</p>
+<p>當下我的猜測如下</p>
 <ul>
 <li>「內在因素」：問題可能是在 Debug 模式和發佈版本之間的差異。</li>
 <li>「外在因素」：或許連線到測試主機有經過一些網通設備，在上傳檔案時，封包被這些設備加料，導致寫檔損壞。</li>
 </ul>
-<p>先從「內在因素」開始，我請對方將發佈給測試主機的打包，放到自己本機 IIS 裡去跑看看，是否可以重現出相同問題。對方測試後，果然在本機 IIS 重現問題了，這時我鬆了一口氣，到這邊我已經有 9 成把握可以肯定問題就是出在 Debug 和發佈版的差異處了，這個差異不難找，範圍瞬間縮小。</p>
-<h3 id="找到問題"><a href="#找到問題" class="headerlink" title="找到問題"></a>找到問題</h3><p>接下來我請對方提供 Program.cs、Startup.cs、Appsettings.json 等檔案。</p>
+<p>先從「內在因素」開始，我請對方將發佈給測試主機的打包，放到自己本機 IIS 裡，看看是否可以重現出相同問題。</p>
+<p>對方測試後，果然在本機 IIS 重現問題了，這時我鬆一口氣，到這邊我幾乎已經可以肯定問題是出在 Debug 和發佈版之間的差異處了，這個差異不難找，範圍瞬間縮小許多。</p>
+<h3 id="確認問題點"><a href="#確認問題點" class="headerlink" title="確認問題點"></a>確認問題點</h3><p>接下來我請對方提供 Program.cs、Startup.cs、Appsettings.json 等檔案。</p>
 <ul>
 <li><strong>Startup.cs 原始碼</strong></li>
 </ul>
@@ -413,10 +414,10 @@
 </ul>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png" alt="ExceptionMiddleware.cs"></p>
 <p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪寫出壞檔，果然和我一開始的預感一樣。</p>
-<h3 id="問題解決"><a href="#問題解決" class="headerlink" title="問題解決"></a>問題解決</h3><p>雖然找到問題很開心，但是問題還沒有解決，而且會有這段轉換一定有他的原因，又不能直接拔掉。</p>
-<p>對方也是剛接手這個案子，不了解這段存在的意義，最後我們決定做比較安全的修改，在這段程式碼外包一層判斷，當 Content-Type 是 multipart/form-data 時，就不要跑進這一段，這樣就不會影響檔案上傳的功能了。</p>
-<p>完成修改，重新發佈到測試機 IIS 測試，問題終於排除了。</p>
-<p>之前上一堆課、看一堆文章和書果然都沒白費，累積的知識點都用上了，如果沒有這些知識點，我也不具備可在短時間內找到這個問題的能力，所以決定把這段經歷寫出來，希望未來有天也能幫到其他人。</p>
+<h3 id="解決問題"><a href="#解決問題" class="headerlink" title="解決問題"></a>解決問題</h3><p>雖然找到問題點很開心，但是目前問題還沒解決，而且有這段轉換一定有他的原因，不能直接拔掉。</p>
+<p>對方也是剛接手這個案子，不了解這段轉換存在的目的，最後我們決定比較安全的修改方式，在這段程式碼外再包一層判斷，當 Content-Type 是 multipart/form-data 時，就不要跑進這一段，這樣就不會影響檔案上傳的功能了。</p>
+<p>完成修改，重新發佈到測試機 IIS 測試，問題終於解決了。</p>
+<p>之前上一堆課、看一堆文章和書果然都沒白費，累積的知識點都用上了，如果缺少這些知識點，我就不具備在短時間內可找到這個問題的能力，所以決定把這段經歷寫出來，希望未來有天也能幫到其他人。</p>
 
     </div>
 
@@ -519,7 +520,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理經過"><span class="nav-text">處理經過</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#找到問題"><span class="nav-text">找到問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#問題解決"><span class="nav-text">問題解決</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理經過"><span class="nav-text">處理經過</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#確認問題點"><span class="nav-text">確認問題點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解決問題"><span class="nav-text">解決問題</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->

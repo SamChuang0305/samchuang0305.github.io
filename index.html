@@ -304,7 +304,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-08-06 01:03:10" itemprop="dateModified" datetime="2022-08-06T01:03:10+08:00">2022-08-06</time>
+                <time title="修改時間：2022-08-06 01:17:30" itemprop="dateModified" datetime="2022-08-06T01:17:30+08:00">2022-08-06</time>
               </span>
             
           
@@ -355,8 +355,8 @@
       
           <p><a href="/2022/08/05/net5_mvc_upload_file_corrupted"><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png" alt="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題"></a></p>
 <h2 id="問題描述"><a href="#問題描述" class="headerlink" title="問題描述"></a>問題描述</h2><p>昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。</p>
-<p>問題描述如下，他負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 檔案匯入的功能，在 IDE 將站台執行起來，可正常上傳 Excel 檔案並匯入資料，但發佈到測試機的 IIS 站台，上傳 Excel 在匯入時就會發生例外。</p>
-<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，訊息分別如下：</p>
+<p>對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。</p>
+<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，訊息如下：</p>
 <ul>
 <li><p>ClosedXML：FileFormatException: File contains corrupted data</p>
 </li>
@@ -365,7 +365,7 @@
 <li><p>ExcelDataReader：Offset to Central Directory cannot be held in an Int64</p>
 </li>
 </ul>
-<p>後來他發現上傳到 Server 的檔案都無法正常開啟，似乎檔案損壞了。</p>
+<p>後來他發現上傳到 Server 的 Excel 檔案都無法開啟，檔案似乎都壞了。</p>
           <!--noindex-->
           
             <div class="post-button">
