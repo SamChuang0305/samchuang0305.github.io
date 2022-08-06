@@ -58,18 +58,19 @@
   };
 </script>
 
-  <meta name="description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。 為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件">
+  <meta name="description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 對方負責的專案是用 ASP.NET Core 5 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，檔案上傳完在匯入資料時會發生例外。 為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題">
 <meta property="og:url" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/index.html">
 <meta property="og:site_name" content="金魚腦的海馬迴">
-<meta property="og:description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。 為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件">
+<meta property="og:description" content="問題描述昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。 對方負責的專案是用 ASP.NET Core 5 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，檔案上傳完在匯入資料時會發生例外。 為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/Startup_cs.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/where_is_the_real_problem.jpg">
 <meta property="article:published_time" content="2022-08-05T13:53:00.000Z">
-<meta property="article:modified_time" content="2022-08-05T17:17:30.583Z">
+<meta property="article:modified_time" content="2022-08-06T04:42:37.435Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="Middleware">
 <meta property="article:tag" content="ASP.NET Core 5 MVC">
@@ -311,7 +312,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-08-06 01:17:30" itemprop="dateModified" datetime="2022-08-06T01:17:30+08:00">2022-08-06</time>
+                <time title="修改時間：2022-08-06 12:42:37" itemprop="dateModified" datetime="2022-08-06T12:42:37+08:00">2022-08-06</time>
               </span>
             
           
@@ -362,22 +363,20 @@
       
         <p><a href="/2022/08/05/net5_mvc_upload_file_corrupted"><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Cover.png" alt="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題"></a></p>
 <h2 id="問題描述"><a href="#問題描述" class="headerlink" title="問題描述"></a>問題描述</h2><p>昨天收到朋友的求救，他在其他駐點的工程師遇到一個奇怪的問題，已經處理三、四天還是解決不了，請我幫忙處理。</p>
-<p>對方負責的專案是用 ASP.NET Core 5.0 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，上傳完在匯入資料時會發生例外。</p>
-<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，訊息如下：</p>
+<p>對方負責的專案是用 ASP.NET Core 5 MVC 開發的，有一個上傳 Excel 匯入資料的功能，在 IDE 將站台執行起來，可正常上傳並匯入資料，但發佈到測試機的 IIS 站台，檔案上傳完在匯入資料時會發生例外。</p>
+<p>為了修正問題，在匯入 Excel 的部份，他嘗試換過各種套件，但全都發生例外，各套件出現的訊息如下：</p>
 <ul>
-<li><p>ClosedXML：FileFormatException: File contains corrupted data</p>
-</li>
-<li><p>NPOI：ZipException: EOF in header</p>
-</li>
-<li><p>ExcelDataReader：Offset to Central Directory cannot be held in an Int64</p>
-</li>
+<li>ClosedXML：FileFormatException: File contains corrupted data</li>
+<li>NPOI：ZipException: EOF in header</li>
+<li>ExcelDataReader：Offset to Central Directory cannot be held in an Int64</li>
 </ul>
-<p>後來他發現上傳到 Server 的 Excel 檔案都無法開啟，檔案似乎都壞了。</p>
+<p>後來他發現上傳到 Server 的 Excel 檔案都無法開啟，似乎檔案都壞了。</p>
+<p>也嘗試修改檔案上傳的寫法，但都無效，寫入的檔案就是會損壞。</p>
 <a id="more"></a>
 
-<h2 id="處理經過"><a href="#處理經過" class="headerlink" title="處理經過"></a>處理經過</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>檔案上傳，在 IDE 執行正常，發佈到測試機 IIS 異常，一開始我猜會不會和寫入權限有關，但既然檔案都寫進去了，只是檔案壞掉，那就排除權限問題。</p>
+<h2 id="處理過程"><a href="#處理過程" class="headerlink" title="處理過程"></a>處理過程</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>「檔案上傳、本機 IDE 執行正常、發佈到測試機 IIS 異常」從這幾個關鍵點，一開始我猜會不會和寫入權限有關，但既然檔案都寫進去了，只是檔案壞掉，那就排除權限問題。</p>
 <p>接下來我懷疑檔案上傳的時候，可能遇到 UTF8 編碼相關問題，造成寫出壞檔的結果，先跟對方拿原始碼來看看。</p>
-<h3 id="原始碼"><a href="#原始碼" class="headerlink" title="原始碼"></a>原始碼</h3><p>以下是相關的程式碼，包含 View Model、View、JS、Controller 等，簡化內容並稍作修改，只保留必要的部份。</p>
+<h3 id="原始碼"><a href="#原始碼" class="headerlink" title="原始碼"></a>原始碼</h3><p>以下是上傳檔案相關的程式碼，內容已簡化修改，只保留講解必要的部份。</p>
 <ul>
 <li><p><strong>View (HTML 部份) 原始碼</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"file_Choose"</span> <span class="attr">width</span>=<span class="string">"400"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn_FileUpload"</span>&gt;</span>確認上傳<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -395,28 +394,38 @@
 </ul>
 <h3 id="縮小問題範圍"><a href="#縮小問題範圍" class="headerlink" title="縮小問題範圍"></a>縮小問題範圍</h3><p>上面的 Code 看起來很正常，頁面是用 AJAX Post 檔案到 Controller，Controller 再用 FileStream 將檔案寫入硬碟，看不出有哪邊會讓檔案壞掉的地方，也沒看到檔案有經過編碼處理的問題。</p>
 <p>且對方說在 IDE 執行是正常的，那就先排除這邊 Code 的問題。</p>
-<p>接下來，我將問題分為「內在因素」和「外在因素」兩個方向，並試著排除掉一個方向，先把問題的範圍縮小，否則像無頭蒼蠅亂猜，對解問題很沒效率。</p>
+<p>如果像無頭蒼蠅亂猜，對找問題很沒效率，所以我先將問題區分為「內在因素」和「外在因素」兩個方向，並試著排除掉一個方向，把問題的範圍縮小。</p>
 <p>當下我的猜測如下</p>
 <ul>
 <li>「內在因素」：問題可能是在 Debug 模式和發佈版本之間的差異。</li>
 <li>「外在因素」：或許連線到測試主機有經過一些網通設備，在上傳檔案時，封包被這些設備加料，導致寫檔損壞。</li>
 </ul>
-<p>先從「內在因素」開始，我請對方將發佈給測試主機的打包，放到自己本機 IIS 裡，看看是否可以重現出相同問題。</p>
+<p>先從「內在因素」開始，我請對方將發佈給測試主機的打包，放到自己本機 IIS 裡執行，看看是否可以重現出相同問題。</p>
 <p>對方測試後，果然在本機 IIS 重現問題了，這時我鬆一口氣，到這邊我幾乎已經可以肯定問題是出在 Debug 和發佈版之間的差異處了，這個差異不難找，範圍瞬間縮小許多。</p>
 <h3 id="確認問題點"><a href="#確認問題點" class="headerlink" title="確認問題點"></a>確認問題點</h3><p>接下來我請對方提供 Program.cs、Startup.cs、Appsettings.json 等檔案。</p>
 <ul>
 <li><strong>Startup.cs 原始碼</strong></li>
 </ul>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Startup_cs.png" alt="Startup.cs"></p>
-<p>在 pipeline 註冊 Middleware 的地方果然看到可疑分子，我再請對方提供 ExceptionMiddleware 原始碼給我看。</p>
+<p>在 pipeline 註冊 Middleware 的地方果然看到可疑分子，在發佈的版本會用到 ExceptionMiddleware 這個 Middleware，我再請對方提供 ExceptionMiddleware 原始碼給我看。</p>
 <ul>
 <li><strong>ExceptionMiddleware.cs 原始碼</strong></li>
 </ul>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png" alt="ExceptionMiddleware.cs"></p>
-<p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪寫出壞檔，果然和我一開始的預感一樣。</p>
-<h3 id="解決問題"><a href="#解決問題" class="headerlink" title="解決問題"></a>解決問題</h3><p>雖然找到問題點很開心，但是目前問題還沒解決，而且有這段轉換一定有他的原因，不能直接拔掉。</p>
-<p>對方也是剛接手這個案子，不了解這段轉換存在的目的，最後我們決定比較安全的修改方式，在這段程式碼外再包一層判斷，當 Content-Type 是 multipart/form-data 時，就不要跑進這一段，這樣就不會影響檔案上傳的功能了。</p>
-<p>完成修改，重新發佈到測試機 IIS 測試，問題終於解決了。</p>
+<p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪上傳的檔案在寫入時會損壞，果然和我一開始的預感一樣，只是當時沒料到問題會藏在 Middleware 這裡。</p>
+<p>請對方先將這段轉換註解掉測試看看，檔案上傳功能正常了，確定就是這裡造成檔案損壞。</p>
+<p>加個圖解，讓大家比較容易理解問題點真正的位置，原本對方以為問題是出在 Controller 在處理上傳檔案和匯入 Excel 的方法（下圖 ❶）。</p>
+<p>經過抽絲剝繭，真正的問題是發生在 Pipeline 的 Middleware（下圖 ❷）。</p>
+<p>難怪對方花了三、四天都修不好，因為一直沒有修到問題的源頭。</p>
+<p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/where_is_the_real_problem.jpg" alt="問題點的位置圖"></p>
+<blockquote>
+<p>引用原圖出處：<a href="https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03" target="_blank" rel="noopener">https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03</a></p>
+</blockquote>
+<h3 id="解決問題"><a href="#解決問題" class="headerlink" title="解決問題"></a>解決問題</h3><p>找到問題的源頭了，接下來要思考怎麼解決問題。</p>
+<p>會有這段轉換 Request Body 的 Middleware 一定有原因，而且他會影響所有傳入的請求內容，如果拔掉肯定會產生更多問題，但留著又影響檔案上傳的功能。</p>
+<p>對方也是剛接手這個案子，不了解這段轉換存在的目的，最後我們決定用比較安全的修改方式，在這段程式碼外再包一層判斷，當 Content-Type 是 multipart/form-data 時，就跳過，不要跑進這一段，這樣就不會影響檔案上傳的功能了。</p>
+<p>完成修改，重新發佈到測試機 IIS 測試，問題解決了。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>這個問題難解的原因是他藏在第一眼看不到的地方，就像病人說他腳痛，但病因其實是腦炎，腳其實很健康，如果醫腳是不可能會好的。</p>
 <p>之前上一堆課、看一堆文章和書果然都沒白費，累積的知識點都用上了，如果缺少這些知識點，我就不具備在短時間內可找到這個問題的能力，所以決定把這段經歷寫出來，希望未來有天也能幫到其他人。</p>
 
     </div>
@@ -520,7 +529,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理經過"><span class="nav-text">處理經過</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#確認問題點"><span class="nav-text">確認問題點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解決問題"><span class="nav-text">解決問題</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理過程"><span class="nav-text">處理過程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#確認問題點"><span class="nav-text">確認問題點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解決問題"><span class="nav-text">解決問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#總結"><span class="nav-text">總結</span></a></li></ol></li></ol></div>
         
       </div>
       <!--/noindex-->
