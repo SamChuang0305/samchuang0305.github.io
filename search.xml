@@ -16,8 +16,8 @@
 <p>也嘗試修改檔案上傳的寫法，但都無效，寫入的檔案就是會損壞。</p>
 <a id="more"></a>
 
-<h2 id="處理過程"><a href="#處理過程" class="headerlink" title="處理過程"></a>處理過程</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>「檔案上傳、本機 IDE 執行正常、發佈到測試機 IIS 異常」從這幾個關鍵點，一開始我猜會不會和寫入權限有關，但既然檔案都寫進去了，只是檔案壞掉，那就排除權限問題。</p>
-<p>接下來我懷疑檔案上傳的時候，可能遇到 UTF8 編碼相關問題，造成寫出壞檔的結果，先跟對方拿原始碼來看看。</p>
+<h2 id="處理過程"><a href="#處理過程" class="headerlink" title="處理過程"></a>處理過程</h2><h3 id="初步猜測"><a href="#初步猜測" class="headerlink" title="初步猜測"></a>初步猜測</h3><p>「檔案上傳、本機 IDE 執行正常、發佈到測試機 IIS 異常」從這幾個關鍵點，一開始我在猜會不會和寫入權限有關，但既然檔案都寫進去了，只是檔案壞掉，那就排除權限問題。</p>
+<p>接下來是懷疑檔案上傳時，可能遇到 UTF8 編碼相關問題，造成寫出壞檔的結果，先跟對方拿原始碼來看看。</p>
 <h3 id="原始碼"><a href="#原始碼" class="headerlink" title="原始碼"></a>原始碼</h3><p>以下是上傳檔案相關的程式碼，內容已簡化修改，只保留講解必要的部份。</p>
 <ul>
 <li><p><strong>View (HTML 部份) 原始碼</strong></p>
@@ -37,29 +37,29 @@
 <h3 id="縮小問題範圍"><a href="#縮小問題範圍" class="headerlink" title="縮小問題範圍"></a>縮小問題範圍</h3><p>上面的 Code 看起來很正常，頁面是用 AJAX Post 檔案到 Controller，Controller 再用 FileStream 將檔案寫入硬碟，看不出有哪邊會讓檔案壞掉的地方，也沒看到檔案有經過編碼處理的問題。</p>
 <p>且對方說在 IDE 執行是正常的，那就先排除這邊 Code 的問題。</p>
 <p>如果像無頭蒼蠅亂猜，對找問題很沒效率，所以我先將問題區分為「內在因素」和「外在因素」兩個方向，並試著排除掉一個方向，把問題的範圍縮小。</p>
-<p>當下我的猜測如下</p>
+<p>當下的猜測如下</p>
 <ul>
 <li>「內在因素」：問題可能是在 Debug 模式和發佈版本之間的差異。</li>
 <li>「外在因素」：或許連線到測試主機有經過一些網通設備，在上傳檔案時，封包被這些設備加料，導致寫檔損壞。</li>
 </ul>
-<p>先從「內在因素」開始，我請對方將發佈給測試主機的打包，放到自己本機 IIS 裡執行，看看是否可以重現出相同問題。</p>
-<p>對方測試後，果然在本機 IIS 重現問題了，這時我鬆一口氣，到這邊我幾乎已經可以肯定問題是出在 Debug 和發佈版之間的差異處了，這個差異不難找，範圍瞬間縮小許多。</p>
-<h3 id="確認問題點"><a href="#確認問題點" class="headerlink" title="確認問題點"></a>確認問題點</h3><p>接下來我請對方提供 Program.cs、Startup.cs、Appsettings.json 等檔案。</p>
+<p>先從「內在因素」開始，請對方將發佈給測試主機的打包，放到本機 IIS 裡執行，看看是否可以重現出相同問題。</p>
+<p>對方測試後，果然在本機 IIS 重現問題了，這時鬆了一口氣，到這邊幾乎可以肯定問題是出在 Debug 和發佈版之間的差異處了，通常這個差異就在 Pipeline 註冊 Middleware 的地方，範圍瞬間縮小許多。</p>
+<h3 id="確認問題點"><a href="#確認問題點" class="headerlink" title="確認問題點"></a>確認問題點</h3><p>接下來請對方提供 Program.cs、Startup.cs、Appsettings.json 等檔案。</p>
 <ul>
 <li><strong>Startup.cs 原始碼</strong></li>
 </ul>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/Startup_cs.png" alt="Startup.cs"></p>
-<p>在 pipeline 註冊 Middleware 的地方果然看到可疑分子，在發佈的版本會用到 ExceptionMiddleware 這個 Middleware，我再請對方提供 ExceptionMiddleware 原始碼給我看。</p>
+<p>在 pipeline 註冊 Middleware 的地方果然看到可疑分子，在發佈的版本會用到 ExceptionMiddleware 這個 Middleware，再請對方提供 ExceptionMiddleware 原始碼給我看。</p>
 <ul>
 <li><strong>ExceptionMiddleware.cs 原始碼</strong></li>
 </ul>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png" alt="ExceptionMiddleware.cs"></p>
-<p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪上傳的檔案在寫入時會損壞，果然和我一開始的預感一樣，只是當時沒料到問題會藏在 Middleware 這裡。</p>
+<p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪上傳的檔案在寫入時會損壞，果然和一開始的預測一樣，只是當時沒料到問題會藏在 Middleware 這裡。</p>
 <p>請對方先將這段轉換註解掉測試看看，檔案上傳功能正常了，確定就是這裡造成檔案損壞。</p>
 <p>加個圖解，讓大家比較容易理解問題點真正的位置。</p>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/where_is_the_real_problem.jpg" alt="問題點的位置圖"></p>
 <blockquote>
-<p>原圖引用出處：<a href="https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03" target="_blank" rel="noopener">https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03</a></p>
+<p>原圖引用出處：<a href="https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03" target="_blank" rel="noopener">[ASP.NET Core MVC Pipeline] Middleware Pipeline</a><br>內文也有解說 Pipeline 實作的細節。</p>
 </blockquote>
 <p>原本對方以為問題是出在 Controller 在處理上傳檔案和匯入 Excel 的方法（圖片 ❶ 處）。</p>
 <p>經過抽絲剝繭，真正的問題卻是發生在 Pipeline 的 Middleware（圖片 ❷ 處）。</p>
