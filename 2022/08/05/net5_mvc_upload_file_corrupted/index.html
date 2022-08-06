@@ -70,7 +70,7 @@
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/05/net5_mvc_upload_file_corrupted/where_is_the_real_problem.jpg">
 <meta property="article:published_time" content="2022-08-05T13:53:00.000Z">
-<meta property="article:modified_time" content="2022-08-06T04:42:37.435Z">
+<meta property="article:modified_time" content="2022-08-06T09:05:10.749Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="Middleware">
 <meta property="article:tag" content="ASP.NET Core 5 MVC">
@@ -312,7 +312,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-08-06 12:42:37" itemprop="dateModified" datetime="2022-08-06T12:42:37+08:00">2022-08-06</time>
+                <time title="修改時間：2022-08-06 17:05:10" itemprop="dateModified" datetime="2022-08-06T17:05:10+08:00">2022-08-06</time>
               </span>
             
           
@@ -414,19 +414,20 @@
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/ExceptionMiddleware_cs.png" alt="ExceptionMiddleware.cs"></p>
 <p>啊哈！抓到鬼了，這個 Middleware 把所有傳入的 HttpContext.Request.Body 都做 UFT8 編碼加料了，難怪上傳的檔案在寫入時會損壞，果然和我一開始的預感一樣，只是當時沒料到問題會藏在 Middleware 這裡。</p>
 <p>請對方先將這段轉換註解掉測試看看，檔案上傳功能正常了，確定就是這裡造成檔案損壞。</p>
-<p>加個圖解，讓大家比較容易理解問題點真正的位置，原本對方以為問題是出在 Controller 在處理上傳檔案和匯入 Excel 的方法（下圖 ❶）。</p>
-<p>經過抽絲剝繭，真正的問題是發生在 Pipeline 的 Middleware（下圖 ❷）。</p>
-<p>難怪對方花了三、四天都修不好，因為一直沒有修到問題的源頭。</p>
+<p>加個圖解，讓大家比較容易理解問題點真正的位置。</p>
 <p><img src="/2022/08/05/net5_mvc_upload_file_corrupted/where_is_the_real_problem.jpg" alt="問題點的位置圖"></p>
 <blockquote>
-<p>引用原圖出處：<a href="https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03" target="_blank" rel="noopener">https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03</a></p>
+<p>原圖引用出處：<a href="https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03" target="_blank" rel="noopener">https://lucaslra.medium.com/asp-net-core-mvc-pipeline-middleware-pipeline-cd9375db0d03</a></p>
 </blockquote>
+<p>原本對方以為問題是出在 Controller 在處理上傳檔案和匯入 Excel 的方法（圖片 ❶ 處）。</p>
+<p>經過抽絲剝繭，真正的問題卻是發生在 Pipeline 的 Middleware（圖片 ❷ 處）。</p>
+<p>難怪對方花了三、四天都修不好，因為一直沒有修到問題的源頭。</p>
 <h3 id="解決問題"><a href="#解決問題" class="headerlink" title="解決問題"></a>解決問題</h3><p>找到問題的源頭了，接下來要思考怎麼解決問題。</p>
 <p>會有這段轉換 Request Body 的 Middleware 一定有原因，而且他會影響所有傳入的請求內容，如果拔掉肯定會產生更多問題，但留著又影響檔案上傳的功能。</p>
 <p>對方也是剛接手這個案子，不了解這段轉換存在的目的，最後我們決定用比較安全的修改方式，在這段程式碼外再包一層判斷，當 Content-Type 是 multipart/form-data 時，就跳過，不要跑進這一段，這樣就不會影響檔案上傳的功能了。</p>
 <p>完成修改，重新發佈到測試機 IIS 測試，問題解決了。</p>
-<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>這個問題難解的原因是他藏在第一眼看不到的地方，就像病人說他腳痛，但病因其實是腦炎，腳其實很健康，如果醫腳是不可能會好的。</p>
-<p>之前上一堆課、看一堆文章和書果然都沒白費，累積的知識點都用上了，如果缺少這些知識點，我就不具備在短時間內可找到這個問題的能力，所以決定把這段經歷寫出來，希望未來有天也能幫到其他人。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這個問題難解的原因是他隱藏在第一眼看不到的地方，就像病人說他腳痛，但腳其實很健康，真正的病因是腦炎，如果只醫腳，病永遠不會好。</p>
+<p>之前上一堆課程、看許多文章和書果然沒白費，累積的知識點都用上了，如果缺少這些知識點，我就不具備在短時間內可找到這個問題的能力，也決定把這段修問題的過程分享出來，希望將來有天也能幫到其他人。</p>
 
     </div>
 
@@ -529,7 +530,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理過程"><span class="nav-text">處理過程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#確認問題點"><span class="nav-text">確認問題點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解決問題"><span class="nav-text">解決問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#總結"><span class="nav-text">總結</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#問題描述"><span class="nav-text">問題描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#處理過程"><span class="nav-text">處理過程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初步猜測"><span class="nav-text">初步猜測</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始碼"><span class="nav-text">原始碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#縮小問題範圍"><span class="nav-text">縮小問題範圍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#確認問題點"><span class="nav-text">確認問題點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解決問題"><span class="nav-text">解決問題</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#總結"><span class="nav-text">總結</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
