@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+  <meta name="google-site-verification" content="MLb6JifP_d6j3eigpmzpvXYv6ecMb-gC6i2tznANrUU">
+  <meta property="fb:admins" content="">
+  <meta property="fb:app_id" content="1099372750454457">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '複製',
+      copy_success: '複製成功',
+      copy_failure: '複製失敗'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料 前言最近遇到一個需求，要將多欄位的資料分組，再將各分組的資料排序後，取出前 N 筆資料出來，舉例如下圖。  123456789101112131415161718192021222324252627282930313233public static void Main()&amp;#123;    v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料">
+<meta property="og:url" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/index.html">
+<meta property="og:site_name" content="金魚腦的海馬迴">
+<meta property="og:description" content="資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料 前言最近遇到一個需求，要將多欄位的資料分組，再將各分組的資料排序後，取出前 N 筆資料出來，舉例如下圖。  123456789101112131415161718192021222324252627282930313233public static void Main()&amp;#123;    v">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/Cover.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany.png">
+<meta property="article:published_time" content="2022-08-20T15:13:00.000Z">
+<meta property="article:modified_time" content="2022-08-20T18:58:37.416Z">
+<meta property="article:author" content="Sam Chuang">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="集合">
+<meta property="article:tag" content="LINQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/Cover.png">
+  <link rel="canonical" href="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料 | 金魚腦的海馬迴</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156002640-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-156002640-1');
+      }
+    </script>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金魚腦的海馬迴</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">海馬迴存放所有的記憶</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首頁</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>歸檔</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分類</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>標籤</a>
+
+  </li>
+      
+    
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">
+          <i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜尋..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sam Chuang">
+      <meta itemprop="description" content="用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金魚腦的海馬迴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料
+            
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              
+                
+              
+
+              <time title="創建時間：2022-08-20 23:13:00" itemprop="dateCreated datePublished" datetime="2022-08-20T23:13:00+08:00">2022-08-20</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2022-08-21 02:58:37" itemprop="dateModified" datetime="2022-08-21T02:58:37+08:00">2022-08-21</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSharp/" itemprop="url" rel="index">
+                    <span itemprop="name">CSharp</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/08/20/grouping_data_using_hashset_or_linq/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/20/grouping_data_using_hashset_or_linq/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="資料分組：使用-HashSet-或-GroupBy-SelectMany-取得各分組的前-N-筆資料"><a href="#資料分組：使用-HashSet-或-GroupBy-SelectMany-取得各分組的前-N-筆資料" class="headerlink" title="資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料"></a>資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料</h2><p><a href="/2022/08/20/grouping_data_using_hashset_or_linq"><img src="/2022/08/20/grouping_data_using_hashset_or_linq/Cover.png" alt="資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近遇到一個需求，要將多欄位的資料分組，再將各分組的資料排序後，取出前 N 筆資料出來，舉例如下圖。</p>
+<p><img src="/2022/08/20/grouping_data_using_hashset_or_linq/legend.png" alt="需求圖例"></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> list = GetSampleData();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Player&gt; <span class="title">GetSampleData</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> List&lt;Player&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"001"</span>, PlayerName=<span class="string">"Sam"</span>, Team=<span class="string">"Blue Team"</span>, Game=<span class="string">"Black Jack"</span>, Score=<span class="number">798</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"002"</span>, PlayerName=<span class="string">"Jack"</span>, Team=<span class="string">"Blue Team"</span>, Game=<span class="string">"Poker Hand"</span>, Score=<span class="number">823</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"003"</span>, PlayerName=<span class="string">"Tiffany"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Black Jack"</span>, Score=<span class="number">627</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"004"</span>, PlayerName=<span class="string">"Betty"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Poker Hand"</span>, Score=<span class="number">803</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"005"</span>, PlayerName=<span class="string">"Jessica"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Solitaire"</span>, Score=<span class="number">858</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"006"</span>, PlayerName=<span class="string">"Mia"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Poker Hand"</span>, Score=<span class="number">943</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"007"</span>, PlayerName=<span class="string">"Tom"</span>, Team=<span class="string">"Blue Team"</span>, Game=<span class="string">"Black Jack"</span>, Score=<span class="number">661</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"008"</span>, PlayerName=<span class="string">"Cindy"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Solitaire"</span>, Score=<span class="number">735</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"009"</span>, PlayerName=<span class="string">"Jenny"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Black Jack"</span>, Score=<span class="number">513</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"010"</span>, PlayerName=<span class="string">"Ken"</span>, Team=<span class="string">"Blue Team"</span>, Game=<span class="string">"Solitaire"</span>, Score=<span class="number">672</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"011"</span>, PlayerName=<span class="string">"Joey"</span>, Team=<span class="string">"Blue Team"</span>, Game=<span class="string">"Poker Hand"</span>, Score=<span class="number">957</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"012"</span>, PlayerName=<span class="string">"Mary"</span>, Team=<span class="string">"Red Team"</span>, Game=<span class="string">"Black Jack"</span>, Score=<span class="number">759</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Player &#123; PlayerId=<span class="string">"013"</span>, PlayerName=<span class="string">"John"</span>, Team=<span class="string">"Blue Team"</span>, Game=<span class="string">"Solitaire"</span>, Score=<span class="number">724</span> &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Player</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> PlayerId &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> PlayerName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Team &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Game &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> Score &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>印象中，三年前回鍋軟體開發，在自學 C# 時，有用 LINQ 做過類似的練習，之後沒機會遇到這種情境，時間一久就忘記要怎麼寫了。</p>
+<p>因為一直想不起來用 LINQ 要怎麼寫，先用當下想得到的方式解決，今天假日把 LINQ 的寫法也研究回來了，趁現在整理成筆記，將來就不用再花時間重做功課了。</p>
+<p>按照時間序，總共研究出三種寫法：</p>
+<ul>
+<li><p>方法一：使用 HashSet 處理</p>
+</li>
+<li><p>方法二：使用 LINQ - ToHashSet() 處理</p>
+</li>
+<li><p>方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<p>不想看過程的話，可以直接跳到 <a href="#method3">方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理</a></p>
+<hr>
+
+<h3 id="方法一：使用-HashSet-處理"><a href="#方法一：使用-HashSet-處理" class="headerlink" title="方法一：使用 HashSet 處理"></a>方法一：使用 HashSet 處理</h3><p>這個做法用到之前在 <a href="/2022/07/24/csharp_override_equals_and_gethashcode/">C# 覆寫 Equals 方法，為何要覆寫 GetHashCode 方法</a> 提過的規則，HashSet 在加入資料時，遇到重複會略過的特性。</p>
+<p>只要在 Player 裡覆寫 Equals() 和 GetHashCode() 方法，自訂判斷重複檢查的條件，讓 HashSet&lt;Player&gt; 在 Add() 時略過不要的資料即可。</p>
+<p>實作的概念是：將 List&lt;Player&gt; 先做好 Score 的降冪排序，再逐筆加進 HashSet&lt;Player&gt; 內，讓 HashSet 內只剩下每組 Team + Game 不重複的資料，且該資料是該分組最高分就行了。</p>
+<p>按照範例的需求，要用 Team 和 Game 屬性當做分組的條件，可覆寫方法如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Player</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> PlayerId &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> PlayerName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Team &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Game &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> Score &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">Equals</span>(<span class="params"><span class="keyword">object</span> obj</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">bool</span> result = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">is</span> Player)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> input = (Player)obj;</span><br><span class="line">            <span class="comment">// 加入至 HashSet&amp;lt;Player&amp;gt; 時，相同 Team + Game 的組合會被視為重複而略過</span></span><br><span class="line">            result = (Team == input.Team &amp;&amp; Game == input.Game);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="title">GetHashCode</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> &#123; Team, Game &#125;.GetHashCode();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但我直覺認為不該覆寫 Player 類別，資料分組不屬於 Player 類別的工作。</p>
+<p>我覺得可以再新增一個處理資料分組專用的 TempModel，讓他繼承 Player 所有屬性，只要覆寫 TempModel 類別的 Equals()、GetHashCode() 方法，再利用 HashSet&lt;TempModel&gt; 的 Add() 方法過濾資料，就不會污染 Player 類別了。</p>
+<p>而處理 HashSet.Add() 的動作，又可以封裝到 DistinctData 類別內，只要在建立 DistinctData 物件時，將 List&lt;Player&gt; 資料送進 ctor 建構式，讓 DistinctData 自己完成資料分組和取最高分的動作，最後再寫一個 Result() 方法將結果取出即可。</p>
+<p>有了這個想法後，接著就想到 TempModel 也可以封裝進這個 DistinctData 類別內，因為外面用不到 TempModel 類別，就不需要公開出來。</p>
+<p>綜合以上想法，得到的完成品如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> list = GetSampleData();</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">new</span> DistinctData(list).Result(); <span class="comment">// 最終結果</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Player</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> PlayerId &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> PlayerName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Team &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Game &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> Score &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 處理資料分組並取出每組最高分資料的類別</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DistinctData</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Player&gt; _distinctResult;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DistinctData</span>(<span class="params">List&lt;Player&gt; list</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        _distinctResult = <span class="keyword">new</span> List&lt;Player&gt;();</span><br><span class="line">        Distinct(list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Player&gt; <span class="title">Result</span>(<span class="params"></span>)</span> =&gt; _distinctResult;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Distinct</span>(<span class="params">List&lt;Player&gt; list</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">if</span> (list == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> orderedlist = list</span><br><span class="line">            .Select(s =&gt; <span class="keyword">new</span> TempModel</span><br><span class="line">            &#123;</span><br><span class="line">                PlayerId = s.PlayerId,</span><br><span class="line">                PlayerName = s.PlayerName,</span><br><span class="line">                Team = s.Team,</span><br><span class="line">                Game = s.Game,</span><br><span class="line">                Score = s.Score,</span><br><span class="line">            &#125;) <span class="comment">// 映射成 TempModel，此類別內有覆寫判斷重複的方法</span></span><br><span class="line">            .OrderByDescending(o =&gt; o.Score); <span class="comment">// 高分的排上面 (以取得每個分組的最高分資料)</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">var</span> hashSet = <span class="keyword">new</span> HashSet&lt;TempModel&gt;();</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> data <span class="keyword">in</span> orderedlist)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 利用 HashSet.Add() 遇到重複的內容會略過的特性，過濾掉不要的資料</span></span><br><span class="line">            <span class="comment">// 可參考 https://sam.webspace.tw/2022/07/24/csharp_override_equals_and_gethashcode/</span></span><br><span class="line">            hashSet.Add(data); <span class="comment">// HashSet.Add() 會使用 TempModel 覆寫的方法去除重複資料</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        _distinctResult = hashSet</span><br><span class="line">            .Cast&lt;Player&gt;() <span class="comment">// 將 TempModel 轉型回 Player</span></span><br><span class="line">            .OrderBy(o =&gt; o.Game) <span class="comment">// 最終結果排序 Gamer ASC, Score DESC</span></span><br><span class="line">            .ThenByDescending(t =&gt; t.Score)</span><br><span class="line">            .ToList();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// TempModel 為私有類別，繼承 Player 所有屬性，且只在 DistinctData 類別內使用</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title">TempModel</span> : <span class="title">Player</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">Equals</span>(<span class="params"><span class="keyword">object</span> obj</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">bool</span> result = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (obj <span class="keyword">is</span> Player)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">var</span> input = (Player)obj;</span><br><span class="line">                <span class="comment">// 判斷是否可加入 HashSet 的條件 (定義是否判斷為資料重複的欄位)</span></span><br><span class="line">                <span class="comment">// 相同 Team + Game 組合的資料，只會有一筆加入到 HashSet 內</span></span><br><span class="line">                result = (Team == input.Team &amp;&amp; Game == input.Game);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="title">GetHashCode</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> &#123; Team, Game &#125;.GetHashCode();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>執行結果：<br><img src="/2022/08/20/grouping_data_using_hashset_or_linq/legend.png" alt="執行結果"></p>
+<hr>
+
+<h3 id="方法二：使用-LINQ-ToHashSet-處理"><a href="#方法二：使用-LINQ-ToHashSet-處理" class="headerlink" title="方法二：使用 LINQ - ToHashSet() 處理"></a>方法二：使用 LINQ - ToHashSet() 處理</h3><p>這是方法一的改進版，在重構方法一的過程，想到 LINQ 有 ToHashSet() 方法，這個方法可以傳入 IEqualityComparer&lt;T&gt;，就不需要 DistinctData 類別，也不需要 TempModel 類別了，程式碼可以簡化成這樣：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = GetSampleData()</span><br><span class="line">        .OrderByDescending(o =&gt; o.Score) <span class="comment">// 高分的排上面 (以取得每個分組的最高分資料)</span></span><br><span class="line">        .ToHashSet(<span class="keyword">new</span> PlayerComparer()) <span class="comment">// 利用 ToHashSet 與自訂的 IEqualityComparer 完成資料分組並取出各組的最高分</span></span><br><span class="line">        .OrderBy(o =&gt; o.Game) <span class="comment">// 最終結果排序 Gamer ASC, Score DESC</span></span><br><span class="line">        .ThenByDescending(t =&gt; t.Score)</span><br><span class="line">        .ToList();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 給 ToHashSet() 用的 IEqualityComparer</span></span><br><span class="line">public class PlayerComparer : IEqualityComparer&lt;Player&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">Equals</span>(<span class="params">Player a, Player b</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">            b != <span class="literal">null</span> &amp;&amp; a != <span class="literal">null</span></span><br><span class="line">            &amp;&amp; a.Team == b.Team</span><br><span class="line">            &amp;&amp; a.Game == b.Game;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">GetHashCode</span>(<span class="params">Player obj</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> &#123; obj.Team, obj.Game &#125;.GetHashCode();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相同的執行結果：<br><img src="/2022/08/20/grouping_data_using_hashset_or_linq/legend.png" alt="執行結果"></p>
+<hr>
+<a id="method3" name="method3"></a>
+
+<h3 id="方法三：使用-LINQ-GroupBy-與-SelectMany-處理"><a href="#方法三：使用-LINQ-GroupBy-與-SelectMany-處理" class="headerlink" title="方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理"></a>方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理</h3><p>最後找到以前寫的很雜亂的筆記，重新拼湊出 LINQ 的寫法了，這次連 IEqualityComparer&lt;T&gt; 都省了，直接在 Main() 裡完成整個動作。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = GetSampleData()</span><br><span class="line">        .GroupBy(g =&gt; <span class="keyword">new</span> &#123; g.Team, g.Game &#125;) <span class="comment">// 將相同的 Team 與 Game 分在同組</span></span><br><span class="line">        .SelectMany(<span class="keyword">group</span> =&gt; <span class="comment">// 將下面三行處理完的 GroupBy 分組資料合併起來</span></span><br><span class="line">            <span class="keyword">group</span>.OrderByDescending(o =&gt; o.Score) <span class="comment">// 每個分組做 Score 降冪排序</span></span><br><span class="line">            .Take(<span class="number">1</span>) <span class="comment">// 每個分組取出前 N 筆</span></span><br><span class="line">            .Select(s =&gt; <span class="keyword">new</span> Player</span><br><span class="line">            &#123;</span><br><span class="line">                PlayerId = s.PlayerId,</span><br><span class="line">                PlayerName = s.PlayerName,</span><br><span class="line">                Team = <span class="keyword">group</span>.Key.Team, <span class="comment">// 也可以寫 s.Team</span></span><br><span class="line">                Game = <span class="keyword">group</span>.Key.Game, <span class="comment">// 也可以寫 s.Game,</span></span><br><span class="line">                Score = s.Score,</span><br><span class="line">            &#125;)</span><br><span class="line">        )</span><br><span class="line">        .OrderBy(o =&gt; o.Game) <span class="comment">// 最終結果排序 Gamer ASC, Team ASC, Score DESC</span></span><br><span class="line">        .ThenBy(t1 =&gt; t1.Team)</span><br><span class="line">        .ThenByDescending(t2 =&gt; t2.Score)</span><br><span class="line">        .ToList()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相同的執行結果：<br><img src="/2022/08/20/grouping_data_using_hashset_or_linq/legend.png" alt="執行結果"></p>
+<p>程式碼簡短、完成資料分組、還能指定每組要取出幾筆資料，只要將 .Take(1) 改成 .Take(2) 就可以取出每組的前兩筆資料，結果如下：</p>
+<p><img src="/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany.png" alt="執行結果"></p>
+<p>LINQ 版本果然很香。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/CSharp/" rel="tag"><i class="fa fa-tag"></i> CSharp</a>
+            
+              <a href="/tags/%E9%9B%86%E5%90%88/" rel="tag"><i class="fa fa-tag"></i> 集合</a>
+            
+              <a href="/tags/LINQ/" rel="tag"><i class="fa fa-tag"></i> LINQ</a>
+            
+          </div>
+        
+
+        
+  <div class="post-widgets">
+    <div class="social-like">
+      
+
+      
+        <div class="fb_like">
+          <div class="fb-like" data-layout="button_count" data-share="true"></div>
+        </div>
+      
+    </div>
+  
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2022/08/05/net5_mvc_upload_file_corrupted/" rel="next" title="工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題">
+                  <i class="fa fa-chevron-left"></i> 工作雜記：ASP.NET Core 5 MVC 解決檔案上傳損壞問題
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#資料分組：使用-HashSet-或-GroupBy-SelectMany-取得各分組的前-N-筆資料"><span class="nav-text">資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一：使用-HashSet-處理"><span class="nav-text">方法一：使用 HashSet 處理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二：使用-LINQ-ToHashSet-處理"><span class="nav-text">方法二：使用 LINQ - ToHashSet() 處理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法三：使用-LINQ-GroupBy-與-SelectMany-處理"><span class="nav-text">方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar.jpg"
+      alt="Sam Chuang">
+  <p class="site-author-name" itemprop="name">Sam Chuang</p>
+  <div class="site-description" itemprop="description">用頭殼裡的金魚腦處理邏輯，將存放記憶的海馬迴放在這裡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分類</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">標籤</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/about/" title="關於我 &amp;rarr; &#x2F;about&#x2F;"><i class="fa fa-fw fa-user"></i>關於我</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="/" title="回首頁 &amp;rarr; &#x2F;"><i class="fa fa-fw fa-home"></i>回首頁</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:samchuang@myhost.idv.tw" title="E-Mail &amp;rarr; mailto:samchuang@myhost.idv.tw" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.facebook.com/chuangsam" title="FB Page &amp;rarr; https:&#x2F;&#x2F;www.facebook.com&#x2F;chuangsam" rel="noopener" target="_blank"><i class="fa fa-fw fa-facebook"></i>FB Page</a>
+      </span>
+    
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sam Chuang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 強力驅動 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主題 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.4.2.js"></script>
+
+<script src="/js/motion.js?v=7.4.2.js"></script>
+
+
+<script src="/js/schemes/pisces.js?v=7.4.2.js"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.4.2.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+    function fbAsyncInit() {
+      FB.init({
+        appId  : '1099372750454457',
+        xfbml  : true,
+        version: 'v3.3'
+      });
+    }
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/zh_TW/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+
+
+
+
+  
+<script src="/js/local-search.js?v=7.4.2.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://samchuangblog.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function disqus_config() {
+    this.page.url = "https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/";
+    this.page.identifier = "2022/08/20/grouping_data_using_hashset_or_linq/";
+    this.page.title = '資料分組：使用 HashSet 或 GroupBy + SelectMany 取得各分組的前 N 筆資料';
+  }
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://samchuangblog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+</body>
+</html>
