@@ -69,10 +69,11 @@
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
+<meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany_diagram.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/legend.png">
 <meta property="og:image" content="https://sam.webspace.tw/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany.png">
 <meta property="article:published_time" content="2022-08-20T15:13:00.000Z">
-<meta property="article:modified_time" content="2022-08-21T00:22:14.894Z">
+<meta property="article:modified_time" content="2022-08-21T06:08:26.822Z">
 <meta property="article:author" content="Sam Chuang">
 <meta property="article:tag" content="CSharp">
 <meta property="article:tag" content="集合">
@@ -315,7 +316,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-08-21 08:22:14" itemprop="dateModified" datetime="2022-08-21T08:22:14+08:00">2022-08-21</time>
+                <time title="修改時間：2022-08-21 14:08:26" itemprop="dateModified" datetime="2022-08-21T14:08:26+08:00">2022-08-21</time>
               </span>
             
           
@@ -412,9 +413,10 @@
 <h2 id="方法三：使用-LINQ-GroupBy-與-SelectMany-處理"><a href="#方法三：使用-LINQ-GroupBy-與-SelectMany-處理" class="headerlink" title="方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理"></a>方法三：使用 LINQ - GroupBy() 與 SelectMany() 處理</h2><p>最後找到以前寫的很雜亂的筆記，重新拼湊出 LINQ 的寫法了，這次連 IEqualityComparer&lt;T&gt; 都省了，直接在 Main() 裡完成整個動作。</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = GetSampleData()</span><br><span class="line">        .GroupBy(g =&gt; <span class="keyword">new</span> &#123; g.Team, g.Game &#125;) <span class="comment">// 將相同的 Team 與 Game 分在同組</span></span><br><span class="line">        .SelectMany(<span class="keyword">group</span> =&gt; <span class="comment">// 將下面三行處理完的 GroupBy 分組資料合併起來</span></span><br><span class="line">            <span class="keyword">group</span>.OrderByDescending(o =&gt; o.Score) <span class="comment">// 每個分組做 Score 降冪排序</span></span><br><span class="line">            .Take(<span class="number">1</span>) <span class="comment">// 每個分組取出前 N 筆</span></span><br><span class="line">            .Select(s =&gt; <span class="keyword">new</span> Player</span><br><span class="line">            &#123;</span><br><span class="line">                PlayerId = s.PlayerId,</span><br><span class="line">                PlayerName = s.PlayerName,</span><br><span class="line">                Team = <span class="keyword">group</span>.Key.Team, <span class="comment">// 也可以寫 s.Team</span></span><br><span class="line">                Game = <span class="keyword">group</span>.Key.Game, <span class="comment">// 也可以寫 s.Game,</span></span><br><span class="line">                Score = s.Score,</span><br><span class="line">            &#125;)</span><br><span class="line">        )</span><br><span class="line">        .OrderBy(o =&gt; o.Game) <span class="comment">// 最終結果排序 Gamer ASC, Team ASC, Score DESC</span></span><br><span class="line">        .ThenBy(t1 =&gt; t1.Team)</span><br><span class="line">        .ThenByDescending(t2 =&gt; t2.Score)</span><br><span class="line">        .ToList()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>相同的執行結果：<br><img src="/2022/08/20/grouping_data_using_hashset_or_linq/legend.png" alt="執行結果"></p>
+<p>GroupBy 與 SelectMany 圖解<br><img src="/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany_diagram.png" alt="GroupBy 與 SelectMany 圖解"></p>
+<p>執行結果：<br><img src="/2022/08/20/grouping_data_using_hashset_or_linq/legend.png" alt="執行結果"></p>
 <p>只要將 .Take(1) 改成 .Take(N) 就可以取出每組的前 N 筆資料，例如 .Take(2) 的結果如下：</p>
-<p><img src="/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany.png" alt="執行結果"></p>
+<p><img src="/2022/08/20/grouping_data_using_hashset_or_linq/GroupBy_SelectMany.png" alt="Take(2) 執行結果"></p>
 <p>程式碼短、資料分組完還能指定每組要取幾筆，LINQ 真香。</p>
 
     </div>
